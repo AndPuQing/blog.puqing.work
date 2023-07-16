@@ -1,0 +1,65 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: rgb(67, 80, 255);
+  --ifm-color-primary-dark: rgb(85, 102, 255);
+  --ifm-color-primary-darker: rgb(37, 92, 211);
+  --ifm-color-primary-darkest: rgb(53, 64, 155);
+  --ifm-color-primary-light: rgb(70, 117, 203);
+  --ifm-color-primary-lighter: rgb(81, 122, 255);
+  --ifm-color-primary-lightest: rgb(109, 172, 253);
+  --ifm-code-font-size: 95%;
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: rgba(0, 0, 0, 0.7);
+  text-shadow: 2px 0 1px #ff3f1a, -2px 0 1px #00a7e0;
+  color: white;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.carousel .slide img {
+  aspect-ratio: 4/3;
+  height: 300px;
+}
+
+.blog-list-page article {
+  box-shadow: 3px 3px 10px #7777;
+  border-radius: 19px;
+  padding: 20px;
+  margin-bottom: 20px !important;
+}
+
+.blog-list-page article .markdown h2 {
+  font-size: 26px;
+}
+
+.blog-list-page article>header>h2 {
+  font-size: 30px;
+}
+
+.blog-list-page main {
+  --ifm-col-width: calc(9 / 12 * 100%) !important;
+}
+
+@media (max-width: 996px) {
+  .blog-list-page main {
+    --ifm-col-width: 100% !important;
+  }
+}

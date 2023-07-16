@@ -1,0 +1,65 @@
+{
+  "name": "blog-puqing-work",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@cmfcmf/docusaurus-search-local": "^0.9.3",
+    "@docusaurus/core": "^2.1.0",
+    "@docusaurus/preset-classic": "^2.1.0",
+    "@easyops-cn/docusaurus-search-local": "^0.21.4",
+    "@mdx-js/react": "^1.6.21",
+    "@nivo/bar": "^0.74.0",
+    "@nivo/calendar": "^0.74.0",
+    "@nivo/core": "^0.74.0",
+    "@nivo/line": "^0.74.0",
+    "@nivo/pie": "^0.74.0",
+    "@svgr/webpack": "^5.5.0",
+    "@vercel/analytics": "^0.1.9",
+    "array-shuffle": "^3.0.0",
+    "clsx": "^1.1.1",
+    "file-loader": "^6.2.0",
+    "fullpage.js": "^3.1.2",
+    "hast-util-is-element": "1.1.0",
+    "nodejieba": "^2.6.0",
+    "prism-react-renderer": "^1.2.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-parallax": "^3.3.0",
+    "react-responsive": "^9.0.0-beta.4",
+    "react-responsive-carousel": "^3.2.22",
+    "react-typical": "^0.1.3",
+    "rehype-katex": "5",
+    "remark-math": "3",
+    "swiper": "^7.2.0",
+    "url-loader": "^4.1.1"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^2.1.0",
+    "@tsconfig/docusaurus": "^1.0.4",
+    "typescript": "^4.3.5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
