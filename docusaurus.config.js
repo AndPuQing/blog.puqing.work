@@ -10,7 +10,7 @@ const katex = require('rehype-katex');
 const config = {
   title: "Stand Alone Complex",
   tagline: "Empoered with knowledge",
-  url: "https://gong.host",
+  url: "https://blog.puqing.work",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
