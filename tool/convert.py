@@ -16,7 +16,7 @@ META = re.compile(r"^---\n(?P<meta>[\s\S]+?)\n---\n", re.MULTILINE)
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("input", help="input file")
-    parser.add_argument("output", help="output file", required=False)
+    parser.add_argument("-o", "--output", help="output file")
     return parser.parse_args()
 
 
