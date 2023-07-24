@@ -1,0 +1,46 @@
+---
+author: PuQing
+creation date: 2023-07-22 17:37
+tags:
+- private
+- 特殊矩阵
+- 线性代数
+---
+# Gramian 矩阵
+
+:::quote
+在线性代数中，内积空间中一族向量 $\{\displaystyle v_{1},\dots ,v_{n}\}$ 的格拉姆矩阵（Gramian matrix、Gram matrix 或 Gramian）是内积的 [埃尔米特矩阵](https://zh.wikipedia.org/wiki/%E5%9F%83%E5%B0%94%E7%B1%B3%E7%89%B9%E7%9F%A9%E9%98%B5)，其元素由 ${\displaystyle G_{ij}=\langle v_{i},v_{j}\rangle }$ 给出。
+
+:::
+## 性质
+
+:::warning
+格拉姆矩阵是 [[正定矩阵|半正定]] 的，反之每个半正定矩阵是某些向量的格拉姆矩阵。这组向量一般不是惟一的：任何 [正交基](https://zh.wikipedia.org/wiki/%E6%AD%A3%E4%BA%A4%E5%9F%BA "正交基") 的格拉姆矩阵是单位矩阵。
+
+
+<!--truncate-->
+:::
+1. 对称性
+2. 半正定性 (可为 [零](http://stats.stackexchange.com/a/56833/67822))
+3. 实特征值和正特征值
+4. 矩阵迹 (trace) 为正 (矩阵迹为特征值之和)
+5. 行列式是正的 (行列式是特征值的乘积)
+6. 对角线条目都是正数
+7. 正交特征向量
+8. 可对角化为 $Q \Lambda Q^{\top}$
+9. [可以得到Cholesky分解](http://mathoverflow.net/q/155147/74150)。
+10. $A^{\top}A$ 的秩与 $A$ 的秩相同。
+11. $\operatorname{ker}(A^{\top}A)$=$\operatorname{ker}(A)$
+
+## 例子
+
+在给定区间 $[t_0,t_f]$ 上的实数函数 $\displaystyle \{\ell _{i}(\cdot ),\,i=1,\dots ,n\}$，格拉姆矩阵 ${\displaystyle G=[G_{ij}]}$，由 [函数的标准内积](https://zh.wikipedia.org/wiki/%E5%86%85%E7%A7%AF#%E4%BE%8B%E5%AD%90) 给出:
+
+$$
+G_{i j}=\int_{t_{0}}^{t_{f}} \ell_{i}(\tau) \ell_{j}(\tau) d \tau
+$$
+给定一个实矩阵 $A$，矩阵 $A^T A$ 是 $A$ 的列向量的格拉姆矩阵，而矩阵 $AA^T$ 是 $A$ 的行向量的格拉姆矩阵。
+
+## 应用
+
+- 如果向量是 [[理解协方差矩阵|随机变量]]，所得格拉姆矩阵是 [[理解协方差矩阵|协方差矩阵]]。

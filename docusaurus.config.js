@@ -10,7 +10,7 @@ const katex = require('rehype-katex');
 const config = {
   title: "Stand Alone Complex",
   tagline: "Empoered with knowledge",
-  url: "https://gong.host",
+  url: "https://blog.puqing.work",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -29,6 +29,11 @@ const config = {
           editUrl: "https://github.dev/AndPuQing/blog.puqing.work/blob/master/",
           remarkPlugins: [math],
           rehypePlugins: [katex],
+          admonitions: {
+            tag: ':::',
+            keywords: ['note', 'abstract', 'info', 'todo', 'tip', 'success',
+              'question', 'warning', 'failure', 'danger', 'example', 'quote']
+          }
         },
         blog: {
           showReadingTime: true,
@@ -37,6 +42,11 @@ const config = {
           blogSidebarCount: "ALL",
           remarkPlugins: [math],
           rehypePlugins: [katex],
+          admonitions: {
+            tag: ':::',
+            keywords: ['note', 'abstract', 'info', 'todo', 'tip', 'success',
+              'question', 'warning', 'failure', 'danger', 'example', 'quote']
+          }
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
