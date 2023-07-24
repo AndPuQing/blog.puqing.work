@@ -35,7 +35,7 @@ SwiperCore.use([
 ]);
 
 function BlurBackgroundImage() {
-  const { isDarkTheme } = useColorMode();
+  const isDarkTheme = useColorMode().colorMode === "dark";
   const anotherImgurl = isDarkTheme
     ? "/img/indexbackground_light.jpg"
     : "/img/indexbackground_dark.jpg";
@@ -63,7 +63,7 @@ function BlurBackgroundImage() {
 
 function HomepageBackground() {
   const { siteConfig } = useDocusaurusContext();
-  const { isDarkTheme } = useColorMode();
+  const isDarkTheme = useColorMode().colorMode === "dark";
   return (
     <header
       className={clsx("hero themedHead", styles.heroBanner)}

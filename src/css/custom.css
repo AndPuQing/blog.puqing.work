@@ -63,3 +63,45 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
     --ifm-col-width: 100% !important;
   }
 }
+
+.theme-admonition-example {
+  background-color: rgba(75, 46, 204, 0.1);
+  border-left: 5px solid #7852ee;
+}
+
+.theme-admonition-example h5 {
+  color: #7852ee;
+}
+
+.theme-admonition-example .theme-admonition-icon svg {
+  stroke: #7852ee;
+  fill: #7852ee;
+}
+
+.theme-admonition-abstract {
+  background-color: rgba(229, 248, 248, 0.1);
+  border-left: 5px solid #00bfbc;
+}
+
+.theme-admonition-abstract h5 {
+  color: #00bfbc;
+}
+
+.theme-admonition-abstract .theme-admonition-icon svg {
+  stroke: #00bfbc;
+  fill: #00bfbc;
+}
+
+.theme-admonition-quote {
+  background-color: rgba(245, 245, 245, 0.1);
+  border-left: 5px solid #9e9e9e;
+}
+
+.theme-admonition-quote h5 {
+  color: #9e9e9e;
+}
+
+.theme-admonition-quote .theme-admonition-icon svg {
+  stroke: #9e9e9e;
+  fill: #9e9e9e;
+}
