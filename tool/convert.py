@@ -77,6 +77,9 @@ class MyRenderer(MarkdownRenderer):
         # tags : tag1, tag2, tag3 -> tags : [tag1, tag2, tag3]
         if "tags" in meta:
             meta["tags"] = [tag.strip() for tag in meta["tags"].split(",")]
+        if "author" in meta:
+            meta["authors"] = [meta["author"]]
+            del meta["author"]
         return "---\n" + yaml.dump(meta, allow_unicode=True) + "---\n"
 
 
