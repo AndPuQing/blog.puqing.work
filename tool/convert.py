@@ -6,7 +6,7 @@ import yaml
 import mistune
 from mistune import BlockState, Markdown, InlineState
 from mistune.renderers.markdown import MarkdownRenderer
-from mistune.plugins import math
+from mistune.plugins import math, formatting
 
 CALLOUT_BLOCK_REGEX = re.compile(r"\[!([^\]]*)\]([\-\+]?)(.*)?")
 
@@ -41,6 +41,7 @@ class MyRenderer(MarkdownRenderer):
         self.flag = False
 
     def render_token(self, token, state):
+        print(token)
         self.token_number += 1
         func = self._get_method(token["type"])
         if self.token_number >= 20 and token["type"] == "paragraph" and not self.flag:
@@ -82,6 +83,9 @@ class MyRenderer(MarkdownRenderer):
             del meta["author"]
         return "---\n" + yaml.dump(meta, allow_unicode=True) + "---\n"
 
+    def mark(self, token: Dict[str, Any], state: InlineState) -> str:
+        return "<Highlight>" + self.render_children(token, state) + "</Highlight>"
+
 
 def parse_front_matters(m: Markdown, state: BlockState):
     """Parse front matters."""
@@ -122,6 +126,7 @@ def main(args):
             math.math_in_quote,
             math.math_in_list,
             plugin_front_matters,
+            formatting.mark,
         ],
     )
     text = markdown(text)
