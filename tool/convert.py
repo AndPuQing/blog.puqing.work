@@ -1,7 +1,7 @@
 import argparse
 import re
 from textwrap import indent
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union, Match
 import yaml
 import mistune
 from mistune import BlockState, Markdown, InlineState
@@ -41,7 +41,6 @@ class MyRenderer(MarkdownRenderer):
         self.flag = False
 
     def render_token(self, token, state):
-        print(token)
         self.token_number += 1
         func = self._get_method(token["type"])
         if self.token_number >= 20 and token["type"] == "paragraph" and not self.flag:
@@ -63,7 +62,9 @@ class MyRenderer(MarkdownRenderer):
                     break
             else:
                 alias = alias_
-            return ":::" + alias + match.group(3) + body + "\n:::\n"
+            count = re.findall(r":+", body)
+            dot_ = max(count, key=len) + ":" if count else ":" * 3
+            return dot_ + alias + match.group(3) + body + f"\n{dot_}\n"
         else:
             return indent(text, "> ")
 
@@ -85,6 +86,37 @@ class MyRenderer(MarkdownRenderer):
 
     def mark(self, token: Dict[str, Any], state: InlineState) -> str:
         return "<Highlight>" + self.render_children(token, state) + "</Highlight>"
+
+
+class MyBlockParser(mistune.BlockParser):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def parse_block_quote(self, m: Match, state: BlockState) -> int:
+        """Parse token for block quote. Here is an example of the syntax:
+
+        .. code-block:: markdown
+
+            > a block quote starts
+            > with right arrows
+        """
+        text, end_pos = self.extract_block_quote(m, state)
+        # scan children state
+        child = state.child_state(text)
+
+        if state.depth() >= self.max_nested_level - 1:
+            rules = list(self.block_quote_rules)
+            rules.remove("block_quote")
+        else:
+            rules = self.block_quote_rules
+
+        self.parse(child, rules)
+        token = {"type": "block_quote", "children": child.tokens}
+        if end_pos:
+            state.prepend_token(token)
+            return end_pos
+        state.append_token(token)
+        return state.cursor
 
 
 def parse_front_matters(m: Markdown, state: BlockState):
@@ -121,6 +153,7 @@ def main(args):
     renderer = MyRenderer()
     markdown = Markdown(
         renderer=renderer,
+        block=MyBlockParser(),
         plugins=[
             math.math,
             math.math_in_quote,
