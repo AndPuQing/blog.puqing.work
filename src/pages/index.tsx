@@ -37,11 +37,11 @@ SwiperCore.use([
 function BlurBackgroundImage() {
   const isDarkTheme = useColorMode().colorMode === "dark";
   const anotherImgurl = isDarkTheme
-    ? "/img/indexbackground_light.jpg"
-    : "/img/indexbackground_dark.jpg";
+    ? "/img/indexbackground_light.webp"
+    : "/img/indexbackground_dark.webp";
   const imgurl = !isDarkTheme
-    ? "/img/indexbackground_light.jpg"
-    : "/img/indexbackground_dark.jpg";
+    ? "/img/indexbackground_light.webp"
+    : "/img/indexbackground_dark.webp";
   return (
     <div
       style={{
