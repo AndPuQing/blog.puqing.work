@@ -24,17 +24,7 @@ const config = {
       "@docusaurus/preset-classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.dev/AndPuQing/blog.puqing.work/blob/master/",
-          remarkPlugins: [math],
-          rehypePlugins: [katex],
-          admonitions: {
-            tag: ':::',
-            keywords: ['note', 'abstract', 'info', 'todo', 'tip', 'success',
-              'question', 'warning', 'failure', 'danger', 'example', 'quote']
-          }
-        },
+        docs: false,
         blog: {
           showReadingTime: true,
           editUrl: "https://github.dev/AndPuQing/blog.puqing.work/blob/master/",
@@ -46,7 +36,7 @@ const config = {
             tag: ':::',
             keywords: ['note', 'abstract', 'info', 'todo', 'tip', 'success',
               'question', 'warning', 'failure', 'danger', 'example', 'quote']
-          }
+          },
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -113,12 +103,6 @@ const config = {
             position: "left"
           },
           {
-            type: "doc",
-            docId: "intro",
-            position: "left",
-            label: "Useless",
-          },
-          {
             to: "/blog/tags",
             label: "Tags",
             position: "left"
@@ -132,33 +116,27 @@ const config = {
       },
       footer: {
         style: "light",
-        links: [{
-          title: "Docs",
-          items: [{
-            label: "Documents",
-            to: "/docs/intro",
-          },],
-        },
-        {
-          title: "More",
-          items: [
-            {
-              label: "See me on Github",
-              href: "https://github.com/AndPuQing",
-            },
-            {
-              label: "Powered by docusaurus",
-              href: "https://github.com/facebook/docusaurus",
-            },
-          ],
-        },
+        links: [
+          {
+            title: "More",
+            items: [
+              {
+                label: "See me on Github",
+                href: "https://github.com/AndPuQing",
+              },
+              {
+                label: "Powered by Docusaurus",
+                href: "https://github.com/facebook/docusaurus",
+              },
+            ],
+          },
         ],
         copyright: `<a href="https://github.com/AndPuQing" target="_blank">@PuQing</a> ${new Date().getFullYear()} all rights reserved | <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2020018876号</a>`,
       },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        defaultMode: 'dark'
+        defaultMode: 'light'
       },
     }),
 };
