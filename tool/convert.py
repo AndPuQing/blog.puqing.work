@@ -168,6 +168,8 @@ def parse_show_link(inline, m, state):
             link, text = link.split("|", 1)
         else:
             text = ""
+        if "images" not in link:
+            link = "./images/" + link
         state.append_token(
             {
                 "type": "image",
