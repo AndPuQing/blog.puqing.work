@@ -1,7 +1,7 @@
 import argparse
 import re
 from textwrap import indent
-from typing import Any, Dict, List, Optional, Tuple, Union, Match
+from typing import Any, Dict, Match
 import yaml
 import mistune
 from mistune import BlockState, Markdown, InlineState
@@ -43,11 +43,12 @@ class MyRenderer(MarkdownRenderer):
     def render_token(self, token, state):
         self.token_number += 1
         func = self._get_method(token["type"])
+        print(token)
         if (
             token["type"] == "list" and not self.flag
         ):  # only when token < 20 and not have flag
             self.flag = True
-            return func(token, state) + "\n<!--truncate-->\n"
+            return "\n<!--truncate-->\n" + func(token, state)
         if self.token_number >= 20 and token["type"] == "paragraph" and not self.flag:
             # insert truncated text
             self.flag = True
@@ -149,6 +150,44 @@ def plugin_front_matters(md: Markdown):
     md.before_parse_hooks.append(parse_front_matters)
 
 
+def parse_show_link(inline, m, state):
+    """
+    Parse link.
+
+    ```markdown
+    ![[link]]
+    ![[link|text]]
+    ```
+    """
+    text = m.group(0)
+    pos = m.end()
+    match = re.match(r"!\[\[(.*)\]\]", text)
+    if match:
+        link = match.group(1)
+        if "|" in link:
+            link, text = link.split("|", 1)
+        else:
+            text = ""
+        state.append_token(
+            {
+                "type": "image",
+                "children": [{"type": "text", "raw": text}],
+                "attrs": {"url": link},
+            }
+        )
+    return pos
+
+
+def show_link(md):
+    md.block.register("show_link", r"!\[\[.*?\]\]", parse_show_link)
+    md.inline.register("show_link", r"!\[\[.*?\]\]", parse_show_link)
+
+
+def show_link_in_list(md):
+    """Enable show_link plugin in list."""
+    md.block.insert_rule(md.block.list_rules, "show_link", before="list")
+
+
 def main(args):
     if args.output is None:
         args.output = args.input.replace(".md", ".mdx")
@@ -165,6 +204,8 @@ def main(args):
             math.math_in_list,
             plugin_front_matters,
             formatting.mark,
+            show_link,
+            show_link_in_list,
         ],
     )
     text = markdown(text)
