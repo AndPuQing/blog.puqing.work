@@ -43,6 +43,11 @@ class MyRenderer(MarkdownRenderer):
     def render_token(self, token, state):
         self.token_number += 1
         func = self._get_method(token["type"])
+        if (
+            token["type"] == "list" and not self.flag
+        ):  # only when token < 20 and not have flag
+            self.flag = True
+            return func(token, state) + "\n<!--truncate-->\n"
         if self.token_number >= 20 and token["type"] == "paragraph" and not self.flag:
             # insert truncated text
             self.flag = True
