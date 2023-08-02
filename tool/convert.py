@@ -7,6 +7,12 @@ import mistune
 from mistune import BlockState, Markdown, InlineState
 from mistune.renderers.markdown import MarkdownRenderer
 from mistune.plugins import math, formatting
+from deep_translator import GoogleTranslator
+
+proxies = {
+    "http": "127.0.0.1:7890",
+    "https": "127.0.0.1:7890",
+}
 
 CALLOUT_BLOCK_REGEX = re.compile(r"\[!([^\]]*)\]([\-\+]?)(.*)?")
 
@@ -85,11 +91,15 @@ class MyRenderer(MarkdownRenderer):
         # tags : tag1, tag2, tag3 -> tags : [tag1, tag2, tag3]
         if "tags" in meta:
             meta["tags"] = [tag.strip() for tag in meta["tags"].split(",")]
+            # remove public/private tag
+            meta["tags"] = [
+                tag for tag in meta["tags"] if tag not in ["Public", "Private"]
+            ]
         if "creation date" in meta:
             meta["date"] = meta["creation date"]
             del meta["creation date"]
         if "keywords" not in meta:
-            meta["keywords"] = meta.get("tags", [])
+            meta["keywords"] = meta["tags"].copy()
         if "author" in meta:
             meta["authors"] = [meta["author"]]
             del meta["author"]
@@ -197,9 +207,20 @@ def show_link_in_list(md):
 
 def main(args):
     if args.output is None:
-        args.output = args.input.replace(".md", ".mdx")
-        # replace " " with "-"
-        args.output = args.output.replace(" ", "-")
+        # translate file name
+        filename = args.input.split("\\")[-1]
+        filename = filename.replace(".md", "")
+        filename = GoogleTranslator(
+            source="zh-CN", target="en", proxies=proxies
+        ).translate(filename)
+        # remove special characters
+        filename = re.sub(r"[^\w\s]", "", filename)
+        # remove space
+        filename = filename.replace(" ", "-")
+        # lowercase
+        filename = filename.lower()
+        args.output = args.input.split("\\")[-2] + "\\" + filename + ".mdx"
+        print("Output file will be saved as: ", args.output)
     with open(args.input, "r", encoding="utf-8") as f:
         text = f.read()
 
