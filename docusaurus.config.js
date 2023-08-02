@@ -43,8 +43,7 @@ const config = {
         },
         sitemap: {
           changefreq: 'weekly',
-          priority: 0.5,
-          ignorePatterns: ['/tags/**'],
+          ignorePatterns: ['/tags/**', '/blog/tags/*'],
           filename: 'sitemap.xml',
         },
         gtag: {
