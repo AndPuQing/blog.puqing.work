@@ -34,8 +34,9 @@ Cloudflared establishes outbound connections (tunnels) between your resources an
 4. 选择 **Save tunnel**.
 
 5. 接下来，需要安装 cloudflared 并运行。
+   ![Cloudflare Tunnel 穿透.png](http://4c4g.puqing.work:8089/i/2023/08/02/64ca0a53c04f2.webp)
 
-   ![](./images/Cloudflare Tunnel 穿透.png)建议是 docker 进行部署
+   建议是 docker 进行部署
 
 ## Private
 
@@ -45,7 +46,7 @@ Cloudflared establishes outbound connections (tunnels) between your resources an
 
 然后重中之重是设置为公网可访问
 
-![](./images/1-Cloudflare Tunnel 穿透.png)
+![1-Cloudflare Tunnel 穿透.png](http://4c4g.puqing.work:8089/i/2023/08/02/64ca0a698d2dc.webp)
 
 主界面是这样的，上面的 subdomain 便是将服务绑定到一个子域名上
 
@@ -53,7 +54,9 @@ Cloudflared establishes outbound connections (tunnels) between your resources an
 
 ### 穿透 HTTP
 
-![](./images/2-Cloudflare Tunnel 穿透.png)类似于这样的设置便好，URL 后的端口修改为服务端口
+![2-Cloudflare Tunnel 穿透.png](http://4c4g.puqing.work:8089/i/2023/08/02/64ca0a76baf05.webp)
+
+类似于这样的设置便好，URL 后的端口修改为服务端口
 
 如果有些 502 错误发生尝试将 HTTP 修改为 HTTPS，并将 **No TLS Verify**打开 (如果服务已经配好证书可以不用)。
 
