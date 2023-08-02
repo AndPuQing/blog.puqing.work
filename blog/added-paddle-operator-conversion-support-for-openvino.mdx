@@ -122,7 +122,7 @@ $ make -j$(nproc); make install
 
 首先在 [Paddle Docs](https://www.paddlepaddle.org.cn/documentation/docs/zh/develop/api/paddle/gather_nd_cn.html#gather-nd) 查看该算子的用法，再根据算子旁边的 [源代码](https://github.com/PaddlePaddle/Paddle/blob/develop/python/paddle/tensor/manipulation.py#L3751) 链接跳转至该算子的 Python 前端代码，如下图：
 
-![image.png](http://4c4g.puqing.work:8089/i/2023/08/02/64ca098a7adf9.webp)
+![image.png](https://images.puqing.work/2023/08/02/64ca1097b0d68.webp)
 
 下面是截取的部分代码，并简要说明其作用
 
@@ -215,7 +215,7 @@ $ ./paddle_tests --gtest_filter=PaddleFuzzyOpTest/FrontEndFuzzyOpTest.testOpFuzz
 
 > 此处的 * 是通配符，若只想测试添加的算子可以例如：*gather_nd* 的写法进行测试
 
-![image.png](http://4c4g.puqing.work:8089/i/2023/08/02/64ca09f887d39.webp)
+![image.png](https://images.puqing.work/2023/08/02/64ca10b61141a.webp)
 
 在测试完毕后有一个单测发生了报错，根据提示说明 openvino 是不支持 rank=0 的数组输入的，所以我们需要对用户的输入数据进行检查。
 
@@ -256,7 +256,7 @@ $ git pull upstream BRANCHNAME
 
 开启一个 PR 并填写 title ，为了方便 review，请附上自己单侧的通过情况的截图以及 Paddle 算子对应算子的实现
 
-![1-为 OpenVINO 新增 Paddle 算子转换支持.png](http://4c4g.puqing.work:8089/i/2023/08/02/64ca09df727ac.webp)
+![image.png](https://images.puqing.work/2023/08/02/64ca10c5be95e.webp)
 
 至此便完成了 openvino gather_nd 算子对于 Paddle 的转换支持 🎉
 
