@@ -94,7 +94,9 @@ class MyRenderer(MarkdownRenderer):
             meta["tags"] = [tag.strip() for tag in meta["tags"].split(",")]
             # remove public/private tag
             meta["tags"] = [
-                tag for tag in meta["tags"] if tag not in ["Public", "Private"]
+                tag
+                for tag in meta["tags"]
+                if tag not in ["Public", "Private", "public", "private"]
             ]
         if "creation date" in meta:
             meta["date"] = meta["creation date"]
