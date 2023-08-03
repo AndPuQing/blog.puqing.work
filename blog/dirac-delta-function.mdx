@@ -22,10 +22,10 @@ tags:
 来考虑上图左边的函数
 
 $$
-f_{h}(x)=\left\{\begin{array}{ll}
-h & \left(\left|x-x_{0}\right| \leqslant \frac{1}{2 h}\right) \\
-0 & \left(\left|x-x_{0}\right|>\frac{1}{2 h}\right)
-\end{array}\right.
+f_{h}(x)=\begin{cases}
+h & \displaystyle\left(\left|x-x_{0}\right| \leqslant \frac{1}{2 h}\right) \\
+0 & \displaystyle\left(\left|x-x_{0}\right|>\frac{1}{2 h}\right)
+\end{cases}
 $$
 其中的 $h,x_{0}$ 是常数，由示意图可以易得函数下面积为 $\int_{-\infty}^{+\infty} f_{h}(x) \mathrm{d} x=1$。现在令 $h\to \infty$，长方形的高将趋近于无穷大，宽将趋近于零，而定积分结果不变。
 
@@ -33,7 +33,7 @@ $$
 
 ## 使用函数列严格定义
 
-:::quote 定义 `狄拉克 $\delta$ 函数`
+:::quote 定义 `狄拉克` $\delta$ 函数
 令 $\delta_{1}(x),\delta_{2}(x),\dots$ 为一个连续实函数的序列。若 $\delta_{n}(x)$ 满足下面条件，那么我们把该函数列称伪狄拉克 $\delta$ 函数列：
 对于所有性质良好（例如在 $x=0$ 连续）的 $f(x)$，都有
 
