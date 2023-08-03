@@ -1,0 +1,82 @@
+---
+authors:
+- PuQing
+date: 2023-08-03 10:50
+keywords:
+- 定积分
+tags:
+- 定积分
+---
+# 狄拉克 delta 函数
+
+狄拉克 $\delta(x)$ 函数并不是数学中一个严格意义上的函数，而是泛函分析中称为 [[广义函数(generalized function)]] 或者**分布 (distribution)**。它在除零以外的点上都等于零，且在整个定义域上的积分等于 $1$.
+
+:::tip Why?
+假设 $f(x)=\delta(x)$ 和 $g(x)=0$ 这两个数学对象除了在 $x=0$ 以外都有相同的值，但其积分却不相同。根据 [勒贝格积分](https://zh.wikipedia.org/wiki/%E5%8B%92%E8%B2%9D%E6%A0%BC%E7%A9%8D%E5%88%86 "勒贝格积分") 理论，若 $f$ 和 $g$ 为函数，使得 $f=g$ [几乎处处](https://zh.wikipedia.org/zh-cn/%E5%B9%BE%E4%B9%8E%E8%99%95%E8%99%95) 成立，则 $f$ 可积当且仅当 $g$ 可积且 $f$ 和 $g$ 的积分相同。
+
+:::
+![Untitled.bmp](https://images.puqing.work/2023/08/03/64cb1de3987f2.bmp)
+
+
+<!--truncate-->
+来考虑上图左边的函数
+
+$$
+f_{h}(x)=\left\{\begin{array}{ll}
+h & \left(\left|x-x_{0}\right| \leqslant \frac{1}{2 h}\right) \\
+0 & \left(\left|x-x_{0}\right|>\frac{1}{2 h}\right)
+\end{array}\right.
+$$
+其中的 $h,x_{0}$ 是常数，由示意图可以易得函数下面积为 $\int_{-\infty}^{+\infty} f_{h}(x) \mathrm{d} x=1$。现在令 $h\to \infty$，长方形的高将趋近于无穷大，宽将趋近于零，而定积分结果不变。
+
+上面的 $f_{h}(x)$ 就可以表示为 $\delta(x-x_{0})$。当然，我们还可以选取其他含有参数的 $f(x)$ 来逼近 $\delta$ 函数，如上图右边所示。
+
+## 使用函数列严格定义
+
+:::quote 定义 `狄拉克 $\delta$ 函数`
+令 $\delta_{1}(x),\delta_{2}(x),\dots$ 为一个连续实函数的序列。若 $\delta_{n}(x)$ 满足下面条件，那么我们把该函数列称伪狄拉克 $\delta$ 函数列：
+对于所有性质良好（例如在 $x=0$ 连续）的 $f(x)$，都有
+
+$$
+\lim _{n \rightarrow \infty} \int_{-\infty}^{+\infty} \delta_{n}(x) f(x) \mathrm{d} x=f(0)
+$$
+:::
+:::danger 这里不是太明白函数列的道理
+
+:::
+## 常见性质
+
+### 缩放与对称
+
+对于非零标量 $\alpha$，$\delta$ 函数有以下缩放性质：
+
+$$
+\int_{-\infty}^{\infty} \delta(\alpha x) \mathrm{d} x=\int_{-\infty}^{\infty} \delta(u) \frac{\mathrm{d} u}{|\alpha|}=\frac{1}{|\alpha|},
+$$
+所以
+
+$$
+\delta(\alpha x)=\frac{\delta(x)}{|\alpha|}.
+$$
+:::tip 证明
+几何不严谨证明：与 $\delta(x)$ 相比较，$\delta(ax)$ 的图像在 $x$ 方向变窄了 $\mid a\mid$ 倍，所以函数曲线下的面积变为原来的 $\frac{1}{\mid a\mid }$ 倍，故 $\mid a\mid\delta(ax)$ 下的面积为 $1$.
+
+:::
+### 与函数复合
+
+若一个等式中出现了所谓的 $\delta$ 函数 $\delta(x)$，那么其严格的定义是先将 $\delta(x)$ 替换为符合 **定义** 的任意函数列 $\delta_{n}(x)$，令**等式在 $n\to \infty$ 的极限时成立**。
+
+对于任意在 $x=x_{0}$ 处连续函数 $f(x)$，有
+
+$$
+\int_{-\infty}^{+\infty} f(x) \delta\left(x-x_{0}\right) \mathrm{d} x=f\left(x_{0}\right)
+$$
+该等式的严格意义是
+
+$$
+\lim _{n \rightarrow \infty} \int_{-\infty}^{+\infty} f(x) \delta_{n}\left(x-x_{0}\right) \mathrm{d} x=f\left(x_{0}\right)
+$$
+## 参考
+
+- [狄拉克δ函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/zh-cn/%E7%8B%84%E6%8B%89%E5%85%8B%CE%B4%E5%87%BD%E6%95%B0#cite_note-FOOTNOTEVladimirov1971%C2%A75.1-5)
+- [狄拉克 delta 函数 - 小时百科](https://wuli.wiki/online/Delta.html#note2)
