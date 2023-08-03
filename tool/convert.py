@@ -49,7 +49,6 @@ class MyRenderer(MarkdownRenderer):
     def render_token(self, token, state):
         self.token_number += 1
         func = self._get_method(token["type"])
-        print(token)
         if (
             token["type"] == "list" and not self.flag
         ):  # only when token < 20 and not have flag
@@ -67,6 +66,7 @@ class MyRenderer(MarkdownRenderer):
         if match:
             body = CALLOUT_BLOCK_REGEX.sub("", text)
             body = body[:-1]
+            print(body)
             alias_ = match.group(1)
             for alias, c_type in self.alias_tuples:
                 if alias == alias_:
@@ -75,7 +75,8 @@ class MyRenderer(MarkdownRenderer):
             else:
                 alias = alias_
             count = re.findall(r":+", body)
-            dot_ = max(count, key=len) + ":" if count else ":" * 3
+            count = max(count, key=len) + ":" if count else ""
+            dot_ = count if len(count) > 3 else ":" * 3
             return dot_ + alias + match.group(3) + body + f"\n{dot_}\n"
         else:
             return indent(text, "> ")
