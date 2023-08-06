@@ -42,8 +42,7 @@ const config = {
           customCss: require.resolve("./src/css/custom.css"),
         },
         sitemap: {
-          changefreq: 'weekly',
-          ignorePatterns: ['/tags/**', '/blog/tags/*'],
+          ignorePatterns: ['/tags/**', '/blog/tags/**', '/docs/**',],
           filename: 'sitemap.xml',
         },
         gtag: {
