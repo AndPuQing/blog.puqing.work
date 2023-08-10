@@ -1,2 +1,5 @@
+# allow google
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://blog.puqing.work/sitemap.xml
