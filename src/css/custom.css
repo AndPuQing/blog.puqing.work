@@ -14,6 +14,7 @@
   --ifm-color-primary-lighter: rgb(81, 122, 255);
   --ifm-color-primary-lightest: rgb(109, 172, 253);
   --ifm-code-font-size: 95%;
+  --ifm-container-width-xl: 1400px;
   scroll-behavior: smooth;
 }
 
@@ -33,6 +34,7 @@
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
 }
+
 
 .carousel .slide img {
   aspect-ratio: 4/3;
