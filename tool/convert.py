@@ -66,7 +66,6 @@ class MyRenderer(MarkdownRenderer):
         if match:
             body = CALLOUT_BLOCK_REGEX.sub("", text)
             body = body[:-1]
-            print(body)
             alias_ = match.group(1)
             for alias, c_type in self.alias_tuples:
                 if alias == alias_:
@@ -79,7 +78,8 @@ class MyRenderer(MarkdownRenderer):
             dot_ = count if len(count) > 3 else ":" * 3
             return dot_ + alias + match.group(3) + body + f"\n{dot_}\n"
         else:
-            return indent(text, "> ")
+            # 补充::: info
+            return "::: info\n" + text + "\n:::\n"
 
     def block_math(self, token: Dict[str, Any], state: BlockState) -> str:
         return "$$\n" + token["raw"] + "\n$$\n"
