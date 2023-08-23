@@ -79,7 +79,7 @@ class MyRenderer(MarkdownRenderer):
             return dot_ + alias + match.group(3) + body + f"\n{dot_}\n"
         else:
             # 补充::: info
-            return "::: info\n" + text + "\n:::\n"
+            return ":::info\n" + text + "\n:::\n"
 
     def block_math(self, token: Dict[str, Any], state: BlockState) -> str:
         return "$$\n" + token["raw"] + "\n$$\n"
