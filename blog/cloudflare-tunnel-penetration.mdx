@@ -1,16 +1,17 @@
 ---
 authors:
-- PuQing
+  - PuQing
 date: 2023-07-18 22:35
 keywords:
-- halfstack
-- 内网穿透
-- 反向代理
+  - halfstack
+  - 内网穿透
+  - 反向代理
 tags:
-- halfstack
-- 内网穿透
-- 反向代理
+  - halfstack
+  - 内网穿透
+  - 反向代理
 ---
+
 # Cloudflare Tunnel 穿透
 
 ## How it works
@@ -23,15 +24,15 @@ Cloudflared establishes outbound connections (tunnels) between your resources an
 
 ### 1. 创建隧道
 
-
 <!--truncate-->
-1. 登录 [Zero TrustOpen external link](https://one.dash.cloudflare.com/) 然后依次选择 **Access** > **Tunnels**.
 
-2. 选择 **Create a tunnel**.
+1. 登录  [Zero TrustOpen external link](https://one.dash.cloudflare.com/)  然后依次选择  **Access** > **Tunnels**.
+
+2. 选择  **Create a tunnel**.
 
 3. 为您的隧道输入一个名称。建议选择一个反映您希望通过该隧道连接的资源类型的名称.
 
-4. 选择 **Save tunnel**.
+4. 选择  **Save tunnel**.
 
 5. 接下来，需要安装 cloudflared 并运行。
    ![image.png](https://images.puqing.work/2023/08/02/64ca10dc38399.webp)
@@ -71,6 +72,8 @@ cloudflare 甚至提供穿透 SSH，而隧道的建立类似于 HTTP，但是需
 一种是本机 terminal
 
 一种是通过 cloudflared 提供的 web terminal 可以说很周到了。
+
+<Geogebra filename="https://cdn.puqing.work/geogebra-export.ggb" />
 
 ## 相关资料
 

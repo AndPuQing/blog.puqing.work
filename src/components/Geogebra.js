@@ -64,7 +64,7 @@ const Geogebra = (props) => {
         LoadComponent = ({ children }) => <h3>{children}</h3>;
     }
 
-    const url = 'https://cdn.puqing.work/GeoGebra/deployggb.js';
+    const url = 'https://geogebra.org/apps/deployggb.js';
     const [deployggbLoaded, setDeployggbLoaded] = useState(false);
     const [loading, setLoading] = useState(true);
     const [watchPropsChange, setWatchPropsChange] = useState(false);
@@ -144,12 +144,13 @@ const Geogebra = (props) => {
 
 Geogebra.defaultProps = {
     appName: 'classic',
-    width: "100%",
+    width: 650,
     height: 600,
     showToolBar: false,
-    showAlgebraInput: false,
     showMenuBar: false,
-    reloadOnPropChange: false,
+    showAlgebraInput: false,
+    showResetIcon: true,
+    reloadOnPropChange: true,
 };
 
 export default Geogebra;
