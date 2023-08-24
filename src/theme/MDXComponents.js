@@ -3,6 +3,7 @@ import React from 'react';
 import MDXComponents from '@theme-original/MDXComponents';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
 import Highlight from '@site/src/components/Highlight';
 import Geogebra from '@site/src/components/Geogebra';
 
@@ -18,4 +19,6 @@ export default {
     Tabs,
     // Map the "<TabItem>" tag to our TabItem component
     TabItem,
+    // Map the "<CodeBlock>" tag to our CodeBlock component
+    CodeBlock,
 };

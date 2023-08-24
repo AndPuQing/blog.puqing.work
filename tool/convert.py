@@ -1,7 +1,7 @@
 import argparse
 import re
-from textwrap import indent
-from typing import Any, Dict, Match
+from typing import Any, Dict, Match, Optional
+from mistune.core import BlockState
 import yaml
 import mistune
 from mistune import BlockState, Markdown, InlineState
@@ -47,6 +47,7 @@ class MyRenderer(MarkdownRenderer):
         self.flag = False
 
     def render_token(self, token, state):
+        print(token)
         self.token_number += 1
         func = self._get_method(token["type"])
         if (
@@ -143,16 +144,6 @@ class MyBlockParser(mistune.BlockParser):
         return state.cursor
 
 
-def parse_front_matters(m: Markdown, state: BlockState):
-    """Parse front matters."""
-
-    meta_text, markdown_text = split_front_matter(state.src)
-    if meta_text:
-        meta = yaml.safe_load(meta_text)
-        state.append_token({"type": "front_matter", "meta": meta})
-        state.process(markdown_text)
-
-
 def split_front_matter(s):
     match = META.match(s)
     if match:
@@ -162,6 +153,16 @@ def split_front_matter(s):
         meta_text = ""
         markdown_text = s
     return meta_text, markdown_text
+
+
+def parse_front_matters(m: Markdown, state: BlockState):
+    """Parse front matters."""
+
+    meta_text, markdown_text = split_front_matter(state.src)
+    if meta_text:
+        meta = yaml.safe_load(meta_text)
+        state.append_token({"type": "front_matter", "meta": meta})
+        state.process(markdown_text)
 
 
 def plugin_front_matters(md: Markdown):
