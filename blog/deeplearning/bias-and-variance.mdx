@@ -1,14 +1,15 @@
 ---
 authors:
-- PuQing
+  - PuQing
 date: 2023-08-24 15:13
 keywords:
-- 机器学习
-- 基础概念
+  - 机器学习
+  - 基础概念
 tags:
-- 机器学习
-- 基础概念
+  - 机器学习
+  - 基础概念
 ---
+
 # Bias and Variance
 
 ## 偏差 (Bias)
@@ -18,13 +19,17 @@ tags:
 $$
 \operatorname{Bias}(\hat{f}(x))=E[\hat{f}(x)-f(x)]
 $$
+
 :::
 其中，$E[\cdot]$ 表示期望，$f(x)$ 是真实值，$\hat{f}(x)$ 是模型对给定输入 $x$ 的预测
 
 偏差衡量了模型预测的平均误差。高偏差可能意味着模型过于简单（即模型欠拟合），无法捕获数据中的所有相关性，导致预测结果偏离真实值。
 
-
 <!--truncate-->
+
+<details>
+<summary>代码示例</summary>
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -58,6 +63,8 @@ plt.legend()
 plt.show()
 ```
 
+</details>
+
 ## 方差 (Variance)
 
 在概率论中，方差是一个衡量<Highlight>预测值</Highlight>分散程度的量。
@@ -67,6 +74,7 @@ plt.show()
 $$
 \text { Variance }=E\left[(\hat{f}(x)-E[\hat{f}(x)])^{2}\right]
 $$
+
 在这个公式中，最外的期望 $E[\cdot]$ 是对不同的训练数据来说的，对于单个数据集是无意义的。
 
 :::danger 这里内侧的 $E[\hat{f}(x)]$ 是多个模型对于同一个输入 $x$ 的预测值的期望
@@ -77,6 +85,9 @@ $$
 
 :::
 同样的代码示例：
+
+<details>
+<summary>代码示例</summary>
 
 ```python
 import numpy as np
@@ -112,6 +123,8 @@ for i, y_pred in enumerate(predictions):
 plt.legend()
 plt.show()
 ```
+
+</details>
 
 ## 降低泛化误差方法 (正则化方法)
 
