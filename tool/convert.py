@@ -16,6 +16,8 @@ proxies = {
 
 CALLOUT_BLOCK_REGEX = re.compile(r"\[!([^\]]*)\]([\-\+]?)(.*)?")
 
+META = re.compile(r"^---\n(?P<meta>[\s\S]+?)\n---\n", re.MULTILINE)
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -90,7 +92,6 @@ class MyRenderer(MarkdownRenderer):
         meta = token["meta"]
         # tags : tag1, tag2, tag3 -> tags : [tag1, tag2, tag3]
         if "tags" in meta:
-            meta["tags"] = [tag.strip() for tag in meta["tags"].split(",")]
             # remove public/private tag
             meta["tags"] = [
                 tag
@@ -140,6 +141,31 @@ class MyBlockParser(mistune.BlockParser):
             return end_pos
         state.append_token(token)
         return state.cursor
+
+
+def split_front_matter(s):
+    match = META.match(s)
+    if match:
+        meta_text = match.group(1)
+        markdown_text = s[match.end() :]
+    else:
+        meta_text = ""
+        markdown_text = s
+    return meta_text, markdown_text
+
+
+def parse_front_matters(m: Markdown, state: BlockState):
+    """Parse front matters."""
+
+    meta_text, markdown_text = split_front_matter(state.src)
+    if meta_text:
+        meta = yaml.safe_load(meta_text)
+        state.append_token({"type": "front_matter", "meta": meta})
+        state.process(markdown_text)
+
+
+def plugin_front_matters(md: Markdown):
+    md.before_parse_hooks.append(parse_front_matters)
 
 
 def parse_show_link(inline, m, state):
@@ -209,6 +235,7 @@ def main(args):
             math.math,
             math.math_in_quote,
             math.math_in_list,
+            plugin_front_matters,
             formatting.mark,
             show_link,
             show_link_in_list,
