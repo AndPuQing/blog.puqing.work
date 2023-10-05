@@ -132,7 +132,7 @@ const config = {
             ],
           },
         ],
-        copyright: `<a href="https://github.com/AndPuQing" target="_blank">@PuQing</a> ${new Date().getFullYear()} all rights reserved | <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2020018876号</a>`,
+        copyright: `<a href="https://github.com/AndPuQing" target="_blank">@PuQing</a> ${new Date().getFullYear()} All rights reserved | <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2020018876号</a>`,
       },
       prism: {
         theme: lightCodeTheme,
