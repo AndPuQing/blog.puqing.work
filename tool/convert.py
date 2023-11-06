@@ -1,17 +1,17 @@
 import argparse
 import re
-from typing import Any, Dict, Match, Optional
-from mistune.core import BlockState
+from typing import Any, Dict, Match
 import yaml
 import mistune
 from mistune import BlockState, Markdown, InlineState
 from mistune.renderers.markdown import MarkdownRenderer
 from mistune.plugins import math, formatting
 from deep_translator import GoogleTranslator
+import os
 
 proxies = {
-    "http": "127.0.0.1:7890",
-    "https": "127.0.0.1:7890",
+    "http": "100.82.183.24:7890",
+    "https": "100.82.183.24:7890",
 }
 
 CALLOUT_BLOCK_REGEX = re.compile(r"\[!([^\]]*)\]([\-\+]?)(.*)?")
@@ -211,7 +211,7 @@ def show_link_in_list(md):
 def main(args):
     if args.output is None:
         # translate file name
-        filename = args.input.split("\\")[-1]
+        filename = args.input.split("/")[-1]
         filename = filename.replace(".md", "")
         filename = GoogleTranslator(
             source="zh-CN", target="en", proxies=proxies
@@ -222,7 +222,7 @@ def main(args):
         filename = filename.replace(" ", "-")
         # lowercase
         filename = filename.lower()
-        args.output = args.input.split("\\")[-2] + "\\" + filename + ".mdx"
+        args.output = filename + ".mdx"
         print("Output file will be saved as: ", args.output)
     with open(args.input, "r", encoding="utf-8") as f:
         text = f.read()
