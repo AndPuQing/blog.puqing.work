@@ -49,7 +49,9 @@ class MyRenderer(MarkdownRenderer):
         ):  # only when token < 20 and not have flag
             self.flag = True
             return "\n<!--truncate-->\n" + func(token, state)
-        if self.token_number >= 15 and token["type"] == "paragraph" and not self.flag:
+        if (
+            self.token_number >= 15 and token["type"] == "paragraph" and not self.flag
+        ):  # noqa
             # insert truncated text
             self.flag = True
             return func(token, state) + "\n<!--truncate-->\n"
@@ -288,24 +290,23 @@ def main(args):
         file_name = file_name.replace(".md", "")
         PUBLISH_DICT[file_name] = file
 
-    render = MyRenderer()
-    markdown = Markdown(
-        renderer=render,
-        block=MyBlockParser(),
-        plugins=[
-            math.math,
-            math.math_in_quote,
-            math.math_in_list,
-            plugin_front_matters,
-            formatting.mark,
-            show_link,
-            show_link_in_list,
-        ],
-    )
-
     for key in PUBLISH_DICT.keys():
         new_file = process_link(PUBLISH_DICT[key], PUBLISH_DICT)
         new_name = hashlib.md5(key.encode("utf-8")).hexdigest()[0:8] + ".mdx"
+        render = MyRenderer()
+        markdown = Markdown(
+            renderer=render,
+            block=MyBlockParser(),
+            plugins=[
+                math.math,
+                math.math_in_quote,
+                math.math_in_list,
+                plugin_front_matters,
+                formatting.mark,
+                show_link,
+                show_link_in_list,
+            ],
+        )
         new_file = markdown("".join(new_file))
         with open(os.path.join(output_dir, new_name), "w", encoding="utf-8") as f:
             f.writelines(new_file)
