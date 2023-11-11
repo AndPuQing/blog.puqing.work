@@ -131,7 +131,7 @@ function RandomImage() {
   const [imgsrc] = useState(
     () =>
       config.illustrations[
-        Math.floor(Math.random() * config.illustrations.length)
+      Math.floor(Math.random() * config.illustrations.length)
       ]
   );
   const isMobile = useMediaQuery({ maxWidth: 1024 });
