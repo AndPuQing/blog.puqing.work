@@ -1,0 +1,281 @@
+---
+authors:
+- PuQing
+date: 2023-07-23 18:01
+keywords:
+- 线性代数
+- LU分解
+- 矩阵分解
+tags:
+- 线性代数
+- LU分解
+- 矩阵分解
+---
+# 矩阵的 LU 分解
+
+## 引入
+
+回想我们解方程组的过程
+
+如果有方程组：
+
+$$
+\left\{\begin{aligned}
+2 x_{1}-x_{2}+2 x_{3} & =-8 \\
+x_{1}+2 x_{2}+3 x_{3} & =-7 \\
+x_{1}+3 x_{2} & =7
+\end{aligned}\right.
+$$
+我们会想要通过**一系列**(消元，代入) 的操作化成是如下的样子：
+
+
+<!--truncate-->
+$$
+\left\{\begin{aligned}
+x_{1}+2 x_{2}+3 x_{3} & =-7, \\
+x_{2}-3 x_{3} & =14, \\
+x_{3} & =-4 ;
+\end{aligned}\right.
+$$
+这样的话我们就可以通过**回代**求解出来该方程组。注意到变换后的式子是一个下三角矩阵。所以我们想能不能将一个矩阵分解为一个单位上三角矩阵 $U$ 和一个单位下三角矩阵 $L$ 呢
+
+我们有两种实现：
+
+- Gauss 消去法
+- 待定系数法
+
+## Gauss 消除法
+
+给定一个矩阵：
+
+$$
+A=\left[\begin{array}{ccc}
+a_{11} & \cdots & a_{1 n} \\
+\vdots & \ddots & \\
+a_{n 1} & \cdots & a_{n n}
+\end{array}\right] \in \mathbb{R}^{n \times n}
+$$
+假定 $a_{11}\ne 0$，构造 [初等矩阵](./ce3fb94b) $L_{1}$ $\displaystyle \left( l_{i1}=\frac{a_{i1}}{a_{11}},i=2,\dots,n. \right)$
+
+$$
+L_{1}=\left[\begin{array}{cccc}
+1 & 0 & \cdots & 0 \\
+l_{21} & 1 & \cdots & 0 \\
+\vdots & & \ddots & \vdots \\
+l_{n 1} & 0 & \cdots & 1
+\end{array}\right],\quad L_{1}^{-1}=\left[\begin{array}{cccc}
+1 & 0 & \cdots & 0 \\
+-l_{21} & 1 & \cdots & 0 \\
+\vdots & \ddots & \vdots & \\
+-l_{n 1} & 0 & \cdots & 1
+\end{array}\right].
+$$
+用 $L^{-1}_{1}$ 左乘 $A$，并将所得的矩阵记为 $A^{(1)}$，则
+
+$$
+A^{(1)}=L_{1}^{-1} A=\left[\begin{array}{cccc}
+a_{11} & a_{12} & \cdots & a_{1 n} \\
+0 & a_{22}^{(1)} & \cdots & a_{2 n}^{(1)} \\
+\vdots & \vdots & \ddots & \\
+0 & a_{n 2}^{(1)} & \cdots & a_{n n}^{(1)}
+\end{array}\right]
+$$
+将上面的操作作用在 $A^{(1)}$ 的子矩阵 $A^{(1)}(2:n,2:n)$ 上，将其除第一列第一个元素外都变成为 $0$：假定 $a_{22}^{(1)}\ne 0$，构造矩阵
+
+$$
+L_{2}=\left[\begin{array}{ccccc}
+1 & 0 & 0 & \cdots & 0 \\
+0 & 1 & 0 & \cdots & 0 \\
+0 & l_{32} & 1 & \cdots & 0 \\
+\vdots & \vdots & & \ddots & \\
+0 & l_{n 2} & 0 & \cdots & 1
+\end{array}\right], \quad \text { 其中 } \quad l_{i 2}=\frac{a_{i 2}^{(1)}}{a_{22}^{(1)}}, i=3,4, \ldots, n \text {. }
+$$
+用 $L_{2}^{-1}$ 左乘 $A^{(1)}$，并将所得到的矩阵记为 $A^{(2)}$，则
+
+$$
+A^{(2)}=L_{2}^{-1} A=L_{2}^{-1} L_{1}^{-1} A=\left[\begin{array}{ccccc}
+a_{11} & a_{12} & a_{13} & \cdots & a_{1 n} \\
+0 & a_{22}^{(1)} & a_{23}^{(1)} & \cdots & a_{2 n}^{(1)} \\
+0 & 0 & a_{33}^{(2)} & \cdots & a_{3 n}^{(2)} \\
+\vdots & \vdots & \vdots & \ddots & \\
+0 & 0 & a_{n 3}^{(2)} & \cdots & a_{n n}^{(2)}
+\end{array}\right]
+$$
+依此类推，假定 $a_{kk}^{(k-1)}\ne 0\quad (k=3,4,\dots,n-1)$
+
+我们可以构造一系列的矩阵 $L_{3},L_{4},\dots,L_{n-1}$，使得
+
+$$
+L_{n-1}^{-1} \cdots L_{2}^{-1} L_{1}^{-1} A=\left[\begin{array}{ccccc}
+a_{11} & a_{12} & a_{13} & \cdots & a_{1 n} \\
+0 & a_{22}^{(1)} & a_{23}^{(1)} & \cdots & a_{2 n}^{(1)} \\
+0 & 0 & a_{33}^{(2)} & \cdots & a_{3 n}^{(2)} \\
+\vdots & \vdots & \vdots & \ddots & \\
+0 & 0 & 0 & \cdots & a_{n n}^{(n-1)}
+\end{array}\right] \triangleq U \rightarrow \color{green}{ 上三角 }
+$$
+于是可得 $A=LU$ 其中
+
+$$
+L=L_{1} L_{2} \cdots L_{n-1}=\left[\begin{array}{ccccc}
+1 & 0 & 0 & \cdots & 0 \\
+l_{21} & 1 & 0 & \cdots & 0 \\
+l_{31} & l_{32} & 1 & \cdots & 0 \\
+\vdots & \vdots & & \ddots & \\
+l_{n 1} & l_{n 2} & l_{n 3} & \cdots & 1
+\end{array}\right]
+$$
+:::tip
+上面我们构造了矩阵 $L_{k}$，我们把这种矩阵也叫做 $Gauss$ 变换，而其中的 $l_{k}$ 被称为 $Gauss$ 向量
+
+:::
+说了这么多，不如举个栗子吧
+
+:::example
+
+$$
+A=\left(\begin{array}{ccc}
+1 & 4 & 7 \\
+2 & 5 & 8 \\
+3 & 6 & 10
+\end{array}\right)
+$$
+先计算第一个 $Gauss$ 变换 $L_{1}$，设
+
+$$
+L_{1}=\left(\begin{array}{ccc}
+1 & 0 & 0 \\
+l_{21} & 1 & 0 \\
+l_{31} & 0 & 1
+\end{array}\right)\quad
+L^{-1}_{1}=\left(\begin{array}{ccc}
+1 & 0 & 0 \\
+-l_{21} & 1 & 0 \\
+-l_{31} & 0 & 1
+\end{array}\right)
+$$
+显然有
+
+$$
+L^{-1}_{1}=\left(\begin{array}{ccc}
+1 & 0 & 0 \\
+-2 & 1 & 0 \\
+-3 & 0 & 1
+\end{array}\right)
+$$
+计算第二个 $Gauss$ 变换 $L_{2}$，
+
+$$
+L_{2}=\left(\begin{array}{ccc}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & l_{32} & 1
+\end{array}\right)\quad
+L^{-1}_{2}=\left(\begin{array}{ccc}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & -l_{32} & 1
+\end{array}\right)
+$$
+显然 (不那么显然)
+
+$$
+L^{-1}_{2}=\left(\begin{array}{ccc}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & -2 & 1
+\end{array}\right)
+$$
+此时
+
+$$
+L_{2}\left(L_{1} A\right)=\left(\begin{array}{ccc}
+1 & 4 & 7 \\
+0 & -3 & -6 \\
+0 & 0 & 1
+\end{array}\right)
+$$
+:::
+## 待定系数法实现 $LU$ 分解
+
+- 设单位下三角矩阵 $L$ 和上三角矩阵 $U$
+
+$$
+\left[\begin{array}{ccccc}
+a_{11} & a_{12} & a_{13} & \cdots & a_{1 n} \\
+a_{21} & a_{22} & a_{23} & \cdots & a_{2 n} \\
+a_{31} & a_{32} & a_{33} & \cdots & a_{3 n} \\
+\vdots & & & \ddots & \vdots \\
+a_{n 1} & a_{n 2} & a_{n 3} & \cdots & a_{n n}
+\end{array}\right]=
+\left[\begin{array}{ccccc}
+1 & & & & \\
+l_{21} & 1 & & & \\
+l_{31} & l_{32} & 1 & & \\
+\vdots & & & \ddots & \\
+l_{n 1} & l_{n 2} & \cdots & l_{n, n-1} & 1
+\end{array}\right]
+\left[\begin{array}{ccccc}
+u_{11} & u_{12} & u_{13} & \cdots & u_{1 n} \\
+& u_{22} & u_{23} & \cdots & u_{2 n} \\
+& & u_{33} & \cdots & u_{2 n} \\
+& & & \ddots & \vdots \\
+& & & & u_{n n}
+\end{array}\right]
+$$
+- 比较等式两边的第一行，可得
+
+$$
+u_{1 j}=a_{1 j}, \quad j=1,2, \ldots, n
+$$
+- 再比较等式两边的第一列，可得 '
+
+$$
+a_{i 1}=l_{i 1} u_{11} \Rightarrow l_{i 1}=a_{i 1} / u_{11}, \quad i=2,3, \ldots, n
+$$
+- 比较等式两边的第二行，可得
+
+$$
+a_{2 j}=l_{21} u_{1 j}+a_{2 j} \Rightarrow u_{2 j}=a_{2 j}-l_{21} u_{1 j}, \quad j=2,3, \ldots, n
+$$
+- 再比较等式两边的第二列，可得
+
+$$
+a_{i 2}=l_{i 1} u_{12}+l_{i 2} u_{22} \Rightarrow l_{i 1}=\left(a_{i 2}-l_{i 1} u_{12}\right) / u_{22}, \quad i=3,4, \ldots, n
+$$
+- 以此类推，第 $k$ 步时，比较等式两边的第 $k$ 行，可得
+
+$$
+\begin{array}{l}
+u_{k j}=a_{k j}-\left(l_{k 1} u_{1 j}+\cdots+l_{k, k-1} u_{k-1, j}\right),\quad j=k, k+1, \ldots, n
+\end{array}
+$$
+- 比较等式的两边的第 $k$ 列，可得
+
+$$
+l_{i k}=\left(a_{i k}-l_{i 1} u_{1 k}-\cdots-l_{i, k-1} u_{k-1, k}\right) / u_{k k} \quad i=k+1, k+2, \ldots, n \text {. }
+$$
+直到第 $n$ 步，即可计算出 $L$ 和 $U$ 的所有元素。
+
+## 方程求解
+
+现在我们将矩阵 $A$ 分解为了 $LU$ 了
+
+$$
+A x=b \Longleftrightarrow\left\{\begin{array}{l}
+L y=b \\
+U x=y
+\end{array}\right.
+$$
+:::tip
+
+- 将 $A$ 进行 $LU$ 分解：$A=LU$
+- 向前回代：求解 $Ly=b$，即得 $y=L^{-1}b$
+- 向后回代：求解 $Ux=y$，即得 $x=U^{-1}y=(LU)^{-1}b=A^{-1}b$
+
+:::
+## 相关资料
+
+- [矩阵计算](https://math.ecnu.edu.cn/~jypan/Teaching/MatrixComp/index.html)
+- [矩阵的LU分解 - 知乎](https://zhuanlan.zhihu.com/p/363948873)
