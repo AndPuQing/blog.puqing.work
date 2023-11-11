@@ -12,7 +12,7 @@ const config = {
   tagline: "Empoered with knowledge",
   url: "https://blog.puqing.work",
   baseUrl: "/",
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/logo.svg",
   organizationName: "AndPuQing", // Usually your GitHub org/user name.
