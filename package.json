@@ -19,7 +19,7 @@
     "@docusaurus/preset-classic": "^2.1.0",
     "@easyops-cn/docusaurus-search-local": "^0.21.4",
     "@mdx-js/react": "^1.6.21",
-    "@vercel/analytics": "^0.1.9",
+    "@vercel/analytics": "^1.0.0",
     "array-shuffle": "^3.0.0",
     "clsx": "^1.1.1",
     "file-loader": "^6.2.0",
