@@ -28,7 +28,7 @@
     "@svgr/webpack": "^5.5.0",
     "@vercel/analytics": "^0.1.9",
     "array-shuffle": "^3.0.0",
-    "clsx": "^1.1.1",
+    "clsx": "^2.0.0",
     "file-loader": "^6.2.0",
     "fullpage.js": "^3.1.2",
     "hast-util-is-element": "1.1.0",
