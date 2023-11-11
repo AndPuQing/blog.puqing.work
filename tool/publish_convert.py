@@ -246,6 +246,8 @@ def process_link(file, PUBLISH_DICT: Dict):
                         m, alias = raw.split("|")
                     if "#" in m:
                         m, anchor = m.split("#")
+                        anchor = anchor.replace(" ", "-")
+                        anchor = anchor.lower()
                     if m not in PUBLISH_DICT.keys():
                         logger.warning(
                             f"Warning [[{m}]] not found in publish list"
