@@ -1,0 +1,271 @@
+---
+authors:
+- PuQing
+date: 2023-08-02 20:57
+keywords:
+- 微积分
+- Green函数
+tags:
+- 微积分
+- Green函数
+---
+# Green 函数
+
+## 引入
+
+### Electrostatics
+
+:::example
+对于有电荷密度函数 $\rho(\boldsymbol{r}')$ 其在场位置 $\boldsymbol{r}$ 处的电势满足：
+
+$$
+-\nabla^2\phi = \frac{\rho}{\epsilon_{0}}
+$$
+:::
+### Driven Oscillator
+
+:::example
+以及 `Driven Oscillator` 系统满足
+
+$$
+m \frac{d^{2} x}{d t^{2}}+\omega^{2} x=F(t)
+$$
+:::
+他们的共同点可以写成
+
+$$
+Ly(x)=f(x)
+$$
+这里的 $L$ 是 `Linear differential operators`，$y$ 是要求解的 $x$ 的函数，而 $f$ 的限制项，是给定的 (`Forcing term`)。下面解释解释什么是 `Linear differential operators`。
+
+## Linear Differential Operators
+
+- 首先看 `operators`，算子将一个函数 $A$，映射到另一个函数 $B$，就比如 $\displaystyle\frac{d}{d x}$ 就是一个算子。
+
+![Untitled.bmp](https://images.puqing.work/2023/08/03/64cb55a03f070.bmp)
+
+如上图所示就将函数 $x^2$ 映射成了 $2x$
+
+所以我们想做的事情就是通过求解某种式子，从 $f(x)$ 逆推回 $y(x)$，如下图所示
+
+![Untitled.bmp](https://images.puqing.work/2023/08/03/64cb56f131c04.bmp)
+
+- 而其中的 `differential` 说明这个算子与微分有关
+- `Linear` 表示其 " 线性组合性 "
+
+$$
+L\left(\lambda y_{1}(x)+\mu y_{2}(x)\right)=\lambda L\left(y_{1}(x)\right)+\mu L\left(y_{2}(x)\right)
+$$
+其中的 $\lambda,\mu$ 是某一常数
+
+这意味着 `operators` 和 `combination` 的顺序无关。可以先组合在变换，也可以先变换再组合。
+
+:::example 举个最简单的例子
+对于微分算子 $\displaystyle\frac{d }{dx}$，有两个函数 $y_{1}=x^2,y_{2}=2x^3$
+
+$$
+L(y_{1}+y_{2})=\frac{d }{dx}(x^2+2x^3)=6x^2+2x
+$$
+而如果相对于每个函数应用算子
+
+$$
+L(y_{1})+L(y_{2})=\frac{d }{dx}(x^2)+\frac{d }{dx}(2x^3)=2x+6x^2
+$$
+:::
+:::warning 有什么反例呢？
+
+:::
+## Dirac $\delta$ "function"
+
+在 [狄拉克 delta 函数](./80201ee5) 中曾经介绍过狄拉克函数，当时是使用的长方形的面积进行引入的，这里使用物理上的电荷量来引入。
+
+我们想要知道一点 $x$ 处的电荷密度，根据定义应该使用如下公式计算：
+
+$$
+\rho(x) =\frac{\mathrm{charge}}{\mathrm{volume}}
+$$
+即电荷除以体积，But，在一个点处的体积应该是 $0$ 才对，则怎么算呢？
+
+不妨考虑在 $x$ 邻域附近小区域 $D$
+
+![Untitled.bmp](https://images.puqing.work/2023/08/03/64cb5e263cb07.bmp)
+
+我们可以使用区域 $D$ 的平均电荷，即电荷密度进行估算。
+
+可是这样区域 $D$ 的大小，形状均会影响其结果，**能不能想办法忽略掉区域 $D$ 呢**？
+
+我们将积分区域扩充到整个空间 $\mathbb{R}^3$，并使用一个指示函数 $1_{D}(\xi)$ 表示如果在区域 $D$ 中函数值为 $1$，如果不在则为 $0$。
+
+$$
+1_{D}(\xi)=\begin{cases}
+1, \xi \in D\\ 
+0, \xi \notin D
+\end{cases}
+$$
+![Untitled.bmp](https://images.puqing.work/2023/08/03/64cb60ec9b74a.bmp)
+
+如上图所示，进一步的，因为 $V$ 是参数，可以移进积分中，所以可以写为：
+
+$$
+\rho(x)\approx \int_{\mathbb{R}^{3}} \rho(\xi) \left(\frac{\mathbf{1}_{D}(\xi)}{V}\right) d \xi
+$$
+到现在还只是估计近似，当 $V\to 0$ 时，则相等。
+
+所以
+
+$$
+\rho(x)=\lim_{V\to 0}\int_{\mathbb{R}^{3}} \rho(\xi) \left(\frac{\mathbf{1}_{D}(\xi)}{V}\right) d \xi
+$$
+这个时候括号中的便是狄拉克 $\delta$ ' 函数 '。
+
+写成狄拉克 $\delta$ 函数的形式便是
+
+$$
+\rho(x)=\int_{\mathbb{R}^{3}} \rho(\xi) \delta(x-\xi) d \xi
+$$
+## Principle of Green`s Function
+
+回想一下上面的引入得到的电荷密度表达式，我们将一个点 $x$ 处的电荷密度等效为整个定义域上点 $\xi$ 和的形式（以积分的形式体现），并乘以了一个狄拉克 $\delta$ 函数进行 " 过滤 "。
+
+同样的，我们可以对电势进行同样的操作，这时狄拉克 $\delta$ 函数的便以 $\mathrm{Green\ function}$ 方式进行体现，记作 $G(x;\xi)$
+
+类似地，我们将电势表达为：
+
+$$
+\phi(x)=\int_{\mathbb{R}^3}\rho(\xi)G(x;\xi)/ \epsilon_{0}\, d\xi
+$$
+:::danger 可能这里你有很多疑惑？
+比如：
+
+- 为什么是 $\rho(\xi)$ 而不是 $\phi(\xi)$
+- 为什么要除以 $\epsilon_{0}$
+
+先看下面哈
+
+:::
+这会带给我们什么便利呢？
+
+::::tip
+我们想要找到这样的一个函数 $G(x;\xi)$，满足
+
+$$
+LG(x;\xi)=\delta(x-\xi) 
+$$
+这样两边乘以函数 $f(\xi)$
+
+$$
+f(\xi)LG(x;\xi)=f(\xi)\delta(x-\xi)
+$$
+注意到算子 $L$ 是对于变量 $x$ 作用的，所以可以把 $f(\xi)$ 和 $L$ 交换位置，则有
+
+$$
+L(f(\xi) G(\mathbf{x} ; \xi))=f(\xi) \delta(\mathbf{x}-\xi)
+$$
+这样对于每个点 $\xi$ 的联合和通常使用积分
+
+$$
+\int_{\mathbb{R}^{n}} L(f(\xi) G(\mathbf{x} ; \xi)) d \xi=\int_{\mathbb{R}^{n}} f(\xi) \delta(\mathbf{x}-\xi) d \xi
+$$
+.
+
+:::danger 重点来了
+
+根据算子 $L$ 满足 `Linear` 性质，所以实际上允许我们将积分符号提入到算子 $L$ 内部，即：
+
+$$
+L\left(\int_{\mathbb{R}^{n}} f(\xi) G(\mathbf{x} ; \xi) d \xi\right)=f(\mathbf{x})
+$$
+令其中的 $\displaystyle\int_{\mathbb{R}^{n}} f(\xi) G(\mathbf{x} ; \xi) d \xi=y(x)$，则正好解出了原式子。
+
+:::
+::::
+:::success 让我们回答一下上面提出的两个问题：
+这两个问题实际上是一个问题：即为什么要如此构造
+
+实际上，上面的推导已经非常清楚，我们的目的是尝试构造一个 $\mathrm{Green}$ 函数，使得下式成立：
+
+$$
+-\nabla^2 G(x;\xi)=\delta(x-\xi)
+$$
+于是乎我们能够很自然的推导出下面式子：
+
+$$
+L\left(\int_{\mathbb{R}^{3}} \rho(\xi) G(\mathbf{x} ; \xi)/\epsilon_0 d \xi \right)=\int_{\mathbb{R}^{3}} \rho(\xi) \delta(x-\xi) d \xi
+$$
+等式右边即为 $\rho(x)$
+
+所以，实际上是一个构造问题 (可能原本直接构造从静电学上有某种含义，但是我确实没 get 到)
+
+:::
+虽然好像懂了一点意思了但是还是存在两个问题：
+
+:::danger
+**问题一**：$\mathrm{Green}$ 函数 $G(x;\xi)$ 如何构造
+
+**问题二**：对于边界值如何考虑。
+
+:::
+但是在这之前先看看另一个案例吧
+
+## Driven Oscillator
+
+![Untitled.bmp](https://images.puqing.work/2023/08/03/64cb98a8e3552.bmp)
+
+这是一个带驱动力的振动模型。给小球施加了随时间变化的力 $F(t)$
+
+则小球的相对于平衡位置的距离满足
+
+$$
+m \frac{d^{2} x}{d t^{2}}+\omega^{2} x=F(t)
+$$
+类似于之前静电力的构造，我们有
+
+$$
+F(t)=\int _{-\infty}^{+\infty}F(\tau)\delta(t-\tau) \, d\tau 
+$$
+:::tip 这个怎么那么像一个东西呢？
+卷积公式
+
+$$
+(f * g)(t) \stackrel{\text { def }}{=} \int_{\mathbb{R}^{n}} f(\tau) g(t-\tau) d \tau \text { 。 }
+$$
+:::
+## One More Thing
+
+### 如何求解 $G$
+
+在上述的推导中，我们需要找到一个函数 $G(x;\xi)$ 满足如下式子
+
+$$
+LG(x;\xi)=\delta(x-\xi)
+$$
+根据狄拉克 $\delta$ 函数的性质，我们有如下步骤
+
+:::tip
+
+1. Solve $LG(x;\xi)=0 \quad \mathrm{if}\ \xi \ne x$
+2. Note $\displaystyle\int_{D}LG(x;\xi) \, d\xi =1\quad \mathrm{if}\ \mathrm{contains}\ x$
+
+:::
+实际上 [^1] 已经将常用的 $\mathrm{Green}$ 函数列举出来了
+
+### 边界条件
+
+从纯求解方程来看，其解并不是唯一的，例如为上述的静电力学的案例来说，为函数 $\phi(x)$ 加上常数依然可以使方程满足，甚至加上一次函数也是可以满足的。
+
+所以为了解为一，我们需要施加一些边界条件，比如
+
+$$
+\phi(x)\to 0 \ \text{as}\ \mid x\mid \to \infty
+$$
+我们可以得到唯一解：
+
+$$
+\frac{G(\mathbf{x} ; \xi)}{\varepsilon_{0}}=\frac{1}{4 \pi \varepsilon_{0}|\mathbf{x}-\xi|}
+$$
+## 相关资料
+
+- [格林函数，天才的解决微分方程Green's functions - the genius way to solve DEs_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Xw411f7rX/?spm_id_from=333.337.search-card.all.click&amp;vd_source=5890eec9b2a60d9ae9a403fd2aad7881)
+- [Green_函数](https://math.fandom.com/zh/wiki/Green_%E5%87%BD%E6%95%B0)
+
+[^1]:[Green's function - Wikipedia](https://en.wikipedia.org/wiki/Green%27s_function)

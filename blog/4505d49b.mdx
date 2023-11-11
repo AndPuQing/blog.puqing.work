@@ -1,0 +1,68 @@
+---
+authors:
+- PuQing
+date: 2023-07-05 15:53
+keywords:
+- ODE
+tags:
+- ODE
+---
+# 梯度下降
+
+假设我们想搜索光滑函数 $f(x)$ 的最小值，常见的方案是梯度下降（Gradient Descent），即按照如下格式进行迭代：
+
+$$
+\begin{equation}
+\boldsymbol{x}_{t+1}  =  \boldsymbol{x}_{t}-\alpha \nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right) \tag{1}
+\end{equation}
+$$
+[如果 $f(x)$ 关于 $x$ 的凸的](./476bc716)，那么梯度下降通常能够找到最小值点；相反，则通常只能收敛到一个 " 驻点 "——即梯度为 0 的点，比较理想的情况下能收敛到一个极小值（局部最小值）点。这里没有对极小值和最小值做严格区分，因为在深度学习中，即便是收敛到一个极小值点也是很难得的了。
+
+:::warning Why?
+
+:::
+如果将 $\alpha$ 记为 $\Delta t$，将 $x_{t+1}$ 记为 $x_{t+\Delta t}$，那么考虑 $\Delta t \to 0$ 的极限，那么式 (1) 将变为一个 [[ODE]]：
+
+$$
+\begin{equation}
+\frac{d \boldsymbol{x}_{t}}{d t}=-\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right) \tag{2}
+\end{equation}
+$$
+:::tip 推导过程
+
+$$
+\begin{align}
+x_{t+1}-x_{t} &= -\alpha \nabla_{x_{t}}f(x_{t}) \\
+\Rightarrow  x_{t+1}-x_{t} &= -\Delta t\nabla_{x_{t}}f(x_{t}) \\
+\Rightarrow \lim_{\Delta t \to 0} \frac{x_{t+1}-x_{t}}{\Delta t}  &= \frac{d \boldsymbol{x}_{t}}{d t} = - \nabla_{x_{t}}f(x_{t})\\
+\end{align}
+$$
+:::
+求解这个 ODE 所得到的轨迹 $x_t$，我们就称为 " 梯度流（Gradient Flow）"，也就是说，梯度流是梯度下降在寻找最小值过程中的轨迹。在式 (2) 成立前提下，我们还有：
+
+$$
+\begin{equation}
+\frac{d f\left(\boldsymbol{x}_{t}\right)}{d t}  = \left\langle\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right), \frac{d \boldsymbol{x}_{t}}{d t}\right\rangle  = -\left\|\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right)\right\|^{2} \leq 0
+\end{equation}
+$$
+:::tip 推导过程 [Nabla 算子与 Laplace 算子](./7edbed51)
+
+$$
+\begin{align}
+\frac{\mathrm{d} f(x_t)}{\mathrm{d} t} & = \frac{\mathrm{d} f(x_t)}{\mathrm{d} x_t} \frac{\mathrm{d} x_t}{\mathrm{d} t}\quad \text{链式法则}\\ 
+\Rightarrow \frac{\mathrm{d} f(x_t)}{\mathrm{d} t}&=\left \langle \nabla_{x_t}f(x_t),\frac{\mathrm{d} x_t}{\mathrm{d} t}\right \rangle \\
+\end{align}
+$$
+其中的 $\displaystyle \frac{\mathrm{d} x_t}{\mathrm{d} t}$ 又可以被 ODE 代换掉，所以继续得到：
+
+$$
+\frac{\mathrm{d} f(x_t)}{\mathrm{d} t}=-\left \| \nabla_{x_t}f(x_t) \right \|^2 
+$$
+$Q.E.D$
+
+:::
+所以只要 $\displaystyle\nabla_{x_t}f(x_t) \ne 0$，梯度下降总是能让 $f(x)$ 变小的方向前进。
+
+## 相关资料
+
+- [梯度流：探索通往最小值之路 - 科学空间|Scientific Spaces](https://spaces.ac.cn/archives/9660)

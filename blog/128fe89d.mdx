@@ -1,0 +1,248 @@
+---
+authors:
+- PuQing
+date: 2023-09-15 16:47
+keywords:
+- 动态系统
+- 控制论
+- 线性系统
+tags:
+- 动态系统
+- 控制论
+- 线性系统
+---
+# 状态方程描述下的动态系统
+
+## 动态系统的定义
+
+![Untitled.bmp](https://images.puqing.work/2023/09/15/650450e31d06e.bmp)
+
+控制理论把系统当作成黑箱，那么这个黑箱和外界的交互，便对应了不同时间点的输入输出。
+
+在 $t$ 时刻，上面图中 $m$ 个会影响系统的输入量在控制理论里称为**控制变量**，而这 $p$ 个系统输出可以被传感器测量的量称为**测量变量**。这里我们只研究连续时变的线性系统，即系统输出量由描述系统的函数，通过输入量在时域上唯一确定。并且我们可以将系统的行为分为**静态和动态**两类。
+
+:::example 举个例子来说
+![Untitled.bmp](https://images.puqing.work/2023/09/15/65045414339a9.bmp)
+
+例 $(a)$：
+
+$$
+v(t)=R \ i(t)
+$$
+例 $(b)$:
+
+$$
+v(t)=v_{0}+\frac{1}{C} \int_{t_{0}}^{t} i(\tau) d \tau
+$$
+显然例子 $(a)$ 两端输出电压不随时间变化，而例子 $(b)$ 因为电容的存在，电容在刚开始充电时，电容相当于短路，电流非常大；充电完成后，其电容上的电压等于电源电压，回路相当于断路。
+
+:::
+后者的输出受到初始条件 $v(t_{0})$，以及 $i(\tau)$ 在这个时间间距 $[t_{0},t]$ 的积分来决定。系统的状态受到过去影响，随时间变化。这样的系统被称为<Highlight>动态系统</Highlight>。
+
+## 状态
+
+动态系统的状态粗略地说就是指系统的过去、现在和将来的运动状况。精确地说，状态需要一组必要而充分的数据说明，用来 `表征` 。
+
+### 状态变量
+
+:::info
+系统的状态变量，就是指足以完全确定系统运动状态的最小一组变量。一个用 $n$ 阶微分方程描述的系统，就有 $n$ 个独立变量，求得这 $n$ 个独立变量的时间响应，系统的运动状态也就可以推知。可以说系统的状态变量就是 $n$ 阶系统的 $n$ 个独立变量。
+
+
+:::
+:::quote Proof
+
+:::
+需要指出的是，同一个系统，究竟选取那些变量作为状态变量，这不是唯一的，要紧的是这些状态变量是相互独立的，且其个数等于微分方程的阶数。
+
+### 状态向量
+
+如果完全描述一个系统的动态行为需要 $n$ 个状态变量，那么这 $n$ 个状态变量 $x_1(t),x_2(t),\dots,x_n(t)$ 作分量所构成的向量就叫做该系统的状态向量，记作
+
+$$
+x=\begin{bmatrix} 
+x_{1}(t) \\
+x_{2}(t) \\
+\vdots \\
+x_{n}(t)
+\end{bmatrix}
+$$
+通过构建状态向量，实际上为将带有物理意义的状态变量转化为 $n$ 为空间的一个坐标，便于我们观察状态变量随时间的变化规律。
+
+### 状态空间
+
+以状态变量 $x_1(t),x_2(t),\dots,x_n(t)$ 为坐标所构成的 $n$ 维空间，称为状态空间。
+
+系统的任何状态，都可以用状态空间中的一个点来表示。即在特定时刻 $t$ 状态向量 $x(t)$ 在状态空间中是一个点。已知初始时刻的 $x(t_{0})$，就得到状态空间中的一个初始点。随着时间的推移，$x(t)$ 在空间中描绘出一条轨迹，称为状态轨线。如下图所示：
+
+![Untitled.bmp](https://images.puqing.work/2023/09/15/65046e57b06db.bmp)
+
+显然，状态轨线的形状，完全由系统在 $t_{0}$ 时刻初始状态和 $t\ge t_0$ 的输入及系统的动态特性唯一决定的。
+
+### 状态方程
+
+描述系统状态变量与系统输入之间关系的一阶微分方程组称为**状态方程**
+
+:::example  
+![Untitled.bmp](https://images.puqing.work/2023/09/15/6504714946093.bmp)
+有一辆小车受到随速度而线性变化的水平向右的力 $F=k\dot{y}$，以及来自地面的摩擦力 $\mu$。则利用小学二年级学过的牛二可得方程：
+
+$$
+ \begin{array}{c}
+ Ma  =  F\\
+ \Downarrow \\
+ \displaystyle M \frac{d^2y}{dt^2}  =  \mu -k \frac{dy}{dt}
+ \end{array}
+$$
+若令 $x_{1}=y,x_{2}=\displaystyle \frac{dy}{dt}$，即取 $x_{1},x_{2}$ 作为系统的一组状态变量，则可得一组一阶微分方程组：
+
+$$
+\begin{cases}
+\displaystyle \frac{dx_{1}}{dt} = \frac{dy}{dt} = x_{2}\\ 
+\displaystyle \frac{dx_{2}}{dt} = \frac{d^2y}{dt^2} = - \frac{k}{M} \frac{dy}{dt} + \frac{1}{M} \mu = - \frac{k}{M} x_{2}+ \frac{1}{M} \mu
+\end{cases}
+$$
+我们将上述式子写为矢量的式子：
+
+$$
+\begin{bmatrix} 
+\dot{x_{1}} \\
+\dot{x_{2}}
+\end{bmatrix}=\begin{bmatrix}
+0 & 1 \\
+0 & -\frac{k}{M}
+\end{bmatrix}\begin{bmatrix}
+x_{1} \\
+x_{2}
+\end{bmatrix}+\begin{bmatrix}
+0 \\
+\frac{1}{M}
+\end{bmatrix} u
+$$
+我们可以简写成：
+
+$$
+\dot{\mathbf{x}} = \mathbf{A} \mathbf{x}+\mathbf{b}\mu
+$$
+其中：
+
+$$
+\mathbf{A}=\left[\begin{array}{cc}
+0 & 1 \\
+0 & -\frac{k}{M}
+\end{array}\right], \mathbf{b}=\left[\begin{array}{l}
+0 \\
+\frac{1}{M}
+\end{array}\right], \mathbf{x}=\left[\begin{array}{l}
+x_{1} \\
+x_{2}
+\end{array}\right]
+$$
+:::
+这里的 $\dot{\mathbf{x}} = \mathbf{A} \mathbf{x}+\mathbf{b}\mu$ 就是状态方程。
+
+:::quote Why?
+我们令了两个新的变量，并且将满足方程修改为了方程组的形式，但是为什么？？
+左部为什么是 $\dot{\mathbf{x}}$，这有什么用？目的是什么？
+
+下面是仅凭我的直觉猜测，可能并不是真实的原因：
+
+`结论：`$\dot{\mathbf{x}}$ 是为了迭代，数值进行求解。
+
+考虑 $\dot{\mathbf{x}}$，根据导数的定义，进行离散化：
+
+$$
+\dot{\mathbf{x}} = \frac{\mathbf{x}(k+1) - \mathbf{x}(k)}{T} = \mathbf{A} \mathbf{X}(k) + \mathbf{B}u(k)
+$$
+$$
+\begin{array}{l}
+\mathbf{x}(k+1)-\mathbf{x}(k)=T[\mathbf{A} \mathbf{x}(k)+\mathbf{B} u(k)] \\
+\mathbf{x}(k+1)=(\mathbf{I}+T \mathbf{A}) \mathbf{x}(k)+T \mathbf{B} u(k)=\mathbf{\Phi} \mathbf{x}(k)+\mathbf{G} u(k)
+\end{array}
+$$
+其中 $\mathbf{\Phi}=\mathbf{I}+T \mathbf{A} ; \quad \mathbf{G}=T \mathbf{B}$
+
+所以我们便可以迭代求解其中的状态变量。
+![Untitled.bmp](https://images.puqing.work/2023/09/17/6506a666db5ab.bmp)
+
+另外，上述过程是对于导数的一阶近似，可能有其他方法迭代。
+
+:::
+### 输出方程
+
+描述系统的状态变量与输出变量一组代数方程称为输出方程。上图中，系统的输出为小车的位移 `(请问系统的输入是什么？)`，则有：对于一般单输入——单输出系统，状态方程和输出方程为 $y=x_{1}$ 或写成矢量的形式：
+
+$$
+y=\begin{bmatrix}
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2}
+\end{bmatrix}
+$$
+同时可以简写为：
+
+$$
+y=c^\top \mathbf{x}
+$$
+其中 $c^\top = [1,0], \mathbf{x}=\begin{bmatrix}x_{1} \\x_{2}\end{bmatrix}$
+
+### 状态空间描述
+
+状态方程和输出方程一同构建一个系统动态的完整描述，称为**系统的状态空间表达式**，也称为**状态空间描述**。状态方程和输出方程为：
+
+$$
+\begin{cases}
+\dot{x}_{1}=f_{1}\left(x_{1}, x_{2}, \ldots x_{n}, u_{1}, u_{2} \ldots u_{m}, t\right), x_{1}\left(t_{0}\right)=x_{1,0} \\
+\dot{x}_{2}=f_{2}\left(x_{1}, x_{2}, \ldots x_{n}, u_{1}, u_{2} \ldots u_{m}, t\right), x_{2}\left(t_{0}\right)=x_{2,0} \\
+\ldots \\
+\dot{x}_{n}=f_{n}\left(x_{1}, x_{2}, \ldots x_{n}, u_{1}, u_{2} \ldots u_{m}, t\right), x_{n}\left(t_{0}\right)=x_{n, 0}
+\end{cases}
+$$
+$$
+\begin{cases}
+y_{1}=h_{1}\left(x_{1}, x_{2}, \ldots x_{n}, u_{1}, u_{2} \ldots u_{m}, t\right) \\
+y_{2}=h_{2}\left(x_{1}, x_{2}, \ldots x_{n}, u_{1}, u_{2} \ldots u_{m}, t\right) \\
+\ldots \\
+y_{p}=h_{p}\left(x_{1}, x_{2}, \ldots x_{n}, u_{1}, u_{2} \ldots u_{m}, t\right)
+\end{cases}
+$$
+同样的，我们可以用向量形式来描述这些方程组：
+
+- $\mathbf{x}=\begin{bmatrix}x_{1} &x_{2} &\ldots &x_{n}\end{bmatrix}^{T}$ 为总共 $\mathrm{n}$ 维状态变量；
+- $\mathbf{u}=\begin{bmatrix}u_{1} & u_{2} & \ldots & u_{m}\end{bmatrix}^{T}$ 为总共 $m$ 维输入向量；
+- $\mathbf{y}=\begin{bmatrix}y_{1} & y_{2} & \ldots & y_{p}\end{bmatrix}^{T}$ 为总共 $\mathrm{p}$ 维输出向量；
+
+$$
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x}, \mathbf{u}, t), \mathbf{x}\left(t_{0}\right)=\mathbf{x}_{0} \\
+\mathbf{y}=\mathbf{h}(\mathbf{x}, \mathbf{u}, t)
+\end{cases}
+$$
+## 线性系统
+
+上述两例子可知，系统的状态方程只用一阶的微分方程组就能很好描述系统，那么遇上更高阶的方程组怎么办呢？事实上考察一个动态系统有很多不同分类标准，我们在这里只探讨其中最主要的——线性、时不变性。
+
+:::quote 定义 **线性系统**
+动态系统满足线性时不变条件，当且仅当它可以有以下形式表示
+
+$$
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{A}(t) \mathbf{x}+\mathbf{B}(t) \mathbf{u} \\
+\mathbf{y}=\mathbf{C}(t) \mathbf{x}+\mathbf{D}(t) \mathbf{u}
+\end{cases}
+$$
+:::
+包含时变的 $\mathbf{A}(t)_{n\times n}$ <Highlight>状态矩阵（系统矩阵）</Highlight>，$\mathbf{B}(t)_{n \times m}$ <Highlight>输入（控制矩阵）</Highlight>，$\mathbf{C}(t)_{p \times n}$ <Highlight>输出矩阵</Highlight>，$\mathbf{D}(t)_{p \times m}$ <Highlight>输入量的直接传递矩阵</Highlight>
+
+而当系统的系统输入量不随时间变化时，有时不变特性：
+
+:::quote 定义 **时不变系统**
+动态系统满足线性时不变条件，当它许用的输入轨迹 $\mathbf{u}(t)$ 自初始条件 $\mathbf{x}_{0}$ 开始，从初始时间 $t_{0}$ 后一定时间 $T\ge 0$ 之内，系统输出为 $\mathbf{y}(t)=\boldsymbol{\psi}\left(t, \mathbf{u}, \mathbf{x}_{0}, t_{0}\right)$，总可以用以下形式表示：
+
+$$
+\boldsymbol{\psi}\left(t, \mathbf{u}(t), \mathbf{x}_{0}, t_{0}\right)=\boldsymbol{\psi}\left(t+T, \mathbf{u}(t-T), \mathbf{x}_{0}, t_{0}+T\right)
+$$
+:::
+这里这个公式还是挺不太明白的。下面画一张图就知道了
