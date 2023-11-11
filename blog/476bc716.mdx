@@ -1,24 +1,22 @@
 ---
 authors:
-  - PuQing
+- PuQing
 date: 2023-08-20 11:23
 keywords:
-  - 凸优化
-  - 凸函数
-  - 机器学习
+- 凸优化
+- 凸函数
+- 机器学习
 tags:
-  - 凸优化
-  - 凸函数
-  - 机器学习
+- 凸优化
+- 凸函数
+- 机器学习
 ---
-
 # 机器学习 - 凸优化
 
 :::quote 定义
 凸优化问题 (`OPT,convex optimization problem`) 指定义在凸集中的凸函数最优化的问题。
 
 :::
-
 ## 数学概念
 
 ### 凸集
@@ -26,8 +24,8 @@ tags:
 ::::quote 定义
 假设 $C$ 是向量空间的集。若对于任意 $x,y\in C$ 和任意的 $\theta\in \mathbb{R}$，满足 $0\le \theta \le 1$ 时，$\theta x+(1-\theta)y \in C$ 恒成立。则称 $C$ 为 `凸集`[^1]
 
-<!--truncate-->
 
+<!--truncate-->
 :::tip 从几何上来看，就是 $C$ 中的任意两点之间的直线段都属于 $C$。
 
 :::
@@ -42,7 +40,6 @@ tags:
 3. 不是凸集，有些边不在集合中
 
 :::
-
 ### 凸函数
 
 :::quote 定义
@@ -56,8 +53,8 @@ tags:
 :::info
 在函数图形上，任意两点连成的线段，皆位于图形的上方
 
-:::
 
+:::
 #### 凸函数的一阶充要条件
 
 :::tip
@@ -66,10 +63,10 @@ tags:
 $$
 f(y)\ge f(x) + \nabla f(x)^\top(y-x)
 $$
-
 :::
 :::info
 从几何上来看，即定义域内图形都大于等于该点的切线 (切平面)
+
 
 :::
 ![image.png](https://images.puqing.work/2023/08/23/64e5b78414e3d.png)
@@ -82,17 +79,14 @@ $$
 $$
 z=f_{x}(x_{0},y_{0})(x-x_{0})+f_{y}(x_{0},y_{0})(y-y_{0}) + f(x_{0},y_{0})
 $$
-
-其中的 $f_{x}(x_{0},y_{0}),f_{y}(x_{0},y_{0})$ 为 $f$ 在 $(x_{0},y_{0})$ 处的偏导数的值，我们可以使用 $\nabla$ [算子](../jacobi-matrix-hessan-matrix-x.mdx) 进行表示，并且将自变量视为向量，则：
+其中的 $f_{x}(x_{0},y_{0}),f_{y}(x_{0},y_{0})$ 为 $f$ 在 $(x_{0},y_{0})$ 处的偏导数的值，我们可以使用 $\nabla$ [算子](./7edbed51) 进行表示，并且将自变量视为向量，则：
 
 $$
 z = \nabla f(x_{0})^\top(x-x_{0})+f(x_{0})
 $$
-
 所以有上面几何理解
 
 :::
-
 #### 凸函数的二阶充要条件
 
 记函数的一阶导数和二阶导数分别为 $g$ 和 $H$：
@@ -110,15 +104,14 @@ g=\nabla f=\left[\begin{array}{c}
 \frac{\partial^{2} f}{\partial x_{n} \partial x_{1}} & \frac{\partial^{2} f}{\partial x_{n} \partial x_{2}} & \cdots & \frac{\partial^{2} f}{\partial x_{n}^{2}}
 \end{array}\right]
 $$
-
 假设定义在 $\mathbb{R}^n \to \mathbb{R}$ 上的函数 $f$ 二阶可微（即海赛矩阵 $\nabla^2f(x)$ 存在）。则函数 $f$ 是凸函数当且仅当函数定义域 $\mathbb{D}(f)$ 是一个凸集，且对于所有 $x \in \mathbb{D}(f)$ 均满足：
 
 $$
 \nabla^2f(x)\succeq 0
 $$
-
 :::info
 这里的 $\succeq 0$ 表示是半正定的
+
 
 :::
 见 [[正定矩阵]]
@@ -134,11 +127,9 @@ s . t . & g_{i}(x) \leq 0, i=1,2, \ldots, m \\
 & h_{j}(x)=0, j=1,2, \ldots, n
 \end{array}
 $$
-
-当 $f(x)$ 和 $g_{i}(x)$ 均为凸函数，而 $h_{j}(x)$ 均为 [[仿射函数]] 时，上述的优化问题即凸优化问题
+当 $f(x)$ 和 $g_{i}(x)$ 均为凸函数，而 $h_{j}(x)$ 均为 [仿射变换与仿射函数](./bbfe1702) 时，上述的优化问题即凸优化问题
 
 :::
-
 ## 常见的凸优化问题
 
 :::example 线性规划（LP，Linear Program）
@@ -150,7 +141,6 @@ $$
 & A(x)=b
 \end{array}
 $$
-
 其中的目标函数和不等式约束都是仿射函数，且 $\preceq$ 表示按元素小于等于
 
 :::
@@ -163,11 +153,9 @@ $$
 & A(x)=b
 \end{array}
 $$
-
 其中目标函数为凸二次型，不等式约束为仿射函数
 
 :::
-
 ## 利用 Python 进行凸优化
 
 下面是几段例程
@@ -184,9 +172,9 @@ x_{1}, x_{2}, x_{3} \geq 0
 \end{array}\right.
 \end{array}
 $$
-
 <Tabs>  
-<TabItem value="scipy" label="Scipy">
+<TabItem value="scipy" label="Scipy">  
+
 
 ```python
 import numpy as np
@@ -216,7 +204,8 @@ print(res)
 ```
 
 </TabItem>  
-<TabItem value="pulp" label="pulp">
+<TabItem value="pulp" label="pulp">  
+
 
 ```python
 import pulp
@@ -250,10 +239,11 @@ print(f'参数取值：{[pulp.value(var) for var in x]}')
 </TabItem>   
 </Tabs>
 
+
 ## 参考资料
 
 - [机器学习必知必会：凸优化 - 知乎](https://zhuanlan.zhihu.com/p/85408804)
-- [【数学建模】线性规划各种问题的 Python 调包方法 - 简书](https://www.jianshu.com/p/9be417cbfebb)
+- [【数学建模】线性规划各种问题的Python调包方法 - 简书](https://www.jianshu.com/p/9be417cbfebb)
 
-[^1]: [凸集 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%87%B8%E9%9B%86)
-[^2]: [凸函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%87%B8%E5%87%BD%E6%95%B0)
+[^1]:[凸集 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%87%B8%E9%9B%86)
+[^2]:[凸函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%87%B8%E5%87%BD%E6%95%B0)

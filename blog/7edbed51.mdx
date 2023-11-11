@@ -3,10 +3,8 @@ authors:
 - PuQing
 date: 2023-07-22 21:23
 keywords:
-- private
 - 微积分
 tags:
-- private
 - 微积分
 ---
 # Nabla 算子与 Laplace 算子
@@ -20,17 +18,18 @@ $$
 \nabla = \left(\frac{\partial}{\partial x}, \frac{\partial}{\partial y}, \frac{\partial}{\partial z}\right) = \vec{e}_{x} \frac{\partial}{\partial x}+\vec{e}_{y} \frac{\partial}{\partial y}+\vec{e}_{z} \frac{\partial}{\partial z} = \sum_{i = 1}^{3} \vec{e}_{i} \frac{\partial}{\partial x_{i}} \tag{1}
 \end{equation}
 $$
-:::tip $\nabla$ 作用于不同类型的量，得到的就是不同类型的新量：
+::::tip $\nabla$ 作用于不同类型的量，得到的就是不同类型的新量：
 
-> $\nabla$ 直接作用于函数 $F(r)$(不论 $F$ 是标量还是向量），意味着求 $F(r)$ 的 [梯度](https://zh.wikipedia.org/wiki/%E6%A2%AF%E5%BA%A6 "梯度")，表示为：$\nabla F(r)$（标量函数的梯度为向量，向量的梯度为二阶张量）；
+:::info
+$\nabla$ 直接作用于函数 $F(r)$(不论 $F$ 是标量还是向量），意味着求 $F(r)$ 的 [梯度](https://zh.wikipedia.org/wiki/%E6%A2%AF%E5%BA%A6 "梯度")，表示为：$\nabla F(r)$（标量函数的梯度为向量，向量的梯度为二阶张量）；
 
+$\nabla$ 与非标量函数 $F(r)$ 由点积符号 $\cdot$ 连接，意味着求 $F(r)$ 的 [散度](https://zh.wikipedia.org/wiki/%E6%95%A3%E5%BA%A6 "散度")，表示为：$\nabla \cdot F(r)$；
 
-> <!--truncate-->
-> $\nabla$ 与非标量函数 $F(r)$ 由点积符号 $\cdot$ 连接，意味着求 $F(r)$ 的 [散度](https://zh.wikipedia.org/wiki/%E6%95%A3%E5%BA%A6 "散度")，表示为：$\nabla \cdot F(r)$；
+$\nabla$ 与非标量（三维）函数 $F(r)$ 由叉积符号 $\times$ 连接，意味着求 $F(x)$ 的 [旋度](https://zh.wikipedia.org/wiki/%E6%97%8B%E5%BA%A6 "旋度")，表示为：$\nabla \times F(r)$。
 
-> $\nabla$ 与非标量（三维）函数 $F(r)$ 由叉积符号 $\times$ 连接，意味着求 $F(x)$ 的 [旋度](https://zh.wikipedia.org/wiki/%E6%97%8B%E5%BA%A6 "旋度")，表示为：$\nabla \times F(r)$。
 
 :::
+::::
 :::example 梯度
 $\nabla f$ 在三维直角坐标系中表示为：
 
@@ -90,7 +89,7 @@ $$
 
 ## Laplace 算子
 
-记 $\Delta=\nabla \cdot \nabla=\frac{\partial^{2}}{\partial x^{2}}+\displaystyle\frac{\partial^{2}}{\partial y^{2}}+\frac{\partial^{2}}{\partial z^{2}}$，称为 **Laplace** 算子，而满足**Laplace**方程的函数：
+记 $\Delta=\nabla \cdot \nabla=\displaystyle\frac{\partial^{2}}{\partial x^{2}}+\frac{\partial^{2}}{\partial y^{2}}+\frac{\partial^{2}}{\partial z^{2}}$，称为 **Laplace** 算子，而满足**Laplace**方程的函数：
 
 $$
 \Delta u=\frac{\partial^{2} u}{\partial x^{2}}+\frac{\partial^{2} u}{\partial y^{2}}+\frac{\partial^{2} u}{\partial z^{2}}=0

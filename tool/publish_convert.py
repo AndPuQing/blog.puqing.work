@@ -1,29 +1,23 @@
 import argparse
+import os
+from typing import Dict, Match, Any
 import re
-from typing import Any, Dict, Match
+import hashlib
 import yaml
 import mistune
 from mistune import BlockState, Markdown, InlineState
 from mistune.renderers.markdown import MarkdownRenderer
 from mistune.plugins import math, formatting
-from deep_translator import GoogleTranslator
-import os
+import coloredlogs
+import logging
 
-proxies = {
-    "http": "100.82.183.24:7890",
-    "https": "100.82.183.24:7890",
-}
+logger = logging.getLogger(__name__)
+coloredlogs.install(level="DEBUG")
+
 
 CALLOUT_BLOCK_REGEX = re.compile(r"\[!([^\]]*)\]([\-\+]?)(.*)?")
 
 META = re.compile(r"^---\n(?P<meta>[\s\S]+?)\n---\n", re.MULTILINE)
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("input", help="input file")
-    parser.add_argument("-o", "--output", help="output file")
-    return parser.parse_args()
 
 
 class MyRenderer(MarkdownRenderer):
@@ -47,7 +41,7 @@ class MyRenderer(MarkdownRenderer):
         self.flag = False
 
     def render_token(self, token, state):
-        print(token)
+        # print(token)
         self.token_number += 1
         func = self._get_method(token["type"])
         if (
@@ -55,7 +49,7 @@ class MyRenderer(MarkdownRenderer):
         ):  # only when token < 20 and not have flag
             self.flag = True
             return "\n<!--truncate-->\n" + func(token, state)
-        if self.token_number >= 20 and token["type"] == "paragraph" and not self.flag:
+        if self.token_number >= 15 and token["type"] == "paragraph" and not self.flag:
             # insert truncated text
             self.flag = True
             return func(token, state) + "\n<!--truncate-->\n"
@@ -92,12 +86,15 @@ class MyRenderer(MarkdownRenderer):
         meta = token["meta"]
         # tags : tag1, tag2, tag3 -> tags : [tag1, tag2, tag3]
         if "tags" in meta:
+            if isinstance(meta["tags"], str):
+                meta["tags"] = meta["tags"].split(", ")
             # remove public/private tag
             meta["tags"] = [
                 tag
                 for tag in meta["tags"]
                 if tag not in ["Public", "Private", "public", "private"]
             ]
+
         if "creation date" in meta:
             meta["date"] = meta["creation date"]
             del meta["creation date"]
@@ -208,28 +205,92 @@ def show_link_in_list(md):
     md.block.insert_rule(md.block.list_rules, "show_link", before="list")
 
 
-def main(args):
-    if args.output is None:
-        # translate file name
-        filename = args.input.split("/")[-1]
-        filename = filename.replace(".md", "")
-        filename = GoogleTranslator(
-            source="zh-CN", target="en", proxies=proxies
-        ).translate(filename)
-        # remove special characters
-        filename = re.sub(r"[^\w\s]", "", filename)
-        # remove space
-        filename = filename.replace(" ", "-")
-        # lowercase
-        filename = filename.lower()
-        args.output = filename + ".mdx"
-        print("Output file will be saved as: ", args.output)
-    with open(args.input, "r", encoding="utf-8") as f:
-        text = f.read()
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dir", help="input dir")
+    parser.add_argument("-o", "--output", help="output file")
+    return parser.parse_args()
 
-    renderer = MyRenderer()
+
+def is_pushlish(file_path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+        footmatter_index = 0
+        for index, line in enumerate(lines[1:]):
+            if line.startswith("---"):
+                footmatter_index = index
+                break
+        if footmatter_index == 0:
+            return False
+        footmatter = lines[1 : footmatter_index + 1]
+        for line in footmatter:
+            if "Public" in line or "public" in line:
+                return True
+    return False
+
+
+def process_link(file, PUBLISH_DICT: Dict):
+    with open(file, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+        for index, line in enumerate(lines):
+            regex = re.compile(r"\[\[(.*?)\]\]")
+            match = regex.findall(line)
+
+            if match:
+                for raw in match:
+                    m = alias = raw
+                    anchor = None
+                    if "|" in raw:
+                        m, alias = raw.split("|")
+                    if "#" in m:
+                        m, anchor = m.split("#")
+                    if m not in PUBLISH_DICT.keys():
+                        logger.warning(
+                            f"Warning [[{m}]] not found in publish list"
+                        )  # noqa
+                        continue
+                    else:
+                        new_name = hashlib.md5(m.encode("utf-8")).hexdigest()[
+                            0:8
+                        ]  # noqa
+                        if anchor:
+                            new_name += (
+                                "#" + anchor
+                            )  # TODO(Puqing): not support anchor #noqa
+                        lines[index] = lines[index].replace(
+                            "[[{}]]".format(raw),
+                            "[{}](./{})".format(alias, new_name),
+                        )
+                        logger.debug(
+                            f"[[{m}]] has been replaced with [{alias}](./{new_name})"  # noqa
+                        )
+    return lines
+
+
+def main(args):
+    file_dir = args.dir
+    output_dir = args.output
+
+    file_list = []
+    for root, dirs, files in os.walk(file_dir):
+        for file in files:
+            if file.endswith(".md"):
+                file_list.append(os.path.join(root, file))
+
+    publish_list = []
+    for file in file_list:
+        if is_pushlish(file):
+            publish_list.append(file)
+
+    PUBLISH_DICT = {}
+    for file in publish_list:
+        file_name = file.split("/")[-1]
+        file_name = file_name.replace(".md", "")
+        PUBLISH_DICT[file_name] = file
+
+    render = MyRenderer()
     markdown = Markdown(
-        renderer=renderer,
+        renderer=render,
         block=MyBlockParser(),
         plugins=[
             math.math,
@@ -241,9 +302,14 @@ def main(args):
             show_link_in_list,
         ],
     )
-    text = markdown(text)
-    with open(args.output, "w", encoding="utf-8") as f:
-        f.write(text)
+
+    for key in PUBLISH_DICT.keys():
+        new_file = process_link(PUBLISH_DICT[key], PUBLISH_DICT)
+        new_name = hashlib.md5(key.encode("utf-8")).hexdigest()[0:8] + ".mdx"
+        new_file = markdown("".join(new_file))
+        with open(os.path.join(output_dir, new_name), "w", encoding="utf-8") as f:
+            f.writelines(new_file)
+        logger.info(f"Success convert {key} to {os.path.join(output_dir, new_name)}")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,11 @@
 ---
 authors:
 - PuQing
-creation date: 2023-07-22 21:42
+date: 2023-07-22 21:42
+keywords:
+- 统计学
+- 概率论
 tags:
-- private
 - 统计学
 - 概率论
 ---
@@ -18,8 +20,6 @@ Maximum Likelihood Estimation(MLE) 极大似然估计，又被称作最大似然
 :::example 正态分布
 连续型随机变量 $X$ 如果满足如下密度函数
 
-
-<!--truncate-->
 $$
 f(x)=\frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(x-\mu)^{2}}{2 \sigma^{2}}} \quad(\mu \in R, \sigma> 0)
 $$
@@ -53,12 +53,15 @@ $$
 $$
 \underset{\theta}{\arg \max } L\left(x_{1}, x_{2}, \ldots, x_{n} ; \theta\right)=\underset{\theta}{\arg \max } \prod_{i=1}^{n} P\left(x_{i} ; \theta\right)
 $$
-:::note i.i.d
-独立同分布 independent and identically distributed，i.i.d.[^独立同分布]
+::::note i.i.d
+独立同分布 independent and identically distributed，i.i.d.[^1]
 
-> 指随机过程中，任何时刻的取值都为随机变量，如果这些随机变量服从同一分布，并且互相独立，那么这些随机变量是独立同分布。
+:::info
+指随机过程中，任何时刻的取值都为随机变量，如果这些随机变量服从同一分布，并且互相独立，那么这些随机变量是独立同分布。
+
 
 :::
+::::
 所以 MLE 极大似然估计在参数估计过程中的基本步骤：
 
 1. 建立似然函数 $L(\theta)$
@@ -141,15 +144,15 @@ $$
 \sigma^{2}=\frac{1}{n} \sum_{i=1}^{n}\left(x_{i}-\mu\right)^{2}
 \end{cases}
 $$
-所以对于正态分布而言，其均值的极大似然估计量即是样本的均值；而其方差的极大似然估计量却是**样本数据的总体方差值 (即分母为 $n$)** ，而不是 **样本数据的样本方差值 (即分母为 $n-1$)**[[理解协方差矩阵#^f98e77|(至于为什么见)]] ，故正态分布方差的极大似然估计量是有偏的
+所以对于正态分布而言，其均值的极大似然估计量即是样本的均值；而其方差的极大似然估计量却是**样本数据的总体方差值 (即分母为 $n$)** ，而不是 **样本数据的样本方差值 (即分母为 $n-1$)**[(这里为什么是n-1)](./8f979ab4#%5E187511) ，故正态分布方差的极大似然估计量是有偏的。
 
 :::danger
-在最后一步，对于多元函数求极值可能需要证明，根据 [[多元函数的极值 最大值与最小值]] 中的描述，其偏导为零只是必要条件，而并非充要条件。其应满足似然函数的 $\mathrm{Hessan}$ 矩阵为负正定。
+在最后一步，对于多元函数求极值可能需要证明，根据 [多元函数的极值 最大值与最小值](./8145550f) 中的描述，其偏导为零只是必要条件，而并非充要条件。其应满足似然函数的 $\mathrm{Hessan}$ 矩阵为负正定。
 
 :::
 ## 相关资料
 
-[^独立同分布]: [独立同分布 independent and identically distributed](https://zhuanlan.zhihu.com/p/52530189)
-
 - [Maximum Likelihood Estimation(MLE) 极大似然估计](https://zhuanlan.zhihu.com/p/163258672)
 - <https://www.ccs.neu.edu/home/vip/teach/MLcourse/3_generative_models/lecture_notes/Maximum_likelihood_Wikipedia.pdf>
+
+[^1]: [独立同分布 independent and identically distributed](https://zhuanlan.zhihu.com/p/52530189)
