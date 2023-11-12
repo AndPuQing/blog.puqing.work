@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://blog.puqing.work/sitemap.xml
+Sitemap: https://blog.puqing.work/sitemap.XML
