@@ -1,8 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+const lightCodeTheme = require("prism-react-renderer").themes.github;
+const darkCodeTheme = require("prism-react-renderer").themes.dracula;
 const math = require('remark-math');
 const katex = require('rehype-katex');
 
@@ -33,7 +33,6 @@ const config = {
           remarkPlugins: [math],
           rehypePlugins: [katex],
           admonitions: {
-            tag: ':::',
             keywords: ['note', 'abstract', 'info', 'todo', 'tip', 'success',
               'question', 'warning', 'failure', 'danger', 'example', 'quote']
           },
