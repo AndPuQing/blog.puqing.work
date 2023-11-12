@@ -42,7 +42,7 @@ const config = {
         },
         sitemap: {
           ignorePatterns: ['/tags/**', '/blog/tags/**', '/docs/**',],
-          filename: 'sitemap.xml',
+          filename: 'sitemap.XML',
         },
         gtag: {
           trackingID: "G-KPEKSDZKLJ",
