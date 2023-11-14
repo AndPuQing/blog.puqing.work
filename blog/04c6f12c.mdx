@@ -107,7 +107,7 @@ $$
 从而，$\boldsymbol{y}$ 的边缘分布为
 
 $$
-p(\boldsymbol{y}) = \sum_{\boldsymbol{z}} p(\boldsymbol{y}\mid \boldsymbol{z}) p(\boldsymbol{z}) = \sum_{{\boldsymbol{z}}} \prod_{i=1}^{K}[\phi_{i}\symcal{N}(\boldsymbol{y}\mid \boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i})]^{z_{i}}
+p(\boldsymbol{y}) = \sum_{\boldsymbol{z}} p(\boldsymbol{y}\mid \boldsymbol{z}) p(\boldsymbol{z}) = \sum_{{\boldsymbol{z}}} \prod_{i=1}^{K}[\phi_{i}\mathcal{N}(\boldsymbol{y}\mid \boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i})]^{z_{i}}
 $$
 注意到 $\boldsymbol{z}$ 是 $\text{one hot}$ 编码的，于是连乘积可以化简成为
 
