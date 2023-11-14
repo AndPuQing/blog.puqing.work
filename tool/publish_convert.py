@@ -81,7 +81,8 @@ class MyRenderer(MarkdownRenderer):
 
     def block_math(self, token: Dict[str, Any], state: BlockState) -> str:
         token["raw"] = token["raw"].replace(
-            "\n\\end{equation}", f"\\tag({self.equation_number})\n" + "\\end{equation}"
+            "\n\\end{equation}",
+            "\\tag{" + f"{self.equation_number}" + "}\n\\end{equation}",
         )
         self.equation_number = (
             token["raw"].count("\\end{equation}") + self.equation_number
