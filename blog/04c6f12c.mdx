@@ -1,0 +1,121 @@
+---
+authors:
+- PuQing
+date: 2023-11-12 16:31
+keywords:
+- 概率论
+- 混合模型
+- 高斯混合模型
+tags:
+- 概率论
+- 混合模型
+- 高斯混合模型
+---
+# Mixture Model
+
+:::info
+In [statistics](https://en.wikipedia.org/wiki/Statistics "Statistics"), a **mixture model** is a [probabilistic model](https://en.wikipedia.org/wiki/Probabilistic_model "Probabilistic model") for representing the presence of [subpopulations](https://en.wikipedia.org/wiki/Subpopulation "Subpopulation") within an overall population, without requiring that an observed data set should identify the sub-population to which an individual observation belongs
+
+
+:::
+## Introduce
+
+### 三硬币模型
+
+假设有 3 枚硬币，分别记作 $A,B,C$。这些硬币正面出现的概率分别是 $\pi,p,q$。进行如下掷硬币实验：先掷硬币 $A$，根据其结果选出硬币 $B$，反面选硬币 $C$；然后掷选出的硬币，掷硬币的结果，出现正面记作 1，出现反面记作 0；独立地重复 $n$ 次实验（这里，$n=10$）,观测结果如下：
+
+
+<!--truncate-->
+$$
+1,1,0,1,0,0,1,0,1,1
+$$
+假设我们只能观测到最终掷硬币的结果，不能观测中间状态。问如何估计三硬币正面出现的概率，即三硬币模型的参数。
+
+:::warning 解
+三硬币模型可以写作
+
+$$
+\begin{aligned}
+P(y \mid \theta) & =\sum_{z} P(y, z \mid \theta)=\sum_{z} P(z \mid \theta) P(y \mid z, \theta) \\
+& =\underbrace{\pi \underbrace{p^{y}(1-p)^{1-y}}_{{\color{Green} P(y\mid z,\theta)} }  +\underbrace{(1-\pi)}_{{\color{Red} P(z\mid \theta)} } q^{y}(1-q)^{1-y}}_{\sum} 
+\end{aligned}
+$$
+在这里，随机变量 $y$ 是观测到的变量，表示实验结果是 $1$ 或者是 $0$；随机变量 $z$ 是一个隐变量，表示未观测到的硬币 $A$ 的结果；$\theta=(\pi,p,q)$ 是模型参数。
+
+:::
+将观测数据表示为 $Y=(Y_{1},Y_{2},\dots,Y_{n})^\top$，未观测数据表示为 $Z=(Z_{1},Z_{2},\dots,Z_{n})^\top$。则观测数据的似然函数为
+
+$$
+\begin{equation}
+P(Y \mid \theta)=\sum_{Z} P(Z \mid \theta) P(Y \mid Z, \theta)
+\end{equation}
+$$
+即
+
+$$
+P(Y \mid \theta)=\prod_{j=1}^{n}\left[\pi p^{y_{j}}(1-p)^{1-y_{J}}+(1-\pi) q^{y_{j}}(1-q)^{1-y_{j}}\right]
+$$
+考虑到求模型参数 $\theta=(\pi,p,q)$ 的极大似然估计，即
+
+$$
+\hat{\theta}=\arg \max _{\theta} \log P(Y \mid \theta)
+$$
+这里的三变量模型实际上就是一种混合模型，最后 $y$ 的总体分布包含有 $K$ 个子分布（这里就是最后的两个 $p,q$ 分布），而其中的 $\pi$ 实际上是一种混合权重 ($\text{mixture weights}$)
+
+更加一般的，混合模型一般有下面几个特点。
+
+## Mixture Model
+
+- 观测到的 $N$ 个随机变量每一个都是从 $K$ 个子分布得到的
+- 有 $N$ 个隐随机变量，表示从各个子分布的结果，每个的维度都是 $K$
+- 一个 $K$ 维的 $\text{mixture weights}$，其和是 $1$
+
+特别的，当各个子分布是高斯（正态）分布时，我们叫 $\text{Gaussian mixture model}$，写作
+
+$$
+p(\boldsymbol{y})=\sum_{i=1}^{K} \phi_{i} \mathcal{N}\left(\boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i}\right)
+$$
+其中的 $\phi_{i}$ 是观测数据属于第 $i$ 个子模型的概率，$\phi_{i}\ge 0, \sum_{i=1}^K \phi_{i}=1$；$\mathcal{N}\left(\boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i}\right)$ 是第 $i$ 个子模型的高斯分布密度函数。
+
+类似于上面中的隐随机变量 $z$，构造混合高斯模型的另一种表示方式。
+
+:::note
+我们可以这样想象一个符合混合高斯模型分布的数据点的产生过程：首先以一定的概率从 $K$ 个高斯分布中选择一个，其中第 $i$ 个高斯分布被选中的概率为 $\phi_{i}$ ，然后依据被选中的高斯分布生成一个数据点。重复以上过程生成多个数据点，这些数据点将符合上式的混合高斯分布。
+
+:::
+:::tip
+为了表示选中哪一个高斯分布，我们引入一个二值指示变量 $\boldsymbol{z}$，该变量是 $\text{one hot}$ 编码的，由于第 $i$ 个高斯分布被选中的概率为 $\phi_{i}$，即
+
+$$
+p(z_{i}=1) = \phi_{i}
+$$
+因此，随机变量 $\boldsymbol{z}$ 的分布可以表示为
+
+$$
+p(\boldsymbol{z}) = \prod^{K}_{i=1} \phi_{i}^{z_{i}}
+$$
+所以，当已知选中第 $i$ 个高斯分布时，$\boldsymbol{y}$ 的条件分布为
+
+$$
+p(\boldsymbol{y}\mid z_{i}=1) = \mathcal{N}\left(\boldsymbol{y}\mid \boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i}\right)
+$$
+或者表示为
+
+$$
+p(\boldsymbol{y}\mid \boldsymbol{z}) = \prod^{K}_{i=1} \mathcal{N}\left(\boldsymbol{y}\mid \boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i}\right) ^ {z_{i}}
+$$
+从而，$\boldsymbol{y}$ 的边缘分布为
+
+$$
+p(\boldsymbol{y}) = \sum_{\boldsymbol{z}} p(\boldsymbol{y}\mid \boldsymbol{z}) p(\boldsymbol{z}) = \sum_{{\boldsymbol{z}}} \prod_{i=1}^{K}[\phi_{i}\symcal{N}(\boldsymbol{y}\mid \boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i})]^{z_{i}}
+$$
+注意到 $\boldsymbol{z}$ 是 $\text{one hot}$ 编码的，于是连乘积可以化简成为
+
+$$
+p(\boldsymbol{y}) = \sum_{\boldsymbol{z}} p(\boldsymbol{y}\mid \boldsymbol{z}) p(\boldsymbol{z}) = \sum_{i=1}^{K}\phi_{i} \mathcal{N}(\boldsymbol{y}\mid\boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i})
+$$
+:::
+## 相关资料
+
+- [Mixture_model](https://en.wikipedia.org/wiki/Mixture_model#Gaussian_mixture_model)
+- [混合模型与EM算法 - 知乎](https://zhuanlan.zhihu.com/p/33365515)
