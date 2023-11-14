@@ -39,6 +39,7 @@ class MyRenderer(MarkdownRenderer):
         super().__init__(**kwargs)
         self.token_number = 0
         self.flag = False
+        self.equation_number = 1
 
     def render_token(self, token, state):
         # print(token)
@@ -79,6 +80,12 @@ class MyRenderer(MarkdownRenderer):
             return ":::info\n" + text + "\n:::\n"
 
     def block_math(self, token: Dict[str, Any], state: BlockState) -> str:
+        token["raw"] = token["raw"].replace(
+            "\n\\end{equation}", f"\\tag({self.equation_number})\n" + "\\end{equation}"
+        )
+        self.equation_number = (
+            token["raw"].count("\\end{equation}") + self.equation_number
+        )
         return "$$\n" + token["raw"] + "\n$$\n"
 
     def inline_math(self, token: Dict[str, Any], state: InlineState) -> str:
