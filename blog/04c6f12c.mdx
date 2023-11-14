@@ -47,7 +47,7 @@ $$
 
 $$
 \begin{equation}
-P(Y \mid \theta)=\sum_{Z} P(Z \mid \theta) P(Y \mid Z, \theta)
+P(Y \mid \theta)=\sum_{Z} P(Z \mid \theta) P(Y \mid Z, \theta)\tag(1)
 \end{equation}
 $$
 即
@@ -58,7 +58,9 @@ $$
 考虑到求模型参数 $\theta=(\pi,p,q)$ 的极大似然估计，即
 
 $$
-\hat{\theta}=\arg \max _{\theta} \log P(Y \mid \theta)
+\begin{equation}
+\hat{\theta}=\arg \max _{\theta} \log P(Y \mid \theta)\tag(2)
+\end{equation}
 $$
 这里的三变量模型实际上就是一种混合模型，最后 $y$ 的总体分布包含有 $K$ 个子分布（这里就是最后的两个 $p,q$ 分布），而其中的 $\pi$ 实际上是一种混合权重 ($\text{mixture weights}$)
 

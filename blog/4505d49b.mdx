@@ -13,7 +13,7 @@ tags:
 
 $$
 \begin{equation}
-\boldsymbol{x}_{t+1}  =  \boldsymbol{x}_{t}-\alpha \nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right) \tag{1}
+\boldsymbol{x}_{t+1}  =  \boldsymbol{x}_{t}-\alpha \nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right) \tag{1}\tag(1)
 \end{equation}
 $$
 [如果 $f(x)$ 关于 $x$ 的凸的](./476bc716)，那么梯度下降通常能够找到最小值点；相反，则通常只能收敛到一个 " 驻点 "——即梯度为 0 的点，比较理想的情况下能收敛到一个极小值（局部最小值）点。这里没有对极小值和最小值做严格区分，因为在深度学习中，即便是收敛到一个极小值点也是很难得的了。
@@ -27,7 +27,7 @@ $$
 
 $$
 \begin{equation}
-\frac{d \boldsymbol{x}_{t}}{d t}=-\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right) \tag{2}
+\frac{d \boldsymbol{x}_{t}}{d t}=-\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right) \tag{2}\tag(2)
 \end{equation}
 $$
 :::tip 推导过程
@@ -44,7 +44,7 @@ $$
 
 $$
 \begin{equation}
-\frac{d f\left(\boldsymbol{x}_{t}\right)}{d t}  = \left\langle\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right), \frac{d \boldsymbol{x}_{t}}{d t}\right\rangle  = -\left\|\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right)\right\|^{2} \leq 0
+\frac{d f\left(\boldsymbol{x}_{t}\right)}{d t}  = \left\langle\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right), \frac{d \boldsymbol{x}_{t}}{d t}\right\rangle  = -\left\|\nabla_{\boldsymbol{x}_{t}} f\left(\boldsymbol{x}_{t}\right)\right\|^{2} \leq 0\tag(3)
 \end{equation}
 $$
 :::tip 推导过程 [Nabla 算子与 Laplace 算子](./7edbed51)
