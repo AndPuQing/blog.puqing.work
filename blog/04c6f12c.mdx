@@ -47,7 +47,7 @@ $$
 
 $$
 \begin{equation}
-P(Y \mid \theta)=\sum_{Z} P(Z \mid \theta) P(Y \mid Z, \theta)\tag{1}
+P(Y \mid \theta)=\sum_{Z} P(Z \mid \theta) P(Y \mid Z, \theta)
 \end{equation}
 $$
 即
@@ -59,7 +59,7 @@ $$
 
 $$
 \begin{equation}
-\hat{\theta}=\arg \max _{\theta} \log P(Y \mid \theta)\tag{2}
+\hat{\theta}=\arg \max _{\theta} \log P(Y \mid \theta)
 \end{equation}
 $$
 这里的三变量模型实际上就是一种混合模型，最后 $y$ 的总体分布包含有 $K$ 个子分布（这里就是最后的两个 $p,q$ 分布），而其中的 $\pi$ 实际上是一种混合权重 ($\text{mixture weights}$)
@@ -76,7 +76,7 @@ $$
 
 $$
 \begin{equation}
-p(\boldsymbol{y})=\sum_{i=1}^{K} \phi_{i} \mathcal{N}\left(\boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i}\right)\tag{3}
+p(\boldsymbol{y})=\sum_{i=1}^{K} \phi_{i} \mathcal{N}\left(\boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i}\right)
 \end{equation}
 $$
 其中的 $\phi_{i}$ 是观测数据属于第 $i$ 个子模型的概率，$\phi_{i}\ge 0, \sum_{i=1}^K \phi_{i}=1$；$\mathcal{N}\left(\boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i}\right)$ 是第 $i$ 个子模型的高斯分布密度函数。
@@ -112,7 +112,7 @@ $$
 
 $$
 \begin{equation}
-p(\boldsymbol{y}) = \sum_{\boldsymbol{z}} p(\boldsymbol{y}\mid \boldsymbol{z}) p(\boldsymbol{z}) = \sum_{{\boldsymbol{z}}} \prod_{i=1}^{K}[\phi_{i}\mathcal{N}(\boldsymbol{y}\mid \boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i})]^{z_{i}}\tag{4}
+p(\boldsymbol{y}) = \sum_{\boldsymbol{z}} p(\boldsymbol{y}\mid \boldsymbol{z}) p(\boldsymbol{z}) = \sum_{{\boldsymbol{z}}} \prod_{i=1}^{K}[\phi_{i}\mathcal{N}(\boldsymbol{y}\mid \boldsymbol{\mu}_{i}, \boldsymbol{\Sigma}_{i})]^{z_{i}}
 \end{equation}
 $$
 注意到 $\boldsymbol{z}$ 是 $\text{one hot}$ 编码的，于是连乘积可以化简成为

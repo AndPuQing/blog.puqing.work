@@ -1,0 +1,65 @@
+---
+authors:
+- PuQing
+date: 2023-11-14 18:57
+keywords:
+- 概率论
+- 贝叶斯定理
+tags:
+- 概率论
+- 贝叶斯定理
+---
+# 贝叶斯定理
+
+## 条件概率
+
+条件概率一般记作 $P(A\mid B)$，意思是当 $B$ 事件发生时，$A$ 事件发生的概率，其定义为
+
+$$
+P(A\mid B)=\frac{P(A\cap B)}{P(B)}
+$$
+其中 $P(A\cap B)$ 意思是 $A$ 和 $B$ 共同发生的概率，称为联合概率。也可以写作 $P(A,B)$ 或 $P(AB)$。
+
+
+<!--truncate-->
+如何对他有更深刻的认识呢？
+
+:::tip
+当我们说 $A$ 发生的概率 $P(A)$，实际上就是说在 `样本空间` 中，事件 $A$ 发生的数量占 $\boldsymbol{\Omega}$ 的比率。
+
+:::
+:::info
+**条件意味着缩小了样本空间，是二级概率**
+
+
+:::
+条件概率中的 $P(A\mid B)$ 意思是事件 $B$ 发生的情况下，事件 $A$ 发生的概率，所以此时 $P(A\mid B)$ 已经不是针对于样本空间 $\boldsymbol{\Omega}$ 而是缩小的样本空间 $B$。
+
+![Untitled(1).bmp](https://images.puqing.work/2023/11/14/65537c93ae703.bmp)
+
+结合上图来讲就是，条件概率 $P(A\mid B)$ 就是
+
+$$
+P(A\mid B) = \frac{\text{size}(A\cap B)}{\text{size}(B)}
+$$
+考虑到 $P(A\cap B)=\displaystyle \frac{\text{size}(A\cap B)}{\text{size}(\boldsymbol{\Omega})}$，$P(B)=\displaystyle \frac{\text{size}(B)}{\text{size}(\boldsymbol{\Omega})}$，所以：
+
+$$
+\begin{equation}
+P(A\mid B) = \frac{P(A\cap B)}{P(B)} \label{1}
+\end{equation}
+$$
+公式 $\eqref{1}$ 就是条件概率
+
+通过条件概率可以很容易推导出贝叶斯定理
+
+$$
+\begin{aligned}
+\displaystyle P(A\mid B) &= \frac{P(A\cap B)}{P(B)} \\
+\displaystyle P(B\mid A) &= \frac{P(A\cap B)}{P(A)} \\
+&\Downarrow \\
+\frac{P(A\mid B)}{P(B\mid A)} &= \frac{P(A)}{P(B)} \\
+&\Downarrow \\
+P(A\mid B) &= \frac{P(B\mid A)P(A)}{P(B)}
+\end{aligned}
+$$
