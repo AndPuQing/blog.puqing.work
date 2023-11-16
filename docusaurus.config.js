@@ -4,7 +4,7 @@
 const lightCodeTheme = require("prism-react-renderer").themes.github;
 const darkCodeTheme = require("prism-react-renderer").themes.dracula;
 const math = require('remark-math');
-const katex = require('rehype-katex');
+const katex = require('rehype-katex').default;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -31,7 +31,18 @@ const config = {
           blogSidebarTitle: "All posts",
           blogSidebarCount: "ALL",
           remarkPlugins: [math],
-          rehypePlugins: [katex],
+          rehypePlugins: [(options) => {
+            const instance = katex({
+              ...options,
+              trust: (context) => ['\\htmlId', '\\href'].includes(context.command),
+              macros: {
+                "\\eqref": "\\href{###1}{(\\text{#1})}",
+                "\\ref": "\\href{###1}{\\text{#1}}",
+                "\\label": "\\htmlId{#1}{}\\tag{#1}"
+              }
+            })
+            return instance;
+          }],
           admonitions: {
             keywords: ['note', 'abstract', 'info', 'todo', 'tip', 'success',
               'question', 'warning', 'failure', 'danger', 'example', 'quote']
