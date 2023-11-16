@@ -80,13 +80,6 @@ class MyRenderer(MarkdownRenderer):
             return ":::info\n" + text + "\n:::\n"
 
     def block_math(self, token: Dict[str, Any], state: BlockState) -> str:
-        token["raw"] = token["raw"].replace(
-            "\n\\end{equation}",
-            "\\tag{" + f"{self.equation_number}" + "}\n\\end{equation}",
-        )
-        self.equation_number = (
-            token["raw"].count("\\end{equation}") + self.equation_number
-        )
         return "$$\n" + token["raw"] + "\n$$\n"
 
     def inline_math(self, token: Dict[str, Any], state: InlineState) -> str:
