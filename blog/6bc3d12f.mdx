@@ -1,0 +1,197 @@
+---
+authors:
+- PuQing
+date: 2023-11-18 17:49
+keywords:
+- 概率论
+- 贝叶斯定理
+- 参数估计
+tags:
+- 概率论
+- 贝叶斯定理
+- 参数估计
+---
+# 朴素贝叶斯分类器
+
+假设我们有个特定的输入 $x$，我们想要 $\text{Inference}$ 它的类别，我们可以通过 [贝叶斯定理](./fc5a835a) 中的后验概率最大的类作为 $x$ 类的输入。
+
+$$
+\begin{equation}
+P\left(Y=c_{k} \mid X=x\right)=\frac{P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)}{\sum_{k} P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)}
+\end{equation}
+$$
+$\label{1}$
+其中的 $Y$ 即输入的类别。
+
+
+<!--truncate-->
+所以分类器可以描述为
+
+$$
+\begin{equation}
+y = f(x)  = \arg \max_{c_{k}} P(Y=c_{k} \mid X=x )
+\end{equation}
+$$
+$\label{2}$
+
+注意到该式 $\eqref{1}$ 的分母对于所有的 $c_{k}$ 都是相同的。所以其核心是需要估计出条件概率分布：
+
+$$
+\begin{equation}
+P\left(X=x \mid Y=c_{k}\right)=P\left(X^{(1)}=x^{(1)}, \cdots, X^{(n)}=x^{(n)} \mid Y=c_{k}\right), \quad k=1,2, \cdots, K
+\end{equation}
+$$
+$\label{3}$
+
+:::warning
+这里 $\mathcal{X} \subseteq \mathbf{R}^{n}$ ，所以 $x^{(1)}$ 表示第 $i$ 维度上的值
+
+:::
+以及先验概率分布：
+
+$$
+P\left(Y=c_{k}\right), \quad k=1,2, \cdots, K
+$$
+但是条件概率有指数级数量的参数，事实上，假设 $x^{(j)}$ 可取值有 $S_{j}$ 个，$j=1,2,\cdots,n$，$Y$ 可取值有 $K$ 个，那么参数个数为 $\displaystyle K \prod_{j=1}^nS_{j}$
+
+而朴素贝叶斯对上面的 $\eqref{3}$ 条件概率分布作出了条件独立性的假设，这是非常强的假设，朴素贝叶斯就此得名。具体的，条件独立性假设是
+
+$$
+\begin{aligned}
+P\left(X=x \mid Y=c_{k}\right) & =P\left(X^{(1)}=x^{(1)}, \cdots, X^{(n)}=x^{(n)} \mid Y=c_{k}\right) \\
+& =\prod_{j=1}^{n} P\left(X^{(j)}=x^{(j)} \mid Y=c_{k}\right)
+\end{aligned}
+$$
+:::warning
+条件独立假设等于是说用于分类的特征在类确定的条件下都是**条件独立**的。
+
+:::
+在这样的假设下分类器 $\eqref{2}$ 可以表示为：
+
+$$
+y=\arg \max _{c_{k}} P\left(Y=c_{k}\right) \prod_{j} P\left(X^{(j)}=x^{(j)} \mid Y=c_{k}\right)
+$$
+## 极大似然估计
+
+在朴素贝叶斯法中，学习意味着估计 $P(Y=c_{k})$ 和 $P\left(X^{(j)}=x^{(j)} \mid Y=c_{k}\right)$.我们可以使用 [极大似然估计](./967aee09) 估计相应的概率.
+
+对于先验概率 $P(Y=c_{k})$ 的极大似然估计是
+
+$$
+P\left(Y=c_{k}\right)=\frac{\sum_{i=1}^{N} I\left(y_{i}=c_{k}\right)}{N}, k=1,2, \cdots, K
+$$
+:::tip 推导过程
+我们想利用一大批数据 $\{y \in Y\}$ 估计 $Y=c_{k}$ 的概率 $P(Y=c_{k})$
+
+注意到对于每一个类可以视为二项分布，即
+
+$$
+\begin{cases}
+P(Y=c_{k}) = p \\
+P(Y\ne c_{k}) = 1-p 
+\end{cases}
+$$
+引入指示函数可以简写为
+
+$$
+P(I(Y,c_{k})) =p^I(1-p)^{1-I},\quad I = \begin{cases}
+1,\quad Y=c_{k} \\
+0,\quad Y\ne c_{k} 
+\end{cases}
+$$
+所以对于那一批数据，我们需要
+
+$$
+\begin{split}
+\arg \max_{p}L(p) &=\arg \max_{p} \prod_{y \in Y} P(I(y,c_{k}))\\
+ &\Rightarrow \arg \max_{p} \sum_{y \in Y} \log P(I(y,c_{k})) \quad \quad \text{(Log Derivative Trick)} \\
+ &=\arg \max_{p} \sum_{y \in Y} \log(p^I(1-p)^{(1-I)}) \\ 
+ &=\arg \max_p \left ( \sum_{y=1} \log p+ \sum_{y\ne 1} \log (1-p)\right )
+\end{split}
+
+$$
+比较麻烦的是这里的 $\sum_{y=1}\log p,\quad \sum_{y\ne 1} \log (1-p)$ 不是太好求导，我们令
+
+$$
+n^{1}=\sum I\left(y=c_{k}\right), n^{0}=\sum I\left(y \neq c_{k}\right)
+$$
+即 $y$ 等于 $c_{k}$ 的数量 $n^1$ 和 $y$ 不等于 $c_{k}$ 的数量 $n^0$，于是上式变换为
+
+$$
+=\arg \max _{p}\left(n^{1} \log p+n^{0} \log (1-p)\right)
+$$
+我们对其求导，得到
+
+$$
+\begin{split}
+\nabla_{p} L&=\frac{\partial \left(\sum_{y \in Y} \log \left(P\left(y=c_{k} \mid p\right)\right)\right)}{\partial  p} \\
+&=\frac{\partial\left(n^{1} \log p+n^{0} \log (1-p)\right)}{\partial p} \\
+&=\frac{n^1}{p}-\frac{n^0}{1-p}
+\end{split}
+$$
+求零点得到
+
+$$
+p=\frac{n^1}{n^0+n^1} = \frac{\sum_{i=1}^{N} I\left(y_{i}=c_{k}\right)}{N}
+$$
+这就是先验概率的最大似然估计值
+
+:::
+而对于条件概率的最大似然估计为
+
+$$
+P\left(X^{(j)}=a_{j l} \mid Y=c_{k}\right)=\frac{\sum_{i=1}^{N} I\left(x_{i}^{(j)}=a_{j l}, y_{i}=c_{k}\right)}{\sum_{j=1}^{N} I\left(y_{i}=c_{k}\right)}
+$$
+式中，$x_{i}^{(j)}$ 是第 $i$ 个样本的第 $j$ 个特征；$a_{jl}$ 是第 $j$ 个特征可能取的第 $l$ 个值；
+
+:::tip 推导过程
+根据条件概率定义
+
+$$
+P\left(X^{(j)}=a_{j l} \mid Y=c_{k}\right)=\frac{P\left(X^{(j)}=a_{j l}, Y=c_{k}\right)}{P\left(Y=c_{k}\right)}
+$$
+我们已经求得 $P(Y=c_{k})$，接下来求 $P\left(X^{(j)}=a_{j l}, Y=c_{k}\right)$ 的最大似然值：
+
+同样的引入指示函数
+
+$$
+\begin{split}
+L(P) &= \arg \max _{p} \sum_{x \in X} \log \left(p^{I}(1-p)^{1-I}\right), I=\begin{cases}
+ 1, x^{(i)}=a_{j l} \text { and } Y=c_{k} \\
+0, x^{(i)} \neq a_{j l} \text {, or } Y \neq c_{k}
+\end{cases} \\
+&= \arg \max _{p}\left(n^{1} \log p+n^{0} \log (1-p)\right), n^{1}=\sum_{i=1}^{N}(I), n^{0}=\sum_{i=1}^{N}(1-I)
+\end{split}
+$$
+求导得到
+
+$$
+\begin{split}
+\nabla_{p} L &= \frac{\partial \left(n^{1} \log p+n^{0} \log (1-p)\right)}{\partial  p}\\
+&= \frac{n^1}{p}- \frac{n^0}{1-p}
+\end{split}
+$$
+解得
+
+$$
+p=\frac{n^1}{n^0+n^1}=\frac{\sum_{i=1}^{N} I\left(x_{i}^{(j)}=a_{j l}, y_{i}=c_{k}\right)}{N}
+$$
+:::
+## 贝叶斯估计
+
+用极大似然估计可能会出现要估计的概率值为 $0$ 的情况。这会影响到后验概率的计算结果，使分类产生偏差。解决这一问题的方法是常用贝叶斯估计。具体的，条件概率的贝叶斯估计是
+
+$$
+P_{\lambda}\left(X^{(j)}=a_{j l} \mid Y=c_{k}\right)=\frac{\sum_{i=1}^{N} I\left(x_{i}^{(j)}=a_{j l}, y_{i}=c_{k}\right)+\lambda}{\sum_{i=1}^{N} I\left(y_{i}=c_{k}\right)+S_{j} \lambda}
+$$
+这里相当于在随机变量各个取值的频数上加上了一个正数 $\lambda$。当 $\lambda=0$ 时就是极大似然估计。常常取 $\lambda=1$，这时称为拉普拉斯平滑 $(\text{Laplace smoothing})$
+
+同样的，先验概率的贝叶斯估计是
+
+$$
+P_{\lambda}\left(Y=c_{k}\right)=\frac{\sum_{i=1}^{N} I\left(y_{i}=c_{k}\right)+\lambda}{N+K \lambda}
+$$
+## 相关资料
+
+- [极大似然估计法推出朴素贝叶斯法中的先验概率估计公式？ - 知乎](https://www.zhihu.com/question/33959624)
+- [Bayesian inference - Wikipedia](https://en.wikipedia.org/wiki/Bayesian_inference)

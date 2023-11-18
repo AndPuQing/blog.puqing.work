@@ -45,10 +45,11 @@ $$
 考虑到 $P(A\cap B)=\displaystyle \frac{\text{size}(A\cap B)}{\text{size}(\boldsymbol{\Omega})}$，$P(B)=\displaystyle \frac{\text{size}(B)}{\text{size}(\boldsymbol{\Omega})}$，所以：
 
 $$
-\begin{aligned}
-P(A\mid B) = \frac{P(A\cap B)}{P(B)} \label{1}
-\end{aligned}
+\begin{align}
+P(A\mid B) = \frac{P(A\cap B)}{P(B)}
+\end{align}
 $$
+$\label{1}$
 公式 $\eqref{1}$ 就是条件概率
 
 通过条件概率可以很容易推导出贝叶斯定理
@@ -115,9 +116,7 @@ $$
 而其中的 $P(H)P(E\mid H)+P(F)P(E\mid F)\Rightarrow P(E)$ 实际上就是一个**全概率公式**，实际上不可能符合描述的人只有图书馆管理员和农民，所以我们可以对其推广到普遍意义上。
 
 $$
-\begin{equation}
 P(E) = \sum^{n}_{i=1}P(B_{i})P(E\mid B_{i})
-\end{equation}
 $$
 :::info
 这里的 $B_{i}$ 就是各个类别人群事件
@@ -127,9 +126,7 @@ $$
 所以同样的我们可以对上面式子进行推广：
 
 $$
-\begin{equation}
 P(B_{i}\mid E)  = \frac{P(B_{i})P(E\mid B_{i})}{P(E)} = \frac{P(B_{i})P(E\mid B_{i})}{\sum^{n}_{j=1}P(B_{j})P(E\mid B_{j})}
-\end{equation}
 $$
 ## Bayes Factor
 
@@ -193,9 +190,7 @@ $$
 所以更加 formula 的阐述就是，在检测之后的患病比率等于检测前的比率 (也就是先验概率) 乘以**贝叶斯因子**
 
 $$
-\begin{equation}
 O(D\mid +) = {\color{Red} O(D)}  \frac{P(+\mid D)}{P(+ \mid \neg D)}
-\end{equation}
 $$
 :::info
 这里的 $O(\cdot)$ 表示概率的比率表示
