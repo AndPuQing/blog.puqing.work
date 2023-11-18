@@ -80,6 +80,9 @@ class MyRenderer(MarkdownRenderer):
             return ":::info\n" + text + "\n:::\n"
 
     def block_math(self, token: Dict[str, Any], state: BlockState) -> str:
+        # for obsidian math error :(
+        # we use \label{} instead of \flat{}
+        token["raw"] = token["raw"].replace("\\flat", "\\label")
         return "$$\n" + token["raw"] + "\n$$\n"
 
     def inline_math(self, token: Dict[str, Any], state: InlineState) -> str:
