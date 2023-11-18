@@ -38,7 +38,7 @@ const config = {
               macros: {
                 "\\eqref": "\\href{###1}{(\\text{#1})}",
                 "\\ref": "\\href{###1}{\\text{#1}}",
-                "\\label": "\\htmlId{#1}{}\\tag{#1}"
+                "\\flat": "\\htmlId{#1}{}"
               }
             })
             return instance;
