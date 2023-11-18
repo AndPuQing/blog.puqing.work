@@ -17,10 +17,9 @@ tags:
 
 $$
 \begin{equation}
-P\left(Y=c_{k} \mid X=x\right)=\frac{P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)}{\sum_{k} P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)}
+P\left(Y=c_{k} \mid X=x\right)=\frac{P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)}{\sum_{k} P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)} \label{1}
 \end{equation}
 $$
-$\label{1}$
 其中的 $Y$ 即输入的类别。
 
 
@@ -29,20 +28,16 @@ $\label{1}$
 
 $$
 \begin{equation}
-y = f(x)  = \arg \max_{c_{k}} P(Y=c_{k} \mid X=x )
+y = f(x)  = \arg \max_{c_{k}} P(Y=c_{k} \mid X=x ) \label{2}
 \end{equation}
 $$
-$\label{2}$
-
 注意到该式 $\eqref{1}$ 的分母对于所有的 $c_{k}$ 都是相同的。所以其核心是需要估计出条件概率分布：
 
 $$
 \begin{equation}
-P\left(X=x \mid Y=c_{k}\right)=P\left(X^{(1)}=x^{(1)}, \cdots, X^{(n)}=x^{(n)} \mid Y=c_{k}\right), \quad k=1,2, \cdots, K
+P\left(X=x \mid Y=c_{k}\right)=P\left(X^{(1)}=x^{(1)}, \cdots, X^{(n)}=x^{(n)} \mid Y=c_{k}\right), \quad k=1,2, \cdots, K \label{3}
 \end{equation}
 $$
-$\label{3}$
-
 :::warning
 这里 $\mathcal{X} \subseteq \mathbf{R}^{n}$ ，所以 $x^{(1)}$ 表示第 $i$ 维度上的值
 
