@@ -45,9 +45,9 @@ $$
 考虑到 $P(A\cap B)=\displaystyle \frac{\text{size}(A\cap B)}{\text{size}(\boldsymbol{\Omega})}$，$P(B)=\displaystyle \frac{\text{size}(B)}{\text{size}(\boldsymbol{\Omega})}$，所以：
 
 $$
-\begin{equation}
+\begin{align}
 P(A\mid B) = \frac{P(A\cap B)}{P(B)} \label{1}
-\end{equation}
+\end{align}
 $$
 公式 $\eqref{1}$ 就是条件概率
 
@@ -63,3 +63,149 @@ $$
 P(A\mid B) &= \frac{P(B\mid A)P(A)}{P(B)}
 \end{aligned}
 $$
+## 更深刻理解
+
+虽然上面我们通过推导得到了 `贝叶斯定理` 但是没有深刻的理解。下面通过一个案例进行说明：
+
+:::info
+Steve 是一个害羞并且性格孤僻，虽然总是乐于助人，但却对周围的人或现实世界不太感兴趣，一个温顺而又井井有条的人，他需要什么事都有理有条，结构清晰并且热衷于钻研细节
+
+你觉得 `Steve` 是一个图书馆管理员还是 `Steve` 是一个农民？
+
+
+:::
+我们可能直觉上一下子就会说 `Steve` 是一个图书馆管理员，但是实际上却是相反，问题是什么？
+
+我们先比较 formula 的描述一下上面的问题
+
+我们设 $P(H)$ 表示 `Steve` 是图书馆管理员的概率，而 $P(F)$ 在这里表示 `Steve` 是农民的概率；$P(E)$ 表示一个人符合描述的概率。
+
+::::tip
+很符合事实的概率是
+
+$$
+P(E\mid H) \gg P(E\mid F)
+$$
+即在图书馆管理员中符合描述的概率远大于农民中符合描述的概率
+
+:::danger
+而误导就发生在此，问题实际上在说的是
+
+$$
+P(H\mid E) \overset{?}{> } P(F\mid E)
+$$
+:::
+::::
+所以实际上就是在本身 $P(H),P(F)$ 的概率下求在知道条件 $E$ 发生下 <Highlight>后验概率</Highlight>。
+
+![Untitled.bmp](https://images.puqing.work/2023/11/17/6557619a6092f.bmp)
+
+:::warning
+上图描述在原本 $P(H),P(F)$ 比例关系下，得知了 $E$ 事实的比例变换
+
+:::
+那怎么求呢？
+![Untitled.bmp](https://images.puqing.work/2023/11/17/655765dc71031.bmp)
+
+通过上面图很容易可以看出
+
+$$
+P(H\mid E) = \frac{\text{图书管理员符合描述人数}}{\text{所有符合描述的人数}} =\frac{P(H)P(E\mid H)}{P(H)P(E\mid H)+P(F)P(E\mid F)} = \frac{P(H)P(E\mid H)}{P(E)}
+$$
+而其中的 $P(H)P(E\mid H)+P(F)P(E\mid F)\Rightarrow P(E)$ 实际上就是一个**全概率公式**，实际上不可能符合描述的人只有图书馆管理员和农民，所以我们可以对其推广到普遍意义上。
+
+$$
+\begin{equation}
+P(E) = \sum^{n}_{i=1}P(B_{i})P(E\mid B_{i})
+\end{equation}
+$$
+:::info
+这里的 $B_{i}$ 就是各个类别人群事件
+
+
+:::
+所以同样的我们可以对上面式子进行推广：
+
+$$
+\begin{equation}
+P(B_{i}\mid E)  = \frac{P(B_{i})P(E\mid B_{i})}{P(E)} = \frac{P(B_{i})P(E\mid B_{i})}{\sum^{n}_{j=1}P(B_{j})P(E\mid B_{j})}
+\end{equation}
+$$
+## Bayes Factor
+
+::::tip
+对于医疗检测试剂，具有两个重要指标
+![Untitled(1).bmp](https://images.puqing.work/2023/11/18/65583ac078c0f.bmp)
+
+其中的 `TP,FP,FN,TN` 第一个字母说明预测正确与否，`True(T), False(F)`，第二个字母说明预测值 `Positives(P), Negatives(N)`
+
+例如:
+
+- `TP`：就是预测阳性预测对了
+- `FP`：就是预测阳性预测错了
+
+:::warning
+
+- $\text{Sensitivity,(True Positive Rate)}$
+
+$$
+\operatorname{TPR}  = \frac{TP}{TP+FN}
+$$
+- $\text{Specificity,(Ture Negative Rate)}$
+
+$$
+\operatorname{TNR}  = \frac{TN}{FP+TN}
+$$
+- $\text{False Positive Rate}$
+
+$$
+\operatorname{FPR}  = \frac{FP}{FP+TN}
+$$
+
+:::
+::::
+:::example
+假设现在有个人通过检测，检测出了阳性，已知该病**发病率**为 $1\%$，该检测的**敏感度**为 $90\%$，**假阳率**为 $9\%$.
+
+$$
+1\% \Rightarrow 1:99
+$$
+我们首先把原来的发病率转化成比率 $1:99$
+
+所以在已知阳性后，需要乘以各自的 " 真阳性率 "
+
+$$
+\frac{(\# \text { With })}{(\# \text { Without })} \Rightarrow \frac{(\# \text { With }) \cdot P(+\mid \text { Cancer })}{\# \text { (Without }) \cdot P(+\mid \text { No cancer })}
+$$
+而这里的 $\displaystyle \frac{P(+\mid \text { Cancer })}{P(+\mid \text { No cancer })}$ 就是 $\text{Bayes Factor}$，或者叫似然比
+
+很显然在这里，似然比就等于
+
+$$
+\frac{P(+\mid \text { Cancer })}{P(+\mid \text { No cancer })} = \frac{\text{Sens.}}{\text{FPR.}} =10
+$$
+所以在检测出阳性的事实下 " 发病率 " <Highlight>更新</Highlight>为了
+
+$$
+1:99 \Rightarrow 10:99 = \frac{10}{109} \approx \frac{1}{11}
+$$
+:::
+所以更加 formula 的阐述就是，在检测之后的患病比率等于检测前的比率 (也就是先验概率) 乘以**贝叶斯因子**
+
+$$
+\begin{equation}
+O(D\mid +) = {\color{Red} O(D)}  \frac{P(+\mid D)}{P(+ \mid \neg D)}
+\end{equation}
+$$
+:::info
+这里的 $O(\cdot)$ 表示概率的比率表示
+
+
+:::
+所以这里贝叶斯定理能够强调公式的哪些部分是来自**先验部分**，哪些是来自统计数据部分
+
+## 相关资料
+
+- [【官方双语】医检阳性≠得了病？重新理解贝叶斯定理_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Ei4y1F72M/?spm_id_from=333.788.recommend_more_video.-1&amp;vd_source=5890eec9b2a60d9ae9a403fd2aad7881)
+- [理解贝叶斯定理 - 知乎](https://zhuanlan.zhihu.com/p/45432367)
+- [<基础系列>1：先验概率 & 后验概率 - 知乎](https://zhuanlan.zhihu.com/p/38567891)
