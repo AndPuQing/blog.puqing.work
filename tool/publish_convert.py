@@ -244,7 +244,7 @@ def process_link(file, PUBLISH_DICT: Dict):
 
             if match:
                 for raw in match:
-                    m = alias = raw
+                    m = alias = raw  # m#anchor|alias
                     anchor = None
                     if "|" in raw:
                         m, alias = raw.split("|")
@@ -252,12 +252,16 @@ def process_link(file, PUBLISH_DICT: Dict):
                         m, anchor = m.split("#")
                         anchor = anchor.replace(" ", "-")
                         anchor = anchor.lower()
-                    if m not in PUBLISH_DICT.keys():
+                    if m not in PUBLISH_DICT.keys():  # replace failed
+                        lines[index] = lines[index].replace(
+                            "[[{}]]".format(raw),
+                            "[{}(This page not published)]".format(m),  # noqa
+                        )
                         logger.warning(
                             f"Warning [[{m}]] not found in publish list"
                         )  # noqa
                         continue
-                    else:
+                    else:  # replace success
                         new_name = hashlib.md5(m.encode("utf-8")).hexdigest()[
                             0:8
                         ]  # noqa
