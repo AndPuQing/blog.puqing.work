@@ -255,7 +255,7 @@ def process_link(file, PUBLISH_DICT: Dict):
                     if m not in PUBLISH_DICT.keys():  # replace failed
                         lines[index] = lines[index].replace(
                             "[[{}]]".format(raw),
-                            "[{}(This page not published)]".format(m),  # noqa
+                            "[{}(This page not published)](./404)".format(m),  # noqa
                         )
                         logger.warning(
                             f"Warning [[{m}]] not found in publish list"
