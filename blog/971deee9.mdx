@@ -30,7 +30,7 @@ $$
 
 ## 单变量高斯分布
 
-对于单变量的高斯分布 $\symcal{N}(\mu,\sigma^2)$，即 $p=1$，其概率密度函数为
+对于单变量的高斯分布 $\mathcal{N}(\mu,\sigma^2)$，即 $p=1$，其概率密度函数为
 
 
 <!--truncate-->
@@ -228,4 +228,36 @@ U_{p}^{T}
 \end{pmatrix} \\
 & =\sum_{i=1}^{p} U_{i} \lambda_{i} U_{i}^{T}
 \end{aligned}
+$$
+而 $\Sigma^{-1}$ 是啥勒？
+
+$$
+\Sigma^{-1}=\left(U \Lambda U^{T}\right)^{-1}=\left(U^{T}\right)^{-1} \Lambda^{-1} U^{-1}=U \Lambda^{-1} U^{T}
+$$
+:::warning
+这里的 $U$ 是正交矩阵，所以 $U^\top=U^{-1}$
+
+:::
+而 $\Lambda$ 是一个对角线矩阵，所以
+
+$$
+\Lambda^{-1} = diag(\frac{1}{\lambda_{i}}),\quad i=1,\cdots,p
+$$
+所以：
+
+$$
+\Sigma^{-1}=\sum_{i=1}^{p} U_{i} \frac{1}{\lambda_{i}} U_{i}^{T}
+$$
+那么，
+
+$$
+\begin{aligned}
+(X-\mu)^{T} \Sigma^{-1}(X-\mu) & =(X-\mu)^{T} \sum_{i=1}^{p} U_{i} \frac{1}{\lambda_{i}} U_{i}^{T}(X-\mu) \\
+& =\sum_{i=1}^{p}(X-\mu)^{T} U_{i} \frac{1}{\lambda_{i}} U_{i}^{T}(X-\mu)
+\end{aligned}
+$$
+令 $y_{i}=(X-\mu)^\top U_{i}$，则上式可以变化为：
+
+$$
+(X-\mu)^{T} \Sigma^{-1}(X-\mu) =\sum_{i=1}^{p} y_{i} \frac{1}{\lambda_{i}} y_{i}^{T}=\sum_{i=1}^p \frac{y_{i}^{2}}{\lambda_{i}}
 $$
