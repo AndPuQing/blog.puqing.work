@@ -248,7 +248,7 @@ $$
 $$
 \Sigma^{-1}=\sum_{i=1}^{p} U_{i} \frac{1}{\lambda_{i}} U_{i}^{T}
 $$
-那么，
+那么代入到前面的马氏距离公式，
 
 $$
 \begin{aligned}
@@ -261,3 +261,36 @@ $$
 $$
 (X-\mu)^{T} \Sigma^{-1}(X-\mu) =\sum_{i=1}^{p} y_{i} \frac{1}{\lambda_{i}} y_{i}^{T}=\sum_{i=1}^p \frac{y_{i}^{2}}{\lambda_{i}}
 $$
+:::danger 怎么理解呢？
+![image.png](https://images.puqing.work/2023/11/21/655c2b85bec7b.png)
+
+上图我们有红点和蓝点，他们与整个样本的 " 中心 " 的欧式距离都是一样的，但是马氏距离会怎么样呢？
+
+首先我们先做变换 $\left( X-\mu \right)^\top U_{i}$
+![image.png](https://images.puqing.work/2023/11/21/655c2b5a94eab.png)
+这个变换就是将样本先平移到原点，然后将原始的特征轴旋转成为主轴 ($U$ 矩阵是正交矩阵)
+
+而之后 $\displaystyle\frac{y_{i}}{\lambda_{i}}$ 实际上就是标准化
+![image.png](https://images.puqing.work/2023/11/21/655c31029bca2.png)
+这样计算两个点的欧式距离就可以区分开了。
+
+:::
+:::tip 和 PCA 的关系
+有主成分分析可知，主成分实际上就是特征向量的方向，而每个方向的方差就是对应的特征值，所以马氏距离就是 $PCA+Norm$
+
+:::
+:::note
+所以表达式 $(X-\mu)^{T} \Sigma^{-1}(X-\mu)$ 实际上是在描述一个样本对于总体样本 " 中心 " 的距离，而概率密度函数
+
+$$
+p(X)={\color{Red} \frac{1}{\sqrt{2 \pi}^{\frac{p}{2}}|\Sigma|^{\frac{1}{2}}}}  \exp \left\{-\frac{1}{2}(X-\mu)^{T} \Sigma^{-1}(X-\mu)\right\}
+$$
+前半部分是样本无关的，所以对于一个样本来说其概率与对总体样本 " 中心 " 的马氏距离负相关。
+
+:::
+## 相关资料
+
+- [马氏距离(Mahalanobis Distance)推导及几何意义-CSDN博客](https://blog.csdn.net/weixin_43486780/article/details/104313350)
+- [期望、方差的性质 - 知乎](https://zhuanlan.zhihu.com/p/147214759)
+- [相似度或距离 - 知乎](https://zhuanlan.zhihu.com/p/578764046)
+- [马氏距离(Mahalanobis Distance) - 知乎](https://zhuanlan.zhihu.com/p/46626607)
