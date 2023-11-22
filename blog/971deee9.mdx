@@ -179,7 +179,7 @@ x_{p}
 \sigma_{p 1} & \sigma_{p 2} & \cdots & \sigma_{p p}
 \end{pmatrix}_{p \times p}
 $$
-其中 $\Sigma$ 一般为 [正定矩阵(This page not published)](./404)。
+其中 $\Sigma$ 一般为 [正定矩阵(This page was not published)](./404)。
 
 ### 马氏距离
 
@@ -213,7 +213,7 @@ $$
 \lambda_{1} & & & \\
 & \lambda_{2} & & \\
 & & \ddots & \\
-& & \lambda_{p}
+& & & \lambda_{p}
 \end{pmatrix}\begin{pmatrix}
 U_{1}^{T} \\
 U_{2}^{T} \\
@@ -286,6 +286,21 @@ $$
 p(X)={\color{Red} \frac{1}{\sqrt{2 \pi}^{\frac{p}{2}}|\Sigma|^{\frac{1}{2}}}}  \exp \left\{-\frac{1}{2}(X-\mu)^{T} \Sigma^{-1}(X-\mu)\right\}
 $$
 前半部分是样本无关的，所以对于一个样本来说其概率与对总体样本 " 中心 " 的马氏距离负相关。
+
+:::
+### 高维问题
+
+:::tip
+由于 $\Sigma$ 是一个 $p \times p$ 是对称矩阵，所以有 $\displaystyle \frac{p(p+1)}{2}$ 个参数。一旦输入维度过大，这个矩阵的计算会很复杂。所以有些时候会进行假设
+
+- $\Sigma$ 是一个对角矩阵
+  - 进一步强化 $\Sigma$ 是 $kI$
+
+这个时候，这个高斯分布各个方向是<Highlight>各向同性</Highlight>的
+
+:::
+:::tip
+另外对于很多情况，实际上利用多维建模是不合适的 (表达有限)，所以会有 [混合高斯模型](./04c6f12c)(GMM)
 
 :::
 ## 相关资料
