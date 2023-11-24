@@ -1,0 +1,303 @@
+---
+authors:
+- PuQing
+date: 2023-11-22 22:02
+keywords:
+- 高斯分布
+- 概率论
+tags:
+- 高斯分布
+- 概率论
+---
+# 多元高斯分布
+
+## 多元高斯的线性性质
+
+:::tip
+已知：
+
+$$
+\begin{split}
+X\sim \mathcal{N}(\mu,\Sigma)\\
+Y = AX+b
+\end{split}
+$$
+那么可以得到：
+
+
+<!--truncate-->
+$$
+Y\sim \mathcal{N}(A\mu+b,A \Sigma A^\top)
+$$
+这里 $X \in \mathbb{R}^{p},A \in \mathbb{R}^{n \times p},Y \in\mathbb{R}^{n}$
+
+:::
+:::warning 证明
+
+:::
+:::quote 这意味着什么？
+如果一个随机变量满足多元高斯分布，对这个随机变量做任意<Highlight>线性变换</Highlight>，得到的随机变量仍然满足多元高斯分布。
+
+:::
+## 高斯边缘分布与联合分布
+
+本节探究两个问题？
+
+:::quote
+
+1. 如果一个分布是联合高斯分布，从中任取一些随机变量得到的分布是否是高斯分布？
+2. 如果每一个随机变量的分布都是高斯分布，把他们组合在一起是否是联合高斯分布？
+
+:::
+### 从联合分布到边缘概率
+
+从联合高斯分布到边缘高斯分布是成立的
+
+::::bug
+这句话的正常说法就是第一个问题
+
+:::info
+如果一个分布是联合高斯分布，从中任取一些随机变量得到的分布是否是高斯分布？
+
+
+:::
+::::
+对于具有 $p$ 个随机变量的联合高斯分布或者说多元高斯分布，证明其边缘概率还是高斯分布。
+
+证明：
+
+$$
+\begin{pmatrix}
+X_{n_{1}} \\
+\vdots \\
+X_{n_{k}}
+\end{pmatrix}=A\begin{pmatrix}
+X_{1} \\
+\vdots \\
+X_{n}
+\end{pmatrix}
+$$
+只要让第 $n_{1}$ 到 $n_{k}$ 个随机变量所在的位置是 $1$ 即可 (相当于选择出来了) ，根据上面的推论 [多元高斯分布#多元高斯的线性性质](./27e8f14f#%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E7%9A%84%E7%BA%BF%E6%80%A7%E6%80%A7%E8%B4%A8) 可以得到，仍然为高斯分布。
+
+### 从边缘分布到联合分布
+
+但是反过来不一定成立。如果 $X_{1},\cdots,X_{n}$ 全部服从高斯分布，其 $X_{1},\cdots,X_{n}$ 的联合概率不一定是高斯分布。
+
+$$
+\begin{split}
+X_{1}\sim \mathcal{N},X_{2}\sim \mathcal{N},\cdots,X_{n}\sim \mathcal{N}\\
+\nRightarrow X=\left( X_{1}\cdots,X_{n} \right)^\top \sim \mathcal{N} 
+\end{split}
+$$
+:::example
+我们可以构造一个概率密度函数 $f(x,y)$，这个函数的边缘分布是高斯，但是联合分布不是高斯分布
+
+函数主体是高斯的，但是边缘有波动
+
+$$
+f(x, y)=\frac{1}{2 \pi} \exp \left(-\frac{x^{2}+y^{2}}{2}\right)+g(x, y)
+$$
+我们希望这个 $g(x,y)$ 的边缘分布都是 $0$，即
+
+$$
+\int_{-\infty}^{+\infty} \mathrm{g}(\mathrm{x}, \mathrm{y}) \mathrm{dx}=\int_{-\infty}^{+\infty} \mathrm{g}(\mathrm{x}, \mathrm{y}) \mathrm{dy}=0
+$$
+如果我们增加这样一项
+
+$$
+g(x,y) = \sin x \sin y
+$$
+可是概率密度函数不能是负的，所以需要修正
+
+$$
+g(x,y) =1+ \sin x \sin y 
+$$
+因此，我们就可以得到一个例子
+
+$$
+\mathrm{f}(\mathrm{x}, \mathrm{y})=\frac{1}{2 \pi} \exp \left(-\frac{\mathrm{x}^{2}+\mathrm{y}^{2}}{2}\right)+(1+\sin \mathrm{x} \sin \mathrm{y})
+$$
+对 $x$ 和对 $y$ 的边缘分布都是高斯的，但是联合分布不是高斯分布
+
+:::
+### 联合高斯分布判据
+
+:::quote
+那么，什么样的判据才能推出联合高斯分布呢？
+
+:::
+对于一个随机变量向量 $X=(X_{1},\cdots,X_{n})^\top$ 是多元随机变量满足一下条件之一 [^1]
+
+:::tip
+
+1. 对于任意的线性组合 $Y=a_{1}X_{1}+\cdots+a_{n}X_{n}$ 是正态分布，写成向量乘的形式就是对于任意的常向量 $a \in \mathbb{R}^n$，随机变量 $Y=a^TX$ 是<Highlight>单变量高斯分布</Highlight>
+
+:::
+::::tip
+2. 有一个 $\mu \in \mathbb{R}^n$ 的向量，以及一个对称、半正定的协方差矩阵 $\Sigma_{n \times n}$，使得 $X=(X_{1},\cdots,X_{n})$ 的 [特征函数(This page was not published)](./404) 等于：
+
+$$
+\rho_{X}(\omega) = \exp \left( i \omega^T\mu-\frac{1}{2}\omega^T \Sigma \omega \right) 
+$$
+.
+
+:::warning 证明
+
+:::
+::::
+## 高斯分布的相关性与独立性
+
+### 独立性和相关性
+
+::::note
+所谓两个随机变量不相关，就是两个随机变量的期望，等于其各自的期望的乘积
+
+$$
+\mathbb{E}\left[ XY \right]  = \mathbb{E}\left[ X \right] \mathbb{E}\left[ Y \right]
+$$
+.
+
+:::tip
+而 `相关` 实际上就是线性相关，也就是协方差或者 `Pearson` 的相关系数为 $0$
+
+$$
+Cov\left[ X,Y \right]  = \mathbb{E}\left[ XY \right] -\mathbb{E}\left[ X \right] \mathbb{E}\left[ Y \right]=0
+$$
+:::
+::::
+而两个随机变量独立，是他们的联合分布等于各自概率密度的乘积
+
+$$
+f_{XY}(x,y) = f_{X}(x)f_{Y}(y)
+$$
+:::info
+独立一定不相关，但是不相关不一定独立。独立要求更高
+
+
+:::
+:::warning
+这可能过于抽象，下面举个例子
+![Untitled.bmp](https://images.puqing.work/2023/11/24/6560b9cd1e055.bmp)
+
+随机变量 $(X,Y)$ 均匀分布在单位圆 $x^{2}+y^{2}=1$ 上
+
+但是 $X$ 和 $Y$ 的 (线性) 相关系数是 $0$，直观的来说，因为是一个圆，用一个线性的线描述都是不合适的，因为是对称的。数学上：
+
+$$
+\mathbb{E}\left[ X\mid Y \right] =\mathbb{E}\left[ Y\mid X \right]=0
+$$
+所以
+
+$$
+\mathbb{E}\left[ X \right] = \mathbb{E}\left[ Y \right] =0
+$$
+并且
+
+$$
+\mathbb{E}\left[ XY \right] = \mathbb{E}\left[ \mathbb{E}\left[ XY\mid X \right] \right] = \mathbb{E}\left[X \mathbb{E}\left[ Y\mid X \right] \right]=0
+$$
+所以
+
+$$
+Cov\left[ X,Y \right] =\mathbb{E}\left[ XY \right] -\mathbb{E}\left[ X \right] \mathbb{E}\left[ Y \right]=0
+$$
+但是显然，$X,Y$ 不是独立的。因为 $X$ 的取值对 $Y$ 是有影响的，反之亦然。
+
+$$
+y= \pm \sqrt{ 1-x^2 }
+$$
+:::
+### 高斯分布的不相关和独立
+
+:::quote
+如果两个高斯分布是不相关的，能够得到二者独立吗?
+
+:::
+## 联合高斯分布的分解
+
+对于随机变量 $x_{a},x_{b}$ 满足联合高斯分布 $p(x_{a},x_{b})$
+
+对于这样的联合高斯分布，我们知道：
+
+$$
+X=\begin{pmatrix}
+x_{a} \\
+x_{b}
+\end{pmatrix} 
+\quad 
+m+n=p 
+\quad 
+\mu=\begin{pmatrix}
+\mu_{a} \\
+\mu_{b}
+\end{pmatrix}
+\quad \Sigma=\begin{pmatrix}
+\Sigma_{a a} & \Sigma_{a b} \\
+\Sigma_{b a} & \Sigma_{b b}
+\end{pmatrix}
+$$
+$$
+X\sim \mathcal{N}\left( \mu,\Sigma \right) 
+$$
+:::info
+就是在 [贝叶斯定理](./fc5a835a) 中的图
+![Untitled(1).bmp](https://images.puqing.work/2023/11/14/65537c93ae703.bmp)
+
+
+:::
+由条件概率公式可知：
+
+$$
+p(x_{a},x_{b}) = p(x_{a})p(x_{b}\mid x_{a})
+$$
+下面分别求得 $p(x_{a}),p(x_{b}\mid x_{a})$
+
+### 求解边缘概率密度
+
+可以将 $x_{a}$ 写为：
+
+$$
+x_{a}=
+\underbrace{\begin{pmatrix}
+\mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
+\end{pmatrix}}_{{\color{Red} A} }
+\begin{pmatrix}
+x_{a} \\
+x_{b}
+\end{pmatrix}
+$$
+于是：
+
+$$
+\mathbb{E}\left[ x_{a} \right] =  
+\begin{pmatrix}
+\mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
+\end{pmatrix}\begin{pmatrix}
+\mu_{a} \\
+\mu_{b}
+\end{pmatrix}=\mu_{a}
+$$
+而
+
+$$
+Var\left[ x_{a} \right] = \begin{pmatrix}
+\mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
+\end{pmatrix}\begin{pmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb}
+\end{pmatrix}\begin{pmatrix}
+\mathbb{I}_{m \times m}  \\
+\mathbb{O}_{n \times n}
+\end{pmatrix} = 
+\Sigma_{aa}
+$$
+所以，$x_{a}\sim \mathcal{N}\left( \mu_{a},\Sigma_{aa} \right)$
+
+:::info
+这是很直觉的，他们的分布当然是满足于自身的均值和方差。
+
+
+:::
+## 相关资料
+
+[^1]:[Multivariate normal distribution - Wikipedia](https://en.wikipedia.org/w/index.php?title=Multivariate_normal_distribution&amp;oldid=950141067)
