@@ -213,17 +213,35 @@ $$
 如果两个高斯分布是不相关的，能够得到二者独立吗?
 
 :::
-## 联合高斯分布的分解
+也是不行的
 
-对于随机变量 $x_{a},x_{b}$ 满足联合高斯分布 $p(x_{a},x_{b})$
+### 联合高斯分布的不相关和独立
 
-对于这样的联合高斯分布，我们知道：
+当两个随机变量是联合高斯分布的时候，二者如果不相关，则一定独立
+
+$$
+\begin{cases}
+\text { Joint Gaussian } \\
+\text { Uncorrelated }
+\end{cases}\Rightarrow \text { independent }
+$$
+:::warning 证明
+
+:::
+## 高斯条件分布
+
+### 条件高斯分布的计算
+
+假设 $X$ 符合联合高斯分布，并且可以分成 $X_{a}$ 和 $X_{b}$ 两个联合分布，则 $X$ 可以表示成
 
 $$
 X=\begin{pmatrix}
-x_{a} \\
-x_{b}
-\end{pmatrix} 
+X_{a} \\
+X_{b}
+\end{pmatrix}_{p}\begin{matrix}
+\rightarrow  m \\
+\rightarrow  n
+\end{matrix}
 \quad 
 m+n=p 
 \quad 
@@ -239,37 +257,31 @@ $$
 $$
 X\sim \mathcal{N}\left( \mu,\Sigma \right) 
 $$
-:::info
-就是在 [贝叶斯定理](./fc5a835a) 中的图
-![Untitled(1).bmp](https://images.puqing.work/2023/11/14/65537c93ae703.bmp)
-
-
-:::
 由条件概率公式可知：
 
 $$
-p(x_{a},x_{b}) = p(x_{a})p(x_{b}\mid x_{a})
+p(X_{a},X_{b}) = p(X_{a})p(X_{b}\mid X_{a})
 $$
-下面分别求得 $p(x_{a}),p(x_{b}\mid x_{a})$
+下面分别求得 $p(X_{a}),p(X_{b}\mid X_{a})$
 
-### 求解边缘概率密度
+#### 求解边缘概率密度
 
-可以将 $x_{a}$ 写为：
+可以将 $X_{a}$ 写为：
 
 $$
-x_{a}=
+X_{a}=
 \underbrace{\begin{pmatrix}
 \mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
 \end{pmatrix}}_{{\color{Red} A} }
 \begin{pmatrix}
-x_{a} \\
-x_{b}
+X_{a} \\
+X_{b}
 \end{pmatrix}
 $$
 于是：
 
 $$
-\mathbb{E}\left[ x_{a} \right] =  
+\mathbb{E}\left[ X_{a} \right] =  
 \begin{pmatrix}
 \mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
 \end{pmatrix}\begin{pmatrix}
@@ -280,7 +292,7 @@ $$
 而
 
 $$
-Var\left[ x_{a} \right] = \begin{pmatrix}
+Var\left[ X_{a} \right] = \begin{pmatrix}
 \mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
 \end{pmatrix}\begin{pmatrix}
 \Sigma_{aa} & \Sigma_{ab} \\
@@ -291,13 +303,32 @@ Var\left[ x_{a} \right] = \begin{pmatrix}
 \end{pmatrix} = 
 \Sigma_{aa}
 $$
-所以，$x_{a}\sim \mathcal{N}\left( \mu_{a},\Sigma_{aa} \right)$
+所以，$X_{a}\sim \mathcal{N}\left( \mu_{a},\Sigma_{aa} \right)$
 
 :::info
-这是很直觉的，他们的分布当然是满足于自身的均值和方差。
+这是符合前文的推导的
 
 
 :::
+#### 求解条件概率密度
+
+:::info
+求解方法一：
+
+
+:::
+对于条件概率有：
+
+$$
+p(X_{b}\mid X_{a}) = \frac{p_{X}(X_{a}X_{b})}{p(X_{a})}
+$$
+即对 $X_{b}$ 的条件概率等于 $X_{a},X_{b}$ 的联合分布除以 $X_{a}$ 的边缘概率。
+
+由于联合高斯分布中取出来一部分还是高斯分布，所以上面是高斯，下面还是高斯。最终得到的还是一个高斯分布。
+
+$$
+\frac{p_{X}(X_{a}X_{b})}{p(X_{a})} = \frac{c_{1}\exp \left( -\frac{1}{2} \left( x_{a}^T-\mu_{a}^T,x_{b}^T-\mu_{b}^T \right)\Sigma^{-1}\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)   \right)}{c_{2}\exp \left( -\frac{1}{2} \left( x_{a}^T-\mu_{a}^T\right)\Sigma_{aa}^{-1}\left( X_{a}-\mu_{a}\right)   \right)} 
+$$
 ## 相关资料
 
 [^1]:[Multivariate normal distribution - Wikipedia](https://en.wikipedia.org/w/index.php?title=Multivariate_normal_distribution&amp;oldid=950141067)
