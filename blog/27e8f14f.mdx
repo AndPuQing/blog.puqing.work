@@ -177,6 +177,7 @@ $$
 :::
 :::warning
 这可能过于抽象，下面举个例子
+
 ![Untitled.bmp](https://images.puqing.work/2023/11/24/6560b9cd1e055.bmp)
 
 随机变量 $(X,Y)$ 均匀分布在单位圆 $x^{2}+y^{2}=1$ 上
@@ -215,6 +216,9 @@ $$
 :::
 也是不行的
 
+:::warning 证明
+
+:::
 ### 联合高斯分布的不相关和独立
 
 当两个随机变量是联合高斯分布的时候，二者如果不相关，则一定独立
@@ -260,18 +264,18 @@ $$
 由条件概率公式可知：
 
 $$
-p(X_{a},X_{b}) = p(X_{a})p(X_{b}\mid X_{a})
+p(X_{a},X_{b}) = p(X_{b})p(X_{a}\mid X_{b})
 $$
-下面分别求得 $p(X_{a}),p(X_{b}\mid X_{a})$
+下面分别求得 $p(X_{b}),p(X_{a}\mid X_{b})$
 
 #### 求解边缘概率密度
 
 可以将 $X_{a}$ 写为：
 
 $$
-X_{a}=
+X_{b}=
 \underbrace{\begin{pmatrix}
-\mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
+\mathbb{O}_{m \times m} & \mathbb{I}_{n \times n}
 \end{pmatrix}}_{{\color{Red} A} }
 \begin{pmatrix}
 X_{a} \\
@@ -281,29 +285,29 @@ $$
 于是：
 
 $$
-\mathbb{E}\left[ X_{a} \right] =  
+\mathbb{E}\left[ X_{b} \right] =  
 \begin{pmatrix}
-\mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
+\mathbb{O}_{m \times m} & \mathbb{I}_{n \times n}
 \end{pmatrix}\begin{pmatrix}
 \mu_{a} \\
 \mu_{b}
-\end{pmatrix}=\mu_{a}
+\end{pmatrix}=\mu_{b}
 $$
 而
 
 $$
-Var\left[ X_{a} \right] = \begin{pmatrix}
-\mathbb{I}_{m \times m} & \mathbb{O}_{n \times n}
+Var\left[ X_{b} \right] = \begin{pmatrix}
+\mathbb{O}_{m \times m} & \mathbb{I}_{n \times n}
 \end{pmatrix}\begin{pmatrix}
 \Sigma_{aa} & \Sigma_{ab} \\
 \Sigma_{ba} & \Sigma_{bb}
 \end{pmatrix}\begin{pmatrix}
-\mathbb{I}_{m \times m}  \\
-\mathbb{O}_{n \times n}
+\mathbb{O}_{m \times m}  \\
+\mathbb{I}_{n \times n}
 \end{pmatrix} = 
-\Sigma_{aa}
+\Sigma_{bb}
 $$
-所以，$X_{a}\sim \mathcal{N}\left( \mu_{a},\Sigma_{aa} \right)$
+所以，$X_{b}\sim \mathcal{N}\left( \mu_{b},\Sigma_{bb} \right)$
 
 :::info
 这是符合前文的推导的
@@ -312,23 +316,158 @@ $$
 :::
 #### 求解条件概率密度
 
-:::info
-求解方法一：
+##### 求解方法一
 
-
-:::
 对于条件概率有：
 
 $$
-p(X_{b}\mid X_{a}) = \frac{p_{X}(X_{a}X_{b})}{p(X_{a})}
+p(X_{a}\mid X_{b}) = \frac{p_{X}(X_{a}X_{b})}{p(X_{b})}
 $$
 即对 $X_{b}$ 的条件概率等于 $X_{a},X_{b}$ 的联合分布除以 $X_{a}$ 的边缘概率。
 
 由于联合高斯分布中取出来一部分还是高斯分布，所以上面是高斯，下面还是高斯。最终得到的还是一个高斯分布。
 
 $$
-\frac{p_{X}(X_{a}X_{b})}{p(X_{a})} = \frac{c_{1}\exp \left( -\frac{1}{2} \left( x_{a}^T-\mu_{a}^T,x_{b}^T-\mu_{b}^T \right)\Sigma^{-1}\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)   \right)}{c_{2}\exp \left( -\frac{1}{2} \left( x_{a}^T-\mu_{a}^T\right)\Sigma_{aa}^{-1}\left( X_{a}-\mu_{a}\right)   \right)} 
+\frac{p_{X}(X_{a}X_{b})}{p(X_{b})} = \frac{c_{1}\exp \left( -\frac{1}{2} \left( X_{a}^T-\mu_{a}^T,X_{b}^T-\mu_{b}^T \right)\Sigma^{-1}\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)   \right)}{c_{2}\exp \left( -\frac{1}{2} \left( X_{b}^T-\mu_{b}^T\right)\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b}\right)   \right)} 
 $$
+其中
+
+$$
+\Sigma=\begin{pmatrix}
+\Sigma_{a a} & \Sigma_{a b} \\
+\Sigma_{b a} & \Sigma_{b b}
+\end{pmatrix}
+$$
+指数相除部分可以转化为加减，所以指数部分可以写为：
+
+$$
+-\frac{1}{2} \left( X_{a}^T-\mu_{a}^T,X_{b}^T-\mu_{b}^T \right)\Sigma^{-1}\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)+\frac{1}{2}\left( X_{b}^T-\mu_{b}^T \right) \Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right)  
+$$
+对于联合分布的协方差，我们可以将其对角化
+
+$$
+\begin{pmatrix}
+\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
+\mathbb{O} & \mathbb{I}
+\end{pmatrix}
+\begin{pmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb}
+\end{pmatrix}
+\begin{pmatrix}
+\mathbb{I} & \mathbb{0} \\
+-\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
+\end{pmatrix}=
+\begin{pmatrix}
+\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{O} \\
+\mathbb{O} & \Sigma_{bb}
+\end{pmatrix}
+$$
+:::info
+这个对角化先行变换去掉右上角的数，然后用列变换去掉左下角的数
+
+
+:::
+然后移相得到：
+
+$$
+\begin{pmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb}
+\end{pmatrix} = 
+\begin{pmatrix}
+\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
+\mathbb{O} & \mathbb{I}
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{O} \\
+\mathbb{O} & \Sigma_{bb}
+\end{pmatrix}
+\begin{pmatrix}
+\mathbb{I} & \mathbb{0} \\
+-\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
+\end{pmatrix}^{-1}
+$$
+对其求逆：
+
+$$
+\begin{split}
+\begin{pmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb}
+\end{pmatrix}^{-1}
+&= 
+\begin{pmatrix}
+\mathbb{I} & \mathbb{0} \\
+-\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
+\end{pmatrix}
+\begin{pmatrix}
+\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{O} \\
+\mathbb{O} & \Sigma_{bb}
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
+\mathbb{O} & \mathbb{I}
+\end{pmatrix}\\
+&=\begin{pmatrix}
+\mathbb{I} & \mathbb{0} \\
+-\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
+\end{pmatrix}
+\begin{pmatrix}
+\left( \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} \right)^{-1}  & \mathbb{O} \\
+\mathbb{O} & \Sigma_{bb}^{-1}
+\end{pmatrix}
+\begin{pmatrix}
+\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
+\mathbb{O} & \mathbb{I}
+\end{pmatrix}
+\end{split}
+$$
+将逆带入到联合概率指数部分：
+
+$$
+\begin{split}
+&-\frac{1}{2} \left( X_{a}^T-\mu_{a}^T,X_{b}^T-\mu_{b}^T \right)\Sigma^{-1}\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)\\
+=&-\frac{1}{2} \left( X_{a}^T-\mu_{a}^T,X_{b}^T-\mu_{b}^T \right)\begin{pmatrix}
+\mathbb{I} & \mathbb{0} \\
+-\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
+\end{pmatrix}
+\begin{pmatrix}
+\left( \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} \right)^{-1}  & \mathbb{O} \\
+\mathbb{O} & \Sigma_{bb}^{-1}
+\end{pmatrix}
+\begin{pmatrix}
+\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
+\mathbb{O} & \mathbb{I}
+\end{pmatrix}
+\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)\\
+=&-\frac{1}{2}\left( X_{a}^T-\mu_{a}^T-\Sigma_{bb}^{-1}\Sigma_{ba}\left( X_{b}^T-\mu_{b}^T \right),X_{b}^T-\mu_{b}^T  \right) 
+\begin{pmatrix}
+\left( \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} \right)^{-1}  & \mathbb{O} \\
+\mathbb{O} & \Sigma_{bb}^{-1}
+\end{pmatrix}
+\left( X_{a}-\mu_{a}-\Sigma_{ab}\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right),X_{b}-\mu_{b}  \right)\\
+=&-\frac{1}{2}\left[ \left( x_{b}^T-\mu_{b}^T \right)\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right)+ \cdots    \right] 
+\end{split}
+$$
+所以其后面指数部分是可以低效的，剩余的 $\cdots$ 部分为：
+
+$$
+-\frac{1}{2}\left[\left(X_{a}^{\mathrm{T}}-\left(\mu_{a}^{\mathrm{T}}+\left(X_{b}^{\mathrm{T}}-\mu_{b}^{\mathrm{T}}\right) \Sigma_{bb}^{-1} \Sigma_{ba}\right)\right)\underbrace{\left(\Sigma_{aa}-\Sigma_{ab} \Sigma_{bb}^{-1} \Sigma_{ba}\right)^{-1}}_{\Sigma_{b\mid a}} \left(X_{a}-\left(\mu_{a}+\Sigma_{ab} \Sigma_{bb}^{-1}\left(X_{2}-\mu_{b}\right)\right)\right)\right]
+$$
+:::danger 此处的推导有误 (反了)
+
+:::
+可以视为一个新的高斯分布，其条件高斯分布的条件期望和条件方差为：
+
+$$
+\begin{split}
+\mu_{b\mid a} = \mu_{b}+\Sigma_{ba} \Sigma_{aa}^{-1}(X_{a}-\mu_{a}) \\
+\Sigma_{b \mid a} = \Sigma_{bb} - \Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab}
+\end{split}
+$$
+##### 求解方法二
+
 ## 相关资料
 
 [^1]:[Multivariate normal distribution - Wikipedia](https://en.wikipedia.org/w/index.php?title=Multivariate_normal_distribution&amp;oldid=950141067)
