@@ -1,0 +1,189 @@
+---
+authors:
+- PuQing
+date: 2023-11-25 20:48
+keywords:
+- 线性代数
+tags:
+- 线性代数
+---
+# Schur Complement
+
+:::quote
+在线性代数和矩阵论中，分块矩阵的舒尔补定义如下：
+
+$$
+M= \begin{bmatrix}
+A_{p\times p} & B_{p\times q} \\
+C_{q\times p} & D_{q\times q}
+\end{bmatrix}_{(p+q)\times(p+q)}
+$$
+如果 $D$ 是 `可逆的`，则矩阵 $M$ 对于块 $D$ 的舒尔补 $p\times p$ 矩阵可以定义为
+
+
+<!--truncate-->
+$$
+M / D:=A-B D^{-1} C .
+$$
+如果 $A$ 是 `可逆的`，则矩阵 $M$ 对于块 $A$ 的舒尔补 $q\times q$ 矩阵可以定义为
+
+$$
+M / A:=D-C A^{-1} B .
+$$
+:::
+## Background
+
+舒尔补是在对矩阵 $M$ 进行高斯消去时出现的。为了消除对角线一下的元素，将矩阵 $M$ 乘以一个初等变换矩阵，使得：
+
+$$
+M=\begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{C} & \mathbf{D}
+\end{bmatrix} \longrightarrow
+\begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{C} & \mathbf{D}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{I}_{p} & \mathbf{0} \\
+-\mathbf{D}^{-1}\mathbf{C} & \mathbf{I}_{q}
+\end{bmatrix}=
+\begin{bmatrix}
+\mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} & \mathbf{B} \\
+\mathbf{0} & \mathbf{D}
+\end{bmatrix}
+$$
+这样舒尔补 $M/D=A-BD^{-1}C$ 就出现在了左上角，其形状为 $p\times p$
+
+接下来继续消除过程：
+
+$$
+\begin{bmatrix}
+\mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} & \mathbf{B} \\
+\mathbf{0} & \mathbf{D}
+\end{bmatrix} \longrightarrow
+\begin{bmatrix}
+\mathbf{I}_{p} & -\mathbf{B}\mathbf{D}^{-1} \\
+\mathbf{0} & \mathbf{I}_{q}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} & \mathbf{B} \\
+\mathbf{0} & \mathbf{D}
+\end{bmatrix}=
+\begin{bmatrix}
+\mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} & \mathbf{0} \\
+\mathbf{0} & \mathbf{D}
+\end{bmatrix}
+$$
+这样实际是对于矩阵 $M$ 的三角分解，可以视为：
+
+$$
+M=\begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{C} & \mathbf{D}
+\end{bmatrix} = \begin{bmatrix}
+\mathbf{I}_{p} & \mathbf{B}\mathbf{D}^{-1} \\
+\mathbf{0} & \mathbf{I}_{q}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} & \mathbf{0} \\
+\mathbf{0} & \mathbf{D}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{I}_{p} & \mathbf{0} \\
+\mathbf{D}^{-1}\mathbf{C} & \mathbf{I}_{q}
+\end{bmatrix}
+$$
+这样，对于 $M$ 的逆可以用 $D$ 的逆和舒尔补的逆来表达。
+
+$$
+\begin{split}
+M^{-1} = \begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{C} & \mathbf{D}
+\end{bmatrix}^{-1} &=
+\left( 
+\begin{bmatrix}
+\mathbf{I}_{p} & \mathbf{B}\mathbf{D}^{-1} \\
+\mathbf{0} & \mathbf{I}_{q}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} & \mathbf{0} \\
+\mathbf{0} & \mathbf{D}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{I}_{p} & \mathbf{0} \\
+\mathbf{D}^{-1}\mathbf{C} & \mathbf{I}_{q}
+\end{bmatrix} 
+\right) ^{-1}\\
+&=\begin{bmatrix}
+\mathbf{I}_{p} & \mathbf{0} \\
+-\mathbf{D}^{-1}\mathbf{C} & \mathbf{I}_{q}
+\end{bmatrix} 
+\begin{bmatrix}
+\left( \mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} \right) ^{-1} & \mathbf{0} \\
+\mathbf{0} & \mathbf{D}^{-1}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{I}_{p} & -\mathbf{B}\mathbf{D}^{-1} \\
+\mathbf{0} & \mathbf{I}_{q}
+\end{bmatrix}\\
+&=\begin{bmatrix}
+\left( \mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} \right)^{-1} & -\left( \mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} \right)^{-1} \mathbf{B}\mathbf{D}^{-1} \\
+-\mathbf{D}^{-1}\mathbf{C}\left( \mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} \right)^{-1} & \mathbf{D}^{-1}+\mathbf{D}^{-1}\mathbf{C}\left( \mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C} \right)^{-1}\mathbf{B}\mathbf{D}^{-1} 
+\end{bmatrix}\\
+&=\begin{bmatrix}
+\left( M/D \right)^{-1} & -\left( M/D \right)^{-1}\mathbf{B}\mathbf{D}^{-1} \\
+-\mathbf{D}^{-1}\mathbf{C}\left( M/D \right)^{-1} & \mathbf{D}^{-1}+\mathbf{D}^{-1}\mathbf{C}\left( M/D \right)^{-1}\mathbf{B}\mathbf{D} 
+\end{bmatrix}
+\end{split}
+$$
+同样的，我们先左乘初等变化得到 $M/A$ 的表达式：
+
+$$
+M=\begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{C} & \mathbf{D}
+\end{bmatrix} \longrightarrow
+\begin{bmatrix}
+\mathbf{I}_{p} & \mathbf{0} \\
+-\mathbf{C}\mathbf{A}^{-1} & \mathbf{I}_{q}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{C} & \mathbf{D}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{0} & \mathbf{D}-\mathbf{C}\mathbf{A}^{-1}\mathbf{B}
+\end{bmatrix}
+$$
+:::info
+于是 $M/A=\mathbf{D}-\mathbf{C}\mathbf{A}^{-1}\mathbf{B}$ 。同时为了书写方便，将 $M/A,M/D$ 记作 $\Delta_{A},\Delta_{D}$
+
+
+:::
+另外，用 $M/A$ 表达的逆为：
+
+$$
+M^{-1}=\begin{bmatrix}
+\mathbf{A}^{-1}+\mathbf{A}^{-1}\mathbf{B}(M/A)^{-1}\mathbf{C}\mathbf{A}^{-1} & -\mathbf{A}^{-1}\mathbf{B}(M/A)^{-1} \\
+-(M/D)^{-1}\mathbf{C}\mathbf{A}^{-1} & (M/A)^{-1}
+\end{bmatrix}
+$$
+:::tip
+通过比较两种逆表达式可以得到 [matrix inversion lemma](https://en.wikipedia.org/wiki/Woodbury_matrix_identity)
+
+$$
+(M/D)^{-1} = \mathbf{A}^{-1}+\mathbf{A}^{-1}\mathbf{B}(M/A)^{-1}\mathbf{C}\mathbf{A}^{-1}
+$$
+完全形式为
+
+$$
+(\mathbf{A}-\mathbf{B}\mathbf{D}^{-1}\mathbf{C})^{-1} = \mathbf{A}^{-1}+\mathbf{A}^{-1}\mathbf{B}(\mathbf{D}-\mathbf{C}\mathbf{A}^{-1}\mathbf{B})^{-1}\mathbf{C}\mathbf{A}^{-1}
+$$
+:::
+## 相关资料
+
+- [Schur complement - Wikipedia](https://en.wikipedia.org/wiki/Schur_complement)
