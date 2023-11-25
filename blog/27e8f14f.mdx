@@ -316,8 +316,6 @@ $$
 :::
 #### 求解条件概率密度
 
-##### 求解方法一
-
 对于条件概率有：
 
 $$
@@ -343,131 +341,126 @@ $$
 $$
 -\frac{1}{2} \left( X_{a}^T-\mu_{a}^T,X_{b}^T-\mu_{b}^T \right)\Sigma^{-1}\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)+\frac{1}{2}\left( X_{b}^T-\mu_{b}^T \right) \Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right)  
 $$
-对于联合分布的协方差，我们可以将其对角化
+上式我们写成矩阵形式
 
 $$
-\begin{pmatrix}
-\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
-\mathbb{O} & \mathbb{I}
-\end{pmatrix}
-\begin{pmatrix}
+\begin{split}
+&-\frac{1}{2}\left\{ \left( \begin{bmatrix}
+X_{a} \\
+X_{b}
+\end{bmatrix}-\begin{bmatrix}
+\mu_{a} \\
+\mu_{b}
+\end{bmatrix} \right)^\mathrm{T}
+\begin{bmatrix}
 \Sigma_{aa} & \Sigma_{ab} \\
 \Sigma_{ba} & \Sigma_{bb}
-\end{pmatrix}
-\begin{pmatrix}
-\mathbb{I} & \mathbb{0} \\
--\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
-\end{pmatrix}=
-\begin{pmatrix}
-\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{O} \\
-\mathbb{O} & \Sigma_{bb}
-\end{pmatrix}
+\end{bmatrix}^{-1}
+\left( \begin{bmatrix}
+X_{a} \\
+X_{b}
+\end{bmatrix}-\begin{bmatrix}
+\mu_{a} \\
+\mu_{b}
+\end{bmatrix} \right) -
+\left( X_{b}-\mu_{b} \right) ^\mathrm{T}
+\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right) 
+\right\} \\
+=&-\frac{1}{2}
+\left\{ 
+\begin{bmatrix}
+X_{a}-\mu_{a} \\
+X_{b}-\mu_{b}
+\end{bmatrix}^\mathrm{T}
+\begin{bmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb}
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+X_{a}-\mu_{a} \\
+X_{b}-\mu_{b}
+\end{bmatrix}-
+\left( X_{b}-\mu_{b} \right) ^\mathrm{T}
+\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right) 
+\right\} \\
+=&-\frac{1}{2}
+\left\{ 
+\begin{bmatrix}
+X_{a}-\mu_{a} \\
+X_{b}-\mu_{b}
+\end{bmatrix}^\mathrm{T}
+\begin{bmatrix}
+I & 0 \\
+-\Sigma_{bb}^{-1} \Sigma_{ba} & I
+\end{bmatrix}
+\begin{bmatrix}
+\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & 0 \\
+0 & \Sigma_{bb}
+\end{bmatrix}
+\begin{bmatrix}
+I & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
+0 & I
+\end{bmatrix}
+\begin{bmatrix}
+X_{a}-\mu_{a} \\
+X_{b}-\mu_{b}
+\end{bmatrix}-
+\left( X_{b}-\mu_{b} \right) ^\mathrm{T}
+\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right) 
+\right\} \\
+\end{split}
 $$
-:::info
-这个对角化先行变换去掉右上角的数，然后用列变换去掉左下角的数
-
+:::warning
+这里最后一步的变换就是在 [Schur complement](./67d6eeea) 中提到的舒尔补求逆方法
 
 :::
-然后移相得到：
+这里有 $ABCDE$ 矩阵连乘，我们转换成 $(AB)C(DE)$，同时令 $\tilde{k}=k-\mu_k$
 
-$$
-\begin{pmatrix}
-\Sigma_{aa} & \Sigma_{ab} \\
-\Sigma_{ba} & \Sigma_{bb}
-\end{pmatrix} = 
-\begin{pmatrix}
-\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
-\mathbb{O} & \mathbb{I}
-\end{pmatrix}^{-1}
-\begin{pmatrix}
-\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{O} \\
-\mathbb{O} & \Sigma_{bb}
-\end{pmatrix}
-\begin{pmatrix}
-\mathbb{I} & \mathbb{0} \\
--\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
-\end{pmatrix}^{-1}
-$$
-对其求逆：
+于是上式等于：
 
 $$
 \begin{split}
-\begin{pmatrix}
-\Sigma_{aa} & \Sigma_{ab} \\
-\Sigma_{ba} & \Sigma_{bb}
-\end{pmatrix}^{-1}
-&= 
-\begin{pmatrix}
-\mathbb{I} & \mathbb{0} \\
--\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
-\end{pmatrix}
-\begin{pmatrix}
-\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{O} \\
-\mathbb{O} & \Sigma_{bb}
-\end{pmatrix}^{-1}
-\begin{pmatrix}
-\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
-\mathbb{O} & \mathbb{I}
-\end{pmatrix}\\
-&=\begin{pmatrix}
-\mathbb{I} & \mathbb{0} \\
--\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
-\end{pmatrix}
-\begin{pmatrix}
-\left( \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} \right)^{-1}  & \mathbb{O} \\
-\mathbb{O} & \Sigma_{bb}^{-1}
-\end{pmatrix}
-\begin{pmatrix}
-\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
-\mathbb{O} & \mathbb{I}
-\end{pmatrix}
+\Phi &= -\frac{1}{2}\left\{ 
+\begin{bmatrix}
+\tilde{X}_{a} - \tilde{X}_{b}\Sigma_{bb}^{-1}\Sigma_{ba} \\
+\tilde{X}_{b}
+\end{bmatrix}^\mathrm{T}
+\begin{bmatrix}
+\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} & 0 \\
+0 & \Sigma_{bb}
+\end{bmatrix}
+\begin{bmatrix}
+\tilde{X}_{a}-\Sigma_{ab}\Sigma_{bb}^{-1}\tilde{X}_{b} \\
+\tilde{X}_{b}
+\end{bmatrix}-\left( 
+\tilde{X}_{b}^\mathrm{T}\Sigma_{bb}\tilde{X}_{b}
+\right) 
+\right\} \\
+&=-\frac{1}{2}\left\{ 
+\begin{bmatrix}
+\tilde{X}_{a} - \tilde{X}_{b}\Sigma_{bb}^{-1}\Sigma_{ba}
+\end{bmatrix}^\mathrm{T}
+\left( 
+\Sigma_{aa}-\Sigma_{ab}\Sigma _{bb}^{-1}\Sigma_{ba}
+\right) 
+\begin{bmatrix}
+\tilde{X}_{a}-\Sigma_{ab}\Sigma_{bb}^{-1}\tilde{X}_{b}
+\end{bmatrix}
+\right\} 
 \end{split}
 $$
-将逆带入到联合概率指数部分：
+所以很容易看出当前的 $p(X_{a}\mid X_{b})$ 服从 $\mathcal{N}(\mu_{a\mid b},\Sigma_{a\mid b})$ 分布：
 
 $$
 \begin{split}
-&-\frac{1}{2} \left( X_{a}^T-\mu_{a}^T,X_{b}^T-\mu_{b}^T \right)\Sigma^{-1}\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)\\
-=&-\frac{1}{2} \left( X_{a}^T-\mu_{a}^T,X_{b}^T-\mu_{b}^T \right)\begin{pmatrix}
-\mathbb{I} & \mathbb{0} \\
--\Sigma_{bb}^{-1}\Sigma_{ba} & \mathbb{I}
-\end{pmatrix}
-\begin{pmatrix}
-\left( \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} \right)^{-1}  & \mathbb{O} \\
-\mathbb{O} & \Sigma_{bb}^{-1}
-\end{pmatrix}
-\begin{pmatrix}
-\mathbb{I} & -\Sigma_{ab}\Sigma_{bb}^{-1} \\
-\mathbb{O} & \mathbb{I}
-\end{pmatrix}
-\left( X_{a}-\mu_{a}, X_{b}-\mu_{b}\right)\\
-=&-\frac{1}{2}\left( X_{a}^T-\mu_{a}^T-\Sigma_{bb}^{-1}\Sigma_{ba}\left( X_{b}^T-\mu_{b}^T \right),X_{b}^T-\mu_{b}^T  \right) 
-\begin{pmatrix}
-\left( \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} \right)^{-1}  & \mathbb{O} \\
-\mathbb{O} & \Sigma_{bb}^{-1}
-\end{pmatrix}
-\left( X_{a}-\mu_{a}-\Sigma_{ab}\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right),X_{b}-\mu_{b}  \right)\\
-=&-\frac{1}{2}\left[ \left( x_{b}^T-\mu_{b}^T \right)\Sigma_{bb}^{-1}\left( X_{b}-\mu_{b} \right)+ \cdots    \right] 
+\mu_{a\mid b} = \mu_{a}+\Sigma_{ab}\Sigma_{bb}^{-1}(X_{b}-\mu_{b})\\
+\Sigma_{a\mid b} = \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}
 \end{split}
 $$
-所以其后面指数部分是可以低效的，剩余的 $\cdots$ 部分为：
-
-$$
--\frac{1}{2}\left[\left(X_{a}^{\mathrm{T}}-\left(\mu_{a}^{\mathrm{T}}+\left(X_{b}^{\mathrm{T}}-\mu_{b}^{\mathrm{T}}\right) \Sigma_{bb}^{-1} \Sigma_{ba}\right)\right)\underbrace{\left(\Sigma_{aa}-\Sigma_{ab} \Sigma_{bb}^{-1} \Sigma_{ba}\right)^{-1}}_{\Sigma_{b\mid a}} \left(X_{a}-\left(\mu_{a}+\Sigma_{ab} \Sigma_{bb}^{-1}\left(X_{2}-\mu_{b}\right)\right)\right)\right]
-$$
-:::danger 此处的推导有误 (反了)
+:::tip
+可以看到的是其方差就等于 $\Sigma$ 对于 $\Sigma_{aa}$ 的舒尔补
 
 :::
-可以视为一个新的高斯分布，其条件高斯分布的条件期望和条件方差为：
-
-$$
-\begin{split}
-\mu_{b\mid a} = \mu_{b}+\Sigma_{ba} \Sigma_{aa}^{-1}(X_{a}-\mu_{a}) \\
-\Sigma_{b \mid a} = \Sigma_{bb} - \Sigma_{ba}\Sigma_{aa}^{-1}\Sigma_{ab}
-\end{split}
-$$
-##### 求解方法二
-
 ## 相关资料
 
 [^1]:[Multivariate normal distribution - Wikipedia](https://en.wikipedia.org/w/index.php?title=Multivariate_normal_distribution&amp;oldid=950141067)
