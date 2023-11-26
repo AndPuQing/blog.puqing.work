@@ -79,7 +79,7 @@ X_{1} \\
 X_{n}
 \end{pmatrix}
 $$
-只要让第 $n_{1}$ 到 $n_{k}$ 个随机变量所在的位置是 $1$ 即可 (相当于选择出来了) ，根据上面的推论 [多元高斯分布#多元高斯的线性性质](./27e8f14f#%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E7%9A%84%E7%BA%BF%E6%80%A7%E6%80%A7%E8%B4%A8) 可以得到，仍然为高斯分布。
+只要让第 $n_{1}$ 到 $n_{k}$ 个随机变量所在的位置是 $1$ 即可 (相当于选择出来了) ，根据上面的推论 [多元高斯的线性性质](./#%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E7%9A%84%E7%BA%BF%E6%80%A7%E6%80%A7%E8%B4%A8) 可以得到，仍然为高斯分布。
 
 ### 从边缘分布到联合分布
 
@@ -136,7 +136,7 @@ $$
 
 :::
 ::::tip
-2. 有一个 $\mu \in \mathbb{R}^n$ 的向量，以及一个对称、半正定的协方差矩阵 $\Sigma_{n \times n}$，使得 $X=(X_{1},\cdots,X_{n})$ 的 [特征函数(This page was not published)](./404) 等于：
+2. 有一个 $\mu \in \mathbb{R}^n$ 的向量，以及一个对称、半正定的协方差矩阵 $\Sigma_{n \times n}$，使得 $X=(X_{1},\cdots,X_{n})$ 的 [特征函数(This page is not published)](./404) 等于：
 
 $$
 \rho_{X}(\omega) = \exp \left( i \omega^T\mu-\frac{1}{2}\omega^T \Sigma \omega \right) 
@@ -469,7 +469,7 @@ $$
 已知：$p(x)=\mathcal{N}\left(\mu, \Lambda^{-1}\right), p(y \mid x)=\mathcal{N}\left(A x+b, L^{-1}\right)$，求解：$p(y),p(x\mid y)$
 
 :::
-根据上文提到的 [(This page was not published)](./404) ，我们可以设
+根据上文提到的 [多元高斯的线性性质](./#%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E7%9A%84%E7%BA%BF%E6%80%A7%E6%80%A7%E8%B4%A8) ，我们可以设
 
 $$
 y=Ax+b+\epsilon
@@ -491,7 +491,7 @@ $$
 $$
 p(y\mid x) = \frac{p(x,y)}{p(x)}
 $$
-这样我们就能和上面推导的 [(This page was not published)](./404) 联系上
+这样我们就能和上面推导的 [求解条件概率密度](./#%E6%B1%82%E8%A7%A3%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87%E5%AF%86%E5%BA%A6) 联系上
 
 这里我们假设 $x$ 与 $y$ 的协方差为 $\Delta$，于是协方差矩阵可以写为：
 
@@ -564,7 +564,7 @@ $$
 \end{array}
 $$
 :::info
-之后可能有单独的一章说 [线性高斯模型(This page was not published)](./404)
+之后可能有单独的一章说 [线性高斯模型(This page is not published)](./404)
 
 
 :::
