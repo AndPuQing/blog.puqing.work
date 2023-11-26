@@ -74,10 +74,10 @@ class MyRenderer(MarkdownRenderer):
             count = re.findall(r":+", body)
             count = max(count, key=len) + ":" if count else ""
             dot_ = count if len(count) > 3 else ":" * 3
-            return dot_ + alias + match.group(3) + body + f"\n{dot_}\n"
+            return dot_ + " " + alias + match.group(3) + body + f"\n{dot_}\n"
         else:
             # 补充::: info
-            return ":::info\n" + text + "\n:::\n"
+            return "::: info\n" + text + "\n:::\n"
 
     def block_math(self, token: Dict[str, Any], state: BlockState) -> str:
         # for obsidian math error :(
@@ -275,7 +275,7 @@ def process_link(file, PUBLISH_DICT: Dict):
                         anchor: str = "#" + anchor
                         alias = alias.replace("#", "")
                         lines[index] = lines[index].replace(
-                            f"[[{raw}]]", f"[{alias}](./{anchor})"
+                            f"[[{raw}]]", f"[{alias}]({anchor})"
                         )
                         continue
                     logger.warning(f"Can't find {link} in publish list")
