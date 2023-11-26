@@ -11,11 +11,15 @@ tags:
 ---
 # 多元高斯分布
 
+在 [高斯分布](./971deee9) 中我们分别介绍了一维高斯分布情况，以及对于多元高斯分布表达式中的 `马氏距离` 进行了解释。这一节将主要介绍在多元高斯分布的常用定理进行介绍。
+
 ## 多元高斯的线性性质
 
 :::tip
 已知：
 
+
+<!--truncate-->
 $$
 \begin{split}
 X\sim \mathcal{N}(\mu,\Sigma)\\
@@ -24,8 +28,6 @@ Y = AX+b
 $$
 那么可以得到：
 
-
-<!--truncate-->
 $$
 Y\sim \mathcal{N}(A\mu+b,A \Sigma A^\top)
 $$
@@ -411,7 +413,7 @@ X_{b}-\mu_{b}
 \end{split}
 $$
 :::warning
-这里最后一步的变换就是在 [Schur complement](./67d6eeea) 中提到的舒尔补求逆方法
+这里最后一步的变换就是在 [Schur complement](./67d6eeea) 中提到的舒尔补求矩阵逆方法
 
 :::
 这里有 $ABCDE$ 矩阵连乘，我们转换成 $(AB)C(DE)$，同时令 $\tilde{k}=k-\mu_k$
@@ -461,8 +463,116 @@ $$
 可以看到的是其方差就等于 $\Sigma$ 对于 $\Sigma_{aa}$ 的舒尔补
 
 :::
+## 求解线性模型
+
+:::danger
+已知：$p(x)=\mathcal{N}\left(\mu, \Lambda^{-1}\right), p(y \mid x)=\mathcal{N}\left(A x+b, L^{-1}\right)$，求解：$p(y),p(x\mid y)$
+
+:::
+根据上文提到的 [(This page was not published)](./404) ，我们可以设
+
+$$
+y=Ax+b+\epsilon
+$$
+其中 $\epsilon \sim \mathcal{N}(0,L^{-1})$
+
+于是有边缘概率：
+
+$$
+\begin{split}
+&\mathbb{E}\left[ y \right] =\mathbb{E}\left[ Ax+b+\epsilon \right]  =\mathbb{E}\left[ Ax+b \right]  +\mathbb{E}\left[ \epsilon \right] = A\mu+b  \\
+&Var\left[ y \right]  = Var\left[ Ax+b+\epsilon \right] =Var\left[ Ax \right]+Var\left[ \epsilon \right] = A \Lambda ^{-1}A^{\mathrm{T}}+L^{-1}
+\end{split}
+$$
+于是有 $p(y) \sim \mathcal{N}(A\mu+b,A \Lambda ^{-1}A^{\mathrm{T}}+L^{-1})$
+
+对于条件概率，我们有：
+
+$$
+p(y\mid x) = \frac{p(x,y)}{p(x)}
+$$
+这样我们就能和上面推导的 [(This page was not published)](./404) 联系上
+
+这里我们假设 $x$ 与 $y$ 的协方差为 $\Delta$，于是协方差矩阵可以写为：
+
+$$
+z = \begin{pmatrix}
+x \\
+y
+\end{pmatrix}
+\sim 
+\mathcal{N}\left( 
+\begin{pmatrix}
+\mu \\
+A\mu+b
+\end{pmatrix},
+\begin{pmatrix}
+\Lambda ^{-1} & \Delta \\
+\Delta & A \Lambda ^{-1}A^{\mathrm{T}}+L^{-1}
+\end{pmatrix}
+\right) 
+$$
+其中的 $\Delta$ 是多少，我们并不知道，需要求解。
+
+:::quote 求解 $\Delta$
+直接使用协方差的定义进行求解
+
+$$
+\begin{split}
+\Delta & =\operatorname{Cov}(x, y)=\mathbb{E}\left[(x-\mathbb{E}[x])(y-\mathbb{E}[y])^{T}\right] \\
+& =\mathbb{E}\left[(x-\mu)(y-(A \mu+b))^{T}\right] \\
+& =\mathbb{E}\left[(x-\mu)(A x+\epsilon-A \mu)^{T}\right] \\
+& =\mathbb{E}\left[(x-\mu)(A x-A \mu+\epsilon)^{T}\right] \\
+& =\mathbb{E}\left[(x-\mu)(A x-A \mu)^{T}+(x-\mu) \epsilon^{T}\right] \\
+& =\mathbb{E}\left[(x-\mu)(A x-A \mu)^{T}\right]+\mathbb{E}\left[(x-\mu) \epsilon^{T}\right]
+\end{split}
+$$
+而由于 $x-\mu$ 和 $\epsilon$ 之间是独立的，那么 $\mathbb{E}\left[ (x-\mu)\epsilon^{\mathbf{T}} \right]=\mathbb{E}\left[ (x-\mu) \right]\mathbb{E}\left[ \epsilon^{\mathbf{T}} \right]=0$，所以我们有：
+
+$$
+\begin{split}
+\Delta & = \mathbb{E}\left[ (x-\mu)(Ax-A\mu)^{\mathbf{T}} \right] \\
+& =\mathbb{E}\left[ (x-\mu)(x-\mu)^{\mathbf{T}} \right]\cdot A^{\mathbf{T}} \\
+& =Var\left[ x\right] \cdot A^{\mathbf{T}}\\
+& =\Lambda ^{-1}A^{\mathbf{T}}
+\end{split}
+$$
+:::
+所以，$x$ 和 $y$ 之间的联合概率分布可表达为
+
+$$
+z=\begin{pmatrix}
+x \\
+y
+\end{pmatrix} \sim \mathcal{N}\left( 
+\begin{pmatrix}
+\mu \\
+A \mu+b
+\end{pmatrix},
+\begin{pmatrix}
+\Lambda^{-1} & \Lambda^{-1} A^{T} \\
+\Lambda^{-1} A^{T} & A \Lambda^{-1} A^{T}+L^{-1}
+\end{pmatrix}
+\right)
+$$
+利用上面推导的公式，可以得到 $p(x\mid y)$。结果如下：
+
+$$
+\begin{array}{c}
+\mathbb{E}[x \mid y]=\mu+\Lambda^{-1} A^{T}\left(L^{-1}+A \Lambda^{-1} A^{T}\right)^{-1}(y-A \mu-b) \\
+\operatorname{Var}[x \mid y]=\Lambda^{-1}-\Lambda^{-1} A^{T}\left(L^{-1}+A \Lambda^{-1} A^{T}\right)^{-1} A \Lambda^{-1}
+\end{array}
+$$
+:::info
+之后可能有单独的一章说 [线性高斯模型(This page was not published)](./404)
+
+
+:::
 ## 相关资料
 
 - [Marginalization & Schur Complement 边缘化与舒尔补 - 知乎](https://zhuanlan.zhihu.com/p/363975790)
+- [多元高斯分布完全解析 - 知乎](https://zhuanlan.zhihu.com/p/58987388)
+- [为什么随机变量X和Y不相关却不一定独立？ - 知乎](https://www.zhihu.com/question/26583332)
+- [【随机过程】8 - 多元高斯分布及其线性性质_multivariable gaussian distribution linear transfo_Ciaran-byte的博客-CSDN博客](https://blog.csdn.net/qq_41741344/article/details/121728111)
 
 [^1]:[Multivariate normal distribution - Wikipedia](https://en.wikipedia.org/w/index.php?title=Multivariate_normal_distribution&amp;oldid=950141067)
