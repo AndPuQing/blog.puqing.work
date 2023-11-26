@@ -15,7 +15,7 @@ tags:
 
 `Koopman` 是使用线性系统用来近似非线性系统的一个符号算子，使用线性系统近似非线性系统后，就可以使用线性系统的控制理论来控制非线性系统了。
 
-:::warning 值得注意的是：
+::: warning 值得注意的是：
 $\operatorname{Koopman}$ 算子是一个无穷维的线性变换，而我们要做的往往是用一个有限维度的 $K$ 矩阵去近似 $\operatorname{Koopman}$ 算子。而方法有：`DMD`、`EDMD` 和 `Deep learning` 的方法
 
 :::
@@ -27,7 +27,7 @@ $\operatorname{Koopman}$ 算子是一个无穷维的线性变换，而我们要�
 <!--truncate-->
 即<Highlight>线性性</Highlight>具有 `可加性`，`齐次性`。对于线性系统来说：若该系统的微分方程满足线性性，则该系统为线性系统。
 
-::::danger 系统的线性是指对系统输入变量 $r$ 与输出变量 $c$ 的线性
+:::: danger 系统的线性是指对系统输入变量 $r$ 与输出变量 $c$ 的线性
 例如函数：
 
 $$
@@ -35,7 +35,7 @@ c(t) = \sin(t) r(t)
 $$
 此时的 $r(t)$ 才是输入，所以即便 $\sin(t)$ 不是线性的，但是该系统仍然是线性的
 
-:::warning
+::: warning
 这里可能有点难以理解，我更想将这里的<Highlight>系统</Highlight>表述成某一种算子，它表示对于 `信号` 的一种 `变换`，这个跟前面一篇文章 [Green 函数#Linear Differential Operators](./bfd8484a#linear-differential-operators) 是相通的，即：
 
 我们令 $L=\sin(t)\cdot$，即算子 $L$ 就是 `Element-wise` 乘以 $\sin(t)$，下面我们将该 `算子` 作用到不同的 `信号` 上

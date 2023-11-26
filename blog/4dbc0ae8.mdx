@@ -40,7 +40,7 @@ $ cd openvino
 $ git checkout -b BRANCHNAME
 ```
 
-:::info
+::: info
 BRANCHNAME 建议起一个有意义的分支名字
 
 
@@ -57,7 +57,7 @@ BRANCHNAME 建议起一个有意义的分支名字
 $ git submodule update --init --recursive
 ```
 
-:::info
+::: info
 如果位于中国地区拉取仓库比较慢，可以尝试使用一下脚本进行拉取
 
 
@@ -106,7 +106,7 @@ $ make -j$(nproc); make install
 
 若完成了以上步骤，便可以继续下面的正式开发了。
 
-:::info
+::: info
 注意：每次修改代码后需要再次编译安装
 
 
@@ -149,7 +149,7 @@ $ make -j$(nproc); make install
 
 所以通过这部分代码我们可以知道在 Paddle 这边 gather_nd 通过输入 inputs 字典，字典中有 "X" ，"Index" 字段。
 
-:::info
+::: info
 而其他的算子的参数并非也是 Tensor 输入的，而是作为 attributes 字典输入的，例如 [shard_index](https://github.com/PaddlePaddle/Paddle/blob/develop/python/paddle/tensor/manipulation.py#L603) 则是以 attr 字典输入的
 
 
@@ -223,7 +223,7 @@ $ cd bin/intel64/Release
 $ ./paddle_tests --gtest_filter=PaddleFuzzyOpTest/FrontEndFuzzyOpTest.testOpFuzzy/*
 ```
 
-:::info
+::: info
 此处的 * 是通配符，若只想测试添加的算子可以例如：*gather_nd* 的写法进行测试
 
 
@@ -258,7 +258,7 @@ $ git add changfile
 $ git commit -m "add a paddle op gather_op"
 ```
 
-:::info
+::: info
 commit 信息尽量有意义且能说明每次的修改内容
 
 
