@@ -238,46 +238,50 @@ def is_pushlish(file_path):
 def process_link(file, PUBLISH_DICT: Dict):
     with open(file, "r", encoding="utf-8") as f:
         lines = f.readlines()
+        code_block = False
         for index, line in enumerate(lines):
+            # ignore code block
+            if line.startswith("```"):
+                code_block = not code_block
+                continue
+            if code_block:
+                continue
             regex = re.compile(r"\[\[(.*?)\]\]")
             match = regex.findall(line)
 
-            if match:
-                for raw in match:
-                    m = alias = raw  # m#anchor|alias
-                    anchor = None
-                    if "|" in raw:
-                        m, alias = raw.split("|")
-                    if "#" in m:
-                        m, anchor = m.split("#")
+            if not match:
+                continue
+            for raw in match:
+                # [[link#anchor|alias]]
+                link, anchor, alias = raw, "", raw
+                if "|" in raw:
+                    link, alias = raw.split("|", 1)
+                else:
+                    link = raw
+                if "#" in link:
+                    link, anchor = link.split("#", 1)
+                if link in PUBLISH_DICT:
+                    link = hashlib.md5(link.encode("utf-8")).hexdigest()[0:8]
+                    if anchor:
+                        anchor: str = "#" + anchor
                         anchor = anchor.replace(" ", "-")
                         anchor = anchor.lower()
-                    if m not in PUBLISH_DICT.keys():  # replace failed
+                    lines[index] = lines[index].replace(
+                        f"[[{raw}]]", f"[{alias}](./{link}{anchor})"
+                    )
+                else:
+                    if link == "":
+                        anchor: str = "#" + anchor
+                        alias = alias.replace("#", "")
                         lines[index] = lines[index].replace(
-                            "[[{}]]".format(raw),
-                            "[{}(This page was not published)](./404)".format(
-                                m
-                            ),  # noqa
+                            f"[[{raw}]]", f"[{alias}](./{anchor})"
                         )
-                        logger.warning(
-                            f"Warning [[{m}]] not found in publish list"
-                        )  # noqa
                         continue
-                    else:  # replace success
-                        new_name = hashlib.md5(m.encode("utf-8")).hexdigest()[
-                            0:8
-                        ]  # noqa
-                        if anchor:
-                            new_name += (
-                                "#" + anchor
-                            )  # TODO(Puqing): not support anchor #noqa
-                        lines[index] = lines[index].replace(
-                            "[[{}]]".format(raw),
-                            "[{}](./{})".format(alias, new_name),
-                        )
-                        logger.debug(
-                            f"[[{m}]] has been replaced with [{alias}](./{new_name})"  # noqa
-                        )
+                    logger.warning(f"Can't find {link} in publish list")
+                    lines[index] = lines[index].replace(
+                        f"[[{raw}]]",
+                        f"[{alias}(This page is not published)](./404)",  # noqa
+                    )
     return lines
 
 
