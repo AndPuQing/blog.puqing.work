@@ -269,6 +269,7 @@ def process_link(file, PUBLISH_DICT: Dict):
                     lines[index] = lines[index].replace(
                         f"[[{raw}]]", f"[{alias}](./{link}{anchor})"
                     )
+                    logger.debug(f"Replace {raw} to {link}{anchor}")
                 else:
                     if link == "":
                         anchor: str = "#" + anchor
@@ -326,7 +327,6 @@ def main(args):
         new_file = markdown("".join(new_file))
         with open(os.path.join(output_dir, new_name), "w", encoding="utf-8") as f:
             f.writelines(new_file)
-        logger.info(f"Success convert {key} to {os.path.join(output_dir, new_name)}")
 
 
 if __name__ == "__main__":
