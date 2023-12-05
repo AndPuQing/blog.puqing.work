@@ -13,7 +13,7 @@ tags:
 ---
 # 机器学习 - 凸优化
 
-::: quote 定义
+:::quote 定义
 凸优化问题 (`OPT,convex optimization problem`) 指定义在凸集中的凸函数最优化的问题。
 
 :::
@@ -21,18 +21,18 @@ tags:
 
 ### 凸集
 
-:::: quote 定义
+::::quote 定义
 假设 $C$ 是向量空间的集。若对于任意 $x,y\in C$ 和任意的 $\theta\in \mathbb{R}$，满足 $0\le \theta \le 1$ 时，$\theta x+(1-\theta)y \in C$ 恒成立。则称 $C$ 为 `凸集`[^1]
 
 
 <!--truncate-->
-::: tip 从几何上来看，就是 $C$ 中的任意两点之间的直线段都属于 $C$。
+:::tip 从几何上来看，就是 $C$ 中的任意两点之间的直线段都属于 $C$。
 
 :::
 ::::
 下面举几个例子：
 
-::: example
+:::example
 ![image.png](https://images.puqing.work/2023/08/22/64e4d721aec91.png)
 
 1. 是凸集 (集合中的任意两个点连线段中的所有点，都在集合中)
@@ -42,7 +42,7 @@ tags:
 :::
 ### 凸函数
 
-::: quote 定义
+:::quote 定义
 定义在 $\mathbb{R}^n \to \mathbb{R}$ 上的函数 $f$ 是凸函数，如果它的定义域 $\mathbb{D}(f)$ 是一个凸集且对任意的 $x,y \in \mathbb{D}$ 和 $0\le \theta \le 1, f(\theta x+(1-\theta y))\le \theta f(x)+(1-\theta)f(y)$ 恒成立 [^2]
 
 :::
@@ -50,28 +50,28 @@ tags:
 
 ![image.png](https://images.puqing.work/2023/08/23/64e581b312fe9.png)
 
-::: info
+:::info
 在函数图形上，任意两点连成的线段，皆位于图形的上方
 
 
 :::
 #### 凸函数的一阶充要条件
 
-::: tip
+:::tip
 假设定义在 $\mathbb{R}^n \to \mathbb{R}$ 上的函数 $f$ 可微 (对于定义域，梯度 $\nabla f(x)$ 均存在)。则函数 $f$ 是凸函数当且仅当函数定义域 $\mathbb{D}(f)$ 是一个 `凸集`，且对于所有 $x,y\in \mathbb{D}(f)$ 均满足
 
 $$
 f(y)\ge f(x) + \nabla f(x)^\top(y-x)
 $$
 :::
-::: info
+:::info
 从几何上来看，即定义域内图形都大于等于该点的切线 (切平面)
 
 
 :::
 ![image.png](https://images.puqing.work/2023/08/23/64e5b78414e3d.png)
 
-::: tip 公式的理解
+:::tip 公式的理解
 对于二元函数 $f(x,y)$
 
 我们知道，函数在某一点 $(x_{0},y_{0})$ 处的切平面为
@@ -109,7 +109,7 @@ $$
 $$
 \nabla^2f(x)\succeq 0
 $$
-::: info
+:::info
 这里的 $\succeq 0$ 表示是半正定的
 
 
@@ -118,7 +118,7 @@ $$
 
 ## 凸优化问题
 
-::: quote 定义
+:::quote 定义
 
 $$
 \begin{array}{cl}
@@ -132,7 +132,7 @@ $$
 :::
 ## 常见的凸优化问题
 
-::: example 线性规划（LP，Linear Program）
+:::example 线性规划（LP，Linear Program）
 
 $$
 \begin{array}{cl}
@@ -144,7 +144,7 @@ $$
 其中的目标函数和不等式约束都是仿射函数，且 $\preceq$ 表示按元素小于等于
 
 :::
-::: example 二次规划（QP，Quadratic Program）
+:::example 二次规划（QP，Quadratic Program）
 
 $$
 \begin{array}{ll}

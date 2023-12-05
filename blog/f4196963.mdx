@@ -19,7 +19,7 @@ tags:
 
 ## Abstract（摘要）
 
-::: info
+:::info
 In recent years, artiﬁcial intelligence technologies have been widely used in computer vision, natural language processing, automatic driving, and other ﬁelds. However, artiﬁcial intelligence systems are vulnerable to adversarial attacks, which limit the applications of artiﬁcial intelligence (AI) technologies in key security ﬁelds. Therefore, improving the robustness of AI systems against adversarial attacks has played an increasingly important role in the further development of AI. This paper aims to comprehensively summarize the latest research progress on adversarial attack and defense technologies in deep learning. According to the target model's different stages where the adversarial attack occurred, this paper expounds the adversarial attack methods in the training stage and testing stage respectively. Then, we sort out the applications of adversarial attack technologies in computer vision, natural language processing, cyberspace security, and the physical world. Finally, we describe the existing adversarial defense methods respectively in three main categories, i.e., modifying data, modifying models and using auxiliary tools.
 [Review of Artiﬁcial Intelligence Adversarial Attack and Defense Technologies](https://www.mdpi.com/2076-3417/9/5/909)
 
@@ -47,15 +47,15 @@ In recent years, artiﬁcial intelligence technologies have been widely used in 
 
 ### 对抗样本的特征
 
-::: tip Transferability
+:::tip Transferability
 可迁移性
 
 :::
-::: tip Adversarial instability
+:::tip Adversarial instability
 对抗不稳定性，在经过变换（如旋转，平移等）之后将会失去攻击性。
 
 :::
-::: tip Regularization effect
+:::tip Regularization effect
 指对抗学习
 
 所以为啥叫 `Regularization effect`
@@ -70,19 +70,19 @@ In recent years, artiﬁcial intelligence technologies have been widely used in 
 
 在训练阶段的攻击一般是通过更改用于训练数据集来直接影响或者破坏目标模型。根据能力划分为：
 
-::: tip Data Injection
+:::tip Data Injection
 在这种情况下，攻击者没有任何访问训练数据和算法的权限，但是有能力向训练数据集中添加新的数据。对手可以通过向训练数据集中插入对抗样本来达到攻击的目的
 
 :::
 ^8632f5
 
-::: tip Data Modification
+:::tip Data Modification
 这种情况下，攻击者不能得到算法细节，但是可以完整得到数据集。并且可以修改数据来污染训练数据
 
 :::
 ^dce3c8
 
-::: tip Logic Corruption
+:::tip Logic Corruption
 这种情况下，攻击者能够干扰目标模型的细节
 
 :::
@@ -105,15 +105,15 @@ $$
 
 在黑盒模型的攻击中，攻击者对于目标模型 $f$ 没有任何了解。这种攻击模式会通过 " 过去 " 的输入/输出 pair 来分析模型的漏洞。那黑盒模型的攻击又分为下面几种：
 
-::: tip Non-Adaptive Black-Box Attacks
+:::tip Non-Adaptive Black-Box Attacks
 对于这种攻击模式。攻击者只能访问目标模型 $f$ 的训练数据分布 $\mu$。因此，攻击者可以利用一个代理模型 $f'$，在来自数据分布 $\mu$ 的样本下利用 $train'$ 训练过程得到一个 $local\ model$ 模型来近似目标模型 $f$。然后攻击者就可以利用白盒攻击策略来攻击了
 
 :::
-::: tip Adaptive Black-Box Attack
+:::tip Adaptive Black-Box Attack
 在这种攻击模型下，攻击者无法访问目标模型的任何信息。但是可以通过利用模型输入 $X$ 以及网络输出标签 $y$ ，然后攻击者查询目标模型得到样本对 $(X,y)$，然后同样的转化为白盒模型进行攻击
 
 :::
-::: tip Strict Black-Box Attack
+:::tip Strict Black-Box Attack
 与 `Adaptive Black-Box Attack` 类似，但是不一样的是它不是自适应的？？什么意思
 
 :::
@@ -121,19 +121,19 @@ $$
 
 对于攻击的效果来说，可以划分为下面四种：
 
-::: tip Confidence Reduction
+:::tip Confidence Reduction
 降低目标模型对于某一预测的置信度
 
 :::
-::: tip Misclassification
+:::tip Misclassification
 分错类，就是把猫识别为除了猫以外的东西。
 
 :::
-::: tip Targeted Misclassification
+:::tip Targeted Misclassification
 有目标的分错类，就是特化为分错为某一特定的类，比如猫识别为狗。
 
 :::
-::: tip Source/Target Misclassification
+:::tip Source/Target Misclassification
 而这个是更加具体的分错类
 
 :::
@@ -143,7 +143,7 @@ $$
 
 在训练过程中根据攻击者的能力有下面几种攻击方式：
 
-:::: tip Modify Training Dataset.
+::::tip Modify Training Dataset.
 修改训练数据集，也叫污染攻击，论文 [^5] 中表明，在模型预测误差小于 $\varepsilon$ 限度下，最大能够容忍修改数据的程度 $b$ 为：
 
 $$
@@ -151,19 +151,19 @@ b \leq \frac{\varepsilon}{\varepsilon+1}
 $$
 .
 
-::: quote
+:::quote
 过于神奇
 
 :::
 ::::
-::: tip Label Manipulation
+:::tip Label Manipulation
 改变 Label 的，对标签进行扰动，从随机分布中选择标签作为训练数据的标签
 
 :::
-:::: tip Input Feature Manipulation
+::::tip Input Feature Manipulation
 输入特征篡改，这种情况下攻击者可以捏造训练数据的标签和输入数据的特征。
 
-::: quote 怎么做的，攻击者的能力也太大了
+:::quote 怎么做的，攻击者的能力也太大了
 
 :::
 ::::
@@ -180,11 +180,11 @@ $$
 $$
 f(X')=Y' _{\ne f(X)}
 $$
-::: tip Direction Sensitivity Estimation
+:::tip Direction Sensitivity Estimation
 攻击者通过搜索 `数据流形` 中样本 $X$ 周围的方向，评估模型 $f$ 对样本 $X$ 每个特征方向的敏感性，与 [重谈L1与L2正则#为什么 L1 更稀疏](./aba1f0a9#%E4%B8%BA%E4%BB%80%E4%B9%88-l1-%E6%9B%B4%E7%A8%80%E7%96%8F) 中我觉得是有关联的。
 
 :::
-::: tip Perturbation Selection
+:::tip Perturbation Selection
 扰动选择，然后攻击者利用敏感信息来选择扰动 $\delta X$，以获得最佳的扰动。
 
 :::
@@ -205,7 +205,7 @@ $$
 
 不知道这个 L-BFGS 是不是拟牛顿梯度下降法的那个 BFGS，简单来说就是由于上述公式高度非凸，所以论文 [^1][^1] 中转而解决一个弱化的问题，即找到一个使得最小化损失函数的添加值，从而将问题转化为凸优化问题。那缺点就是计算成本昂贵
 
-::: quote 如何转化的？这个最小化损失函数是啥
+:::quote 如何转化的？这个最小化损失函数是啥
 
 :::
 ###### Fast Gradient Sign Method(FGSM)
@@ -217,7 +217,7 @@ X^{\prime}=X+\epsilon * \operatorname{sign}\left(\nabla_{x} J\left(X, y_{\text {
 $$
 在这里 $J$ 是模型 $f$ 的 $cost\ function$，在 [正则化](./4bd7c8e0) 文章中有所提及，这里不在赘述。$\nabla_{x}$ 是对于具有正常标签 $y_{\text {true }}$ 的梯度，$\epsilon$ 是控制扰动幅度的超参数。这是一种基于线性假设的近似。
 
-::: danger Why?
+:::danger Why?
 
 - 什么是线性假设？
 - 为什么是近似？
@@ -239,7 +239,7 @@ X_{0}^{\prime}=X, X_{n+1}^{\prime}=\operatorname{Clip}_{X, \epsilon}\left\{X_{n}
 $$
 这里 $\alpha$ 表示步长，这里的 $\operatorname{Clip}_{X,\epsilon}$ 是对于样本 $X$ 的逐元素裁剪。那这种方法不依赖于模型近似，当模型迭代更多次时，会产生更多的对抗样本。
 
-::: danger 这里还是提到了模型近似，到底这个近似是近似啥？
+:::danger 这里还是提到了模型近似，到底这个近似是近似啥？
 
 :::
 ###### Iterative Least-Likely Class Method(ILCM)
@@ -261,7 +261,7 @@ $$
 
 论文提出了一种基于迭代计算给定图像的最小 norm 的对抗扰动的方法，以便找到最接近样本 $X$ 的决策边界，并且在边界上找到最小的样本。方法解决了 FGSM 中选择参数 $\epsilon$ 的问题，并通过使用多个线性逼近来对抗非线性决策函数。这项工作生成的扰动比 FGSM 更小，并且具有类似的欺骗率
 
-::: danger How
+:::danger How
 不太懂这里的 minimal norm 是什么？以及怎么样使用多个线性逼近对抗非线性决策函数？
 
 :::
@@ -279,7 +279,7 @@ $$
 
 这种方法有效的减小了原始样本与相应对抗样本之间的欧几里得距离。
 
-::: quote 这又是怎么来的？
+:::quote 这又是怎么来的？
 
 :::
 ###### Perturb the Selected Input Dimension
