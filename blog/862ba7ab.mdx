@@ -17,12 +17,28 @@ tags:
 $\mathrm{MLE}:p(X\mid \theta)$。我们想要求解的结果就是：
 
 $$
-\theta_{MLE} = \arg \max_{\theta} \log p(X\mid \theta)
+\theta_{MLE} = \arg \max_{\theta}\sum_{i=1}^N \log p(x_{i}\mid \theta)
 $$
-其中，$\log p(X\mid \theta)$ 也被我们称为 [对数似然函数](./967aee09#%5E67c3dc)。但是一旦问题复杂，特别是引入隐变量后，求解变得极其复杂。
+其中，$\sum_{i=1}^N\log p(x_{i}\mid \theta)$ 也被我们称为 [对数似然函数](./967aee09#%5E67c3dc)。但是一旦引入隐变量，似然函数变为：
 
 
 <!--truncate-->
+$$
+\mathcal{L}(\theta) = \sum_{i=1}^N \log p(x_{i}\mid \theta)=\sum_{i}^N \log \left[ \sum_{z_{i}} p(x_{i},z_{i}\mid \theta) \right] 
+$$
+:::tip 其他格式：
+
+$$
+\mathcal{L}(\theta) = \sum_{i}^N \log \left[ \sum_{z_{i}}p(x_{i},z_{i};\theta) \right] 
+$$
+写成条件概率的形式 (该种写法在 [混合模型](./04c6f12c#%5Ed1001b) 中有过推导)
+
+$$
+\mathcal{L}(\theta) = \sum_{i}^N \log \left[ \sum_{z_{i}}p(x_{i}\mid z_{i};\theta)p(z_{i}\mid \theta) \right]
+$$
+:::
+这个式子变的难以求解
+
 :::example
 就拿上面 [三硬币模型](./04c6f12c#%E4%B8%89%E7%A1%AC%E5%B8%81%E6%A8%A1%E5%9E%8B) 来说，其似然函数可写为，
 
@@ -50,7 +66,7 @@ $$
 \frac{\partial \log P(Y\mid \theta)}{\partial q}&=\sum_{j=1}^n\frac{(\pi-1)\left(q^{y_{i}} y_{i}(1-q)^{2-y_{i}}+q^{y_{i}+1}(1-q)^{1-y_{i}}\left(y_{i}-1\right)\right)}{q(q-1)\left(p^{y_{i}} \pi(1-p)^{1-y_{i}}-q^{y_{i}}(1-q)^{1-y_{i}}(\pi-1)\right)}
 \end{aligned}
 $$
-…
+…这是及其难以求解的
 
 :::
 ## EM 算法概述
