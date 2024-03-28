@@ -1,0 +1,119 @@
+---
+authors:
+- PuQing
+date: 2024-03-21 20:30
+keywords:
+- 最优化
+tags:
+- 最优化
+---
+# 深度学习优化算法概述
+
+## 引言
+
+梯度下降是优化算法最为流行的算法之一，也是优化神经网络最常见的方式。这篇文章主要想要探讨不同的优化梯度下降算法的行为 " 直觉 "，参考资料主要来自于 [^1][^1]，本文主要是对其实现进行补充。
+
+## 梯度下降
+
+梯度下降是一种通过更新模型参数 $\theta \in \mathbb{R}^d$ 的参数，沿着目标函数 $J(\theta)$ 的梯度 $\nabla_{\theta}J(\theta)$ 的相反方向来最小化目标函数的方法。学习率 $\eta$ 则是我们达到 (局部) 最小值的步长。换句话说，我们沿着目标函数所指代的曲面的斜坡方向向下，直至到达一个山谷。
+
+
+<!--truncate-->
+## 梯度下降变种
+
+梯度下降法有三种变体
+
+### Batch Gradient Descent
+
+这种梯度下降，在整个数据集上计算目标函数对于参数 $\theta$ 的梯度：
+
+$$
+\begin{aligned}
+\theta = \theta-\eta \cdot \nabla_{\theta}J(\theta)
+\end{aligned}
+$$
+因为更新一次参数，需要计算整个数据集的梯度，所以 Batch Gradient Descent 可能会非常缓慢。
+
+我们可以写出参数更新方式的伪代码：
+
+```python
+for i in range(nb_epochs):
+	params_grad = evaluate_gradient(loss_fuction, data, params)
+	params = params - learning_rate * params_grad
+```
+
+对于凸损失曲面，Batch Gradient Descent 可以保证会收敛到全局最小值，对于非凸曲面则会收敛到局部最小。
+
+### Stochastic Gradient Descent
+
+相比之下，Stochastic Gradient Descent(SGD) 对于每个训练样本 $x^{(i)}$ 以及标签 $y^{(i)}$ 进行参数更新：
+
+$$
+\begin{aligned}
+\theta = \theta-\eta \cdot \nabla_{\theta}J(\theta;x^{(i)};y^{(i)})
+\end{aligned}
+$$
+SGD 通常更快，但是 SGD 会频繁地执行高方差的更新，它会导致目标函数剧烈的抖动。
+
+伪代码可以写为：
+
+```python
+for i in range(nb_epochs):
+	np.random.shuffle(data)
+	for example in data:
+		params_grad = evaluate_gradient(loss_function, example, params)
+		params = params - learning_rate * params_grad
+```
+
+### Mini-batch Gradient Descent
+
+最后的 Mini-batch Gradient Descent 融合了二者的优点，每 $n$ 个训练样本进行参数更新：
+
+$$
+\theta = \theta-\eta \cdot \nabla_{\theta}J(\theta;x^{(i:i+n)};y^{(i:i+n)})
+$$
+通过这种方式
+
+:::tip 减少参数更新的方差，可以导致更稳定的收敛
+
+:::
+伪代码可以写为：
+
+```python
+for i in range(nb_epochs):
+	np.random.shuffle(data)
+	for batch in get_batches(data, batch_size=50)
+		params_grad = evaluate_gradient(loss_function, example, params)
+		params = params - learning_rate * params_grad
+```
+
+## Challenges
+
+:::warning 选择学习率困难
+学习率过小会导致收敛速度非常慢，而学习率过大则可能阻碍收敛，导致损失函数在最小值周围波动甚至发散。
+
+:::
+::::warning 特征异构
+在梯度下降中，对于所有的参数都是使用的相同的学习率。如果我们的数据稀疏并且数据特征的频率不同，我们可能不希望同等更新它们，而是对于罕见的特征进行更大的更新。
+
+:::quote 难道梯度不能很好的反应该偏好吗？
+
+:::
+::::
+:::warning 高度非凸
+神经网络一个常见的问题就是如何避免高度非凸的损失误差函数陷入到众多的局部最优解中。而 `Dauphin` 等人认为问题不是来自于局部最优值，而是来自于鞍点，即在一个维度向上倾斜，另一个维度向下倾斜的点，这些点使得随机梯度下降很难逃脱，因为梯度在所有维度上都接近于零。
+
+:::
+## Gradient Descent Optimization Algorithm
+
+### Momentum
+
+SGD 在遇到沟壑时很容易发生震荡。为此为其引入动量 Momentum，加速 SGD 在正确的方向的下降并抑制震荡。
+
+$$
+\begin{aligned}
+v_{t}  &= \gamma v_{t-1}+\eta \nabla_{\theta}J(\theta) \\
+\theta &= \theta-v_{t}
+\end{aligned}
+$$
+[^1]: https://arxiv.org/abs/1609.04747
