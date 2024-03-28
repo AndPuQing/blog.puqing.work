@@ -7,7 +7,6 @@ import styles from "./index.module.css";
 import { inject } from "@vercel/analytics";
 inject();
 
-import Typical from "react-typical";
 import * as config from "./_index.config";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useMediaQuery } from "react-responsive";
@@ -96,20 +95,6 @@ function HomepageBackground() {
             >
               {siteConfig.title}
             </p>
-            <p className="hero__subtitle">
-              <Typical
-                steps={useMemo(
-                  () =>
-                    config.subtitles_and_delays.flatMap((x) => [
-                      x.text,
-                      x.delay,
-                    ]),
-                  []
-                )}
-                loop={Infinity}
-                wrapper="span"
-              />
-            </p>
           </div>
           <div
             className={clsx(
@@ -131,7 +116,7 @@ function RandomImage() {
   const [imgsrc] = useState(
     () =>
       config.illustrations[
-      Math.floor(Math.random() * config.illustrations.length)
+        Math.floor(Math.random() * config.illustrations.length)
       ]
   );
   const isMobile = useMediaQuery({ maxWidth: 1024 });
