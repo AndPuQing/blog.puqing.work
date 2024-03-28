@@ -5,6 +5,7 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import styles from "./index.module.css";
 import { inject } from "@vercel/analytics";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 inject();
 
 import * as config from "./_index.config";
@@ -205,6 +206,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout title={`${siteConfig.title}`}>
       <HomepageBackground />
+      <SpeedInsights />
     </Layout>
   );
 }

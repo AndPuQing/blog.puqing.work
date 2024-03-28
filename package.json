@@ -20,6 +20,7 @@
     "@easyops-cn/docusaurus-search-local": "^0.21.4",
     "@mdx-js/react": "^3.0.0",
     "@vercel/analytics": "^1.0.0",
+    "@vercel/speed-insights": "^1.0.10",
     "clsx": "^2.0.0",
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
