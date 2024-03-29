@@ -12,3 +12,136 @@ tags:
 - ODE
 ---
 # Banach Fixed point Theorem
+
+## 两个例子
+
+:::example 落在地图上的地图
+有命题：**将一座公园的地图铺开在公园的地面上，则地面上恰好有唯一一点与地图上对应的点重合**
+
+设公园可以用有界的面闭区域 $\bar{\Omega}$ 表示。设地图的比例是 $\lambda$ (它当然介于 0 和 1 之间)。现在固定一个平面坐标系，把地图铺在区域 $\bar{\Omega}$ 内（公园内），则从 $\bar{\Omega}$ 内的点（**物理公园中的地点**）到**地图上对应点**的变换由下面的公式给出：
+
+
+<!--truncate-->
+$$
+x \to \lambda Rx+b
+$$
+这里 $R$ 是一个旋转变换，$b$ 是一个平移向量。于是，我们要找的重合点必然满足方程：
+
+$$
+x = \lambda Rx+b \to (1-\lambda R)x=b
+$$
+由于 $\left \| \lambda R \right \|=\lambda<1$，这个方程就有唯一的解
+
+$$
+x = (1-\lambda R)^{-1}b = \sum^{\infty}_{n=0}\lambda^nR^nb.
+$$
+这就是要求的重合点
+
+:::
+:::example 函数的迭代
+在计算器中任意输入一个数，然后不断地计算它的余弦值，会得到什么结果？
+![image.png](https://images.puqing.work/2024/03/29/66061fb5c7ae4.png)
+上面是其中的模拟；迭代的结果越来越逼近对角线 $y=x$ 与余弦 $y=\cos x$ 的唯一交点。验算若干数值，不难作出如下猜想：**不论实数的迭代序列**
+
+$$
+x_{n+1} = \cos x_{n}
+$$
+**开始于哪个数，它最后都会收敛到方程 $x=\cos x$ 的唯一实数解 $x=0.739\dots$**
+
+:::
+下面我们证明该迭代过程会收敛到唯一不动点。
+
+:::quote 定义
+设 $I$ 是一个区间，$f(x)$ 是定义在 $I$ 上的函数，如有 $\alpha$，$0<\alpha <1$，使对任意 $x \in I,y \in I$ 恒有
+
+$$
+\mid f(x)-f(y) \mid \le \alpha\mid x-y\mid
+$$
+则称 $f(x)$ 是 $I$ 上的**压缩函数**。
+
+:::
+^977396
+
+:::quote 定理
+设 $f(x)$ 是区间 $I$ 到 $I$ 中的一个压缩函数，则 $f(x)$ 在 $I$ 上有唯一不动点。
+
+:::
+^1b7fa3
+
+:::tip Proof
+$\forall x_{0} \in I, x_{1}=f\left(x_{0}\right), x_{2}=f\left(x_{1}\right), x_{3}=f\left(x_{2}\right), \ldots, x_{n}=f\left(x_{n-1}\right), \ldots$
+
+则
+
+$$
+\begin{array}{l}
+\left|x_{1}-x_{2}\right|=\left|f\left(x_{0}\right)-f\left(x_{1}\right)\right| \leq \alpha\left|x_{0}-x_{1}\right|=\alpha\left|x_{0}-f\left(x_{0}\right)\right| \\
+\left|x_{2}-x_{3}\right|=\left|f\left(x_{1}\right)-f\left(x_{2}\right)\right| \leq \alpha\left|x_{1}-x_{2}\right|=\alpha^{2}\left|x_{0}-f\left(x_{0}\right)\right| \\
+\dots \\
+\left|x_{n}-x_{n+1}\right|=\left|f\left(x_{n-1}\right)-f\left(x_{n}\right)\right| \leq \alpha\left|x_{n-1}-x_{n}\right|=\alpha^{n-1}\left|x_{0}-f\left(x_{0}\right)\right|
+\end{array}
+$$
+从而
+
+$$
+\begin{array}{l}
+\left|x_{n}-x_{n+p}\right| \leq\left|x_{n}-x_{n+1}\right|+\left|x_{n+1}-x_{n+2}\right|+\ldots\left|x_{n+p-1}-x_{n+p}\right| \\
+\leq\left(\alpha^{n}+\alpha^{n+1}+\ldots+\alpha^{n+p-1}\right)\left|x_{0}-f\left(x_{0}\right)\right| \leq \frac{\alpha^{n}}{1-\alpha}\left|x_{0}-f\left(x_{0}\right)\right|
+\end{array}
+$$
+而由于 $0<\alpha<1$，因此 $\{x_{n}\}$ 是 Cauchy 序列，设 $\lim_{n \to \infty}x_{n}=x^*$，$x^*$ 为 $f(x)$ 在 $I$ 上的不动点
+
+:::
+:::tip 证明唯一性：
+假设存在另一个不动点 $y^*=f(y^*)$，则
+
+$$
+\left|x^{*}-y^{*}\right|=\left|f\left(x^{*}\right)-f\left(y^{*}\right)\right| \leq \alpha\left|x^{*}-y^{*}\right|
+$$
+由于 $0<\alpha<1$，因此 $\mid x^*-y^*\mid=0,x^*=y^*$.
+
+$\Box$
+
+:::
+## 巴拿赫不动点定理
+
+:::tip 定理
+设 $(X,d)$ 是完备度量空间，$T:X \to X$ 是其上的 [压缩映射](./d5b7b998#%5E977396)，那么映射 $T$ 有唯一的不动点，即满足 $x=Tx$ 的点。而且，对于任意 $x_{0} \in X$，点列 $\{T^nx_{0}\}_{n \in \mathbb{R}}$ 都收敛到这个不动点。
+
+:::
+:::success Proof
+根据度量空间中的三角不等式，我们可以直接略过上面的递推方程，显然有：
+
+$$
+\begin{aligned}
+d\left(T^{n} x_{0}, T^{n+k} x_{0}\right) & \leq \sum_{j=1}^{k} d\left(T^{n+j-1} x_{0}, T^{n+j} x_{0}\right) \\
+& \leq \sum_{j=1}^{k} q^{n+j-1} d\left(x_{0}, T x_{0}\right) \\
+& \leq \frac{q^{n}}{1-q} d\left(x_{0}, T x_{0}\right) .
+\end{aligned}
+$$
+于是点列 $\{T^nx_{0}\}_{n \in \mathbb{R}}$ 是柯西序列，在完备度量空间 $X$ 之中自然的收敛到某一个 $x^*$。而这个点 $x^*$ 就是不动点，不动点的唯一性则可以由 $d(Tx,Ty)\le qd(x,y)$ 得到 ($0<q<1$) $\Box$。
+
+:::
+## 后话
+
+:::quote 不动域
+在 [定理](./d5b7b998#%5E1b7fa3) 中提到该压缩映射必须是满足这样的映射 $T:X\to X$ 。当实际应用这个定理时，最艰难的部分通常是如何恰当的定义 $X$，使得从集合 $X$ 映射到 $X$，即 $Tx$ 总是集合 $X$ 的元素。
+
+:::
+:::quote " 缓坡 "
+在 [压缩映射](./d5b7b998#%5E977396) 中我们要求任意 $x,y$ 满足：
+
+$$
+\mid f(x)-f(y) \mid \le \alpha\mid x-y\mid
+$$
+其中 $0<\alpha<1$.
+
+$\displaystyle\frac{\mid f(x)-f(y)\mid}{\mid x-y\mid}$ 可以视为斜率，所以该限定条件可以视为该函数在该不动域的导数小于 1
+
+:::
+## 参考资料
+
+- [巴拿赫不动点定理 - 小时百科](https://wuli.wiki/online/ConMap.html)
+- [不动点理论（一） - 知乎](https://zhuanlan.zhihu.com/p/641491255)
+- [计算器按出的秘密：不动点_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1bD4y1Q7wY/?spm_id_from=333.788.recommend_more_video.6&amp;vd_source=5890eec9b2a60d9ae9a403fd2aad7881)
+- [Site Unreachable](https://zh.wikipedia.org/zh-cn/%E5%B7%B4%E6%8B%BF%E8%B5%AB%E4%B8%8D%E5%8A%A8%E7%82%B9%E5%AE%9A%E7%90%86)
