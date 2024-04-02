@@ -52,6 +52,7 @@ $$
 $$
 :::
 :::warning 为什么我们限定 $\alpha_{t}^{2}+\beta_{t}^{2}=1$
+
 注意到公式后面部分为多个均值为 $0$，方差分别为 $(\alpha_{t}\cdots a_{2})^{2}\beta_{1}^{2}$、$(\alpha_{t}\cdots \alpha_{3})^{2}\beta_{2}$、…、$(\alpha_{t})^{2}\beta_{t-1}^{2}$、$\beta_{t}^{2}$ 的正态噪声之和，因为多个独立的正态分布之和还是均值为 $0$，方差为各个分布方差和的正态分布；
 
 $$
@@ -73,7 +74,7 @@ $$
 
 ## 重建
 
-分解是 $\boldsymbol{x}_{t-1}\to x_{t}$ 的过程，这个过程中有很多数据对 $(\boldsymbol{x}_{t-1},\boldsymbol{x}_{t})$，这样<Highlight>重建</Highlight>自然就是从这些数据中学习一个 $\boldsymbol{x}_{t}\to \boldsymbol{x}_{t-1}$ 的模型。设该模型为 $\boldsymbol{\mu}(\boldsymbol{x}_{t})$，那么很容易想到学习方案就是最小化二者的欧式距离：
+分解是 $\boldsymbol{x}_{t-1}\to \boldsymbol{x}_{t}$ 的过程，这个过程中有很多数据对 $(\boldsymbol{x}_{t-1},\boldsymbol{x}_{t})$，这样<Highlight>重建</Highlight>自然就是从这些数据中学习一个 $\boldsymbol{x}_{t}\to \boldsymbol{x}_{t-1}$ 的模型。设该模型为 $\boldsymbol{\mu}(\boldsymbol{x}_{t})$，那么很容易想到学习方案就是最小化二者的欧式距离：
 
 $$
 \left\|\boldsymbol{x}_{t-1}-\boldsymbol{\mu}\left(\boldsymbol{x}_{t}\right)\right\|^{2}
@@ -103,6 +104,7 @@ $$
 \left\|\boldsymbol{\varepsilon}_{t}-\boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}, t\right)\right\|^{2}
 $$
 :::danger 为什么要回推到 $\boldsymbol{x}_{t-1}$
+
 你可能会产生疑问：为什么我们需要利用 $\boldsymbol{x}_{t-1}$? 为什么我们不直接用
 
 $$
@@ -134,6 +136,7 @@ $$
 观察上面损失函数 $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}$ 部分。嘿，这不也是一个正态分布吗，我们可以合成为一个随机变量。
 
 :::tip $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\boldsymbol{\varepsilon}|\boldsymbol{\varepsilon}\sim \mathcal{N}(\boldsymbol{0},\boldsymbol{I})$
+
 显然新随机变量的均值为 0，方差为各个随机变量方差的和
 
 $$
