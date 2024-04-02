@@ -11,7 +11,7 @@ tags:
 ---
 # Legendre Transformations
 
-:::quote
+:::quote[]
 设函数 $f:\mathbb{R}^n \to \mathbb{R}$，定义函数 $f^*:\mathbb{R}^n \to \mathbb{R}$ 则勒让德变换为：
 
 $$
@@ -34,7 +34,7 @@ $$
 $$
 f^*\left( \frac{df}{fx} \right) = -b 
 $$
-:::warning
+:::warning[]
 这里我们加了一个负号，实际上没有任何区别
 
 :::
@@ -47,7 +47,7 @@ f^*\left( \frac{df}{dx} \right) = \frac{df}{dx}x-f
 $$
 下面我们从几何直觉推导下：
 
-:::warning
+:::warning[]
 ![image.png](https://images.puqing.work/2023/12/11/6577111d64063.png)
 我们想要求解截距 $b$
 
@@ -63,7 +63,7 @@ $$
 f^*\left( \frac{df}{dx} \right)=-b=\frac{df}{dx}x-f 
 $$
 :::
-:::example 例子
+:::example[ 例子]
 对于简单函数 $f(x)=x^{2}$，我们首先定义新的自变量 $p$
 
 $$
@@ -125,7 +125,7 @@ b &= \inf_{x}\left( f(x)-s^{\mathsf{T}}x \right) \\
 &= -\sup_{x} \left( s^{\mathsf{T}}x-f(x) \right) 
 \end{split}
 $$
-:::tip
+:::tip[]
 这里使用了性质 $\inf(-x)=-\sup(x)$
 
 :::
@@ -134,7 +134,7 @@ $$
 $$
 f^*(s)= -b = \sup_{x}(s^{\mathsf{T}}x-f(x))
 $$
-:::todo
+:::todo[]
 讨论 $\text{Bregmen Divergence}$
 
 :::

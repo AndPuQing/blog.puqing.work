@@ -39,7 +39,7 @@ $$
 & =\left(\alpha_{t} \cdots \alpha_{1}\right) \boldsymbol{x}_{0}+\underbrace{\left(\alpha_{t} \cdots \alpha_{2}\right) \beta_{1} \boldsymbol{\varepsilon}_{1}+\left(\alpha_{t} \cdots \alpha_{3}\right) \beta_{2} \boldsymbol{\varepsilon}_{2}+\cdots+\alpha_{t} \beta_{t-1} \boldsymbol{\varepsilon}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}}_{\text {多个相互独立的正态噪声之和 }}
 \end{aligned}
 $$
-:::tip 多个随机变量相加的方差
+:::tip[ 多个随机变量相加的方差]
 如果有 $n$ 个随机变量 $X_{1},X_{2},\dots ,X_{n}$。它们的方差分别为 $\operatorname{Var}(X_{1}),\operatorname{Var}(X_{2}),\dots,\operatorname{Var}(X_{n})$。并且它们两两之间的协方差为 $\operatorname{Cov}(X_{i},X_{j})$，那么它们的线性组合 $Y=\alpha_{1}X_{1}+\alpha_{2}X_{2}+\dots+\alpha_nX_{n}$ 的方差可以用下面公式计算：
 
 $$
@@ -51,7 +51,7 @@ $$
 \operatorname{Var}(Y)=\sum^{n}_{i=1}\alpha_{i}^{2}\operatorname{Var}(X_{i})
 $$
 :::
-:::warning 为什么我们限定 $\alpha_{t}^{2}+\beta_{t}^{2}=1$
+:::warning[ 为什么我们限定 $\alpha_{t}^{2}+\beta_{t}^{2}=1$]
 
 注意到公式后面部分为多个均值为 $0$，方差分别为 $(\alpha_{t}\cdots a_{2})^{2}\beta_{1}^{2}$、$(\alpha_{t}\cdots \alpha_{3})^{2}\beta_{2}$、…、$(\alpha_{t})^{2}\beta_{t-1}^{2}$、$\beta_{t}^{2}$ 的正态噪声之和，因为多个独立的正态分布之和还是均值为 $0$，方差为各个分布方差和的正态分布；
 
@@ -103,7 +103,7 @@ $$
 $$
 \left\|\boldsymbol{\varepsilon}_{t}-\boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}, t\right)\right\|^{2}
 $$
-:::danger 为什么要回推到 $\boldsymbol{x}_{t-1}$
+:::danger[ 为什么要回推到 $\boldsymbol{x}_{t-1}$]
 
 你可能会产生疑问：为什么我们需要利用 $\boldsymbol{x}_{t-1}$? 为什么我们不直接用
 
@@ -126,7 +126,7 @@ $$
 上面的损失函数已经可以用于模型的训练了，但是在实践过程中会发现收敛过慢等问题。其原因是
 上面需要我们采样的随机变量太多了。
 
-:::info
+:::info[]
 
 1. 随机采样样本
 2. 从正态分布 $\mathcal{N}(\boldsymbol{0},\boldsymbol{I})$ 中采样两个随机变量 $\bar{\boldsymbol{\varepsilon}}_{t},\boldsymbol{\varepsilon}_{t}$
@@ -135,7 +135,7 @@ $$
 :::
 观察上面损失函数 $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}$ 部分。嘿，这不也是一个正态分布吗，我们可以合成为一个随机变量。
 
-:::tip $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\boldsymbol{\varepsilon}|\boldsymbol{\varepsilon}\sim \mathcal{N}(\boldsymbol{0},\boldsymbol{I})$
+:::tip[ $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\boldsymbol{\varepsilon}|\boldsymbol{\varepsilon}\sim \mathcal{N}(\boldsymbol{0},\boldsymbol{I})$]
 
 显然新随机变量的均值为 0，方差为各个随机变量方差的和
 
@@ -152,7 +152,7 @@ $$
 
 于是我们令 $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\boldsymbol{\varepsilon}$，那我们的想法就是如何将 $\boldsymbol{\varepsilon}_{t}$ 利用 $\boldsymbol{\omega},\boldsymbol{\varepsilon}$ 表达出来：
 
-:::tip 求解 $\boldsymbol{\varepsilon}_{t}$
+:::tip[ 求解 $\boldsymbol{\varepsilon}_{t}$]
 联立方程
 
 $$
@@ -175,7 +175,7 @@ $$
 = & \mathbb{E}_{\boldsymbol{\omega}, \boldsymbol{\varepsilon} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{I})}\left[\left\|\frac{\beta_{t} \boldsymbol{\varepsilon}-\alpha_{t} \bar{\beta}_{t-1} \boldsymbol{\omega}}{\bar{\beta}_{t}}-\boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon}, t\right)\right\|^{2}\right]
 \end{aligned}
 $$
-::::tip 求均值
+::::tip[ 求均值]
 为了方便求均值，我们有 $\boldsymbol{\epsilon}_{\theta}:=\boldsymbol{\epsilon}_{\theta}\left( \bar{\alpha}_{t}\boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon},t \right)$，于是整个平方可以有：
 
 $$
@@ -192,7 +192,7 @@ $$
 $$
 下面我们分别分析几个部分
 
-:::note 其中的：
+:::note[ 其中的：]
 
 - $\mathcal{A}1$: 均值为常数.
 - $\mathcal{A}2$: 独立的两个随机变量乘积的均值等于均值的乘积，即有：$\mathbb{E}\left[ A \cdot B \right]=\mathbb{E}\left[ A \right]\cdot \mathbb{E}\left[ B \right]$，所以该项依然为 $\boldsymbol{0}$.
@@ -225,7 +225,7 @@ $$
 $$
 \boldsymbol{x}_{t-1}=\frac{1}{\alpha_{t}}\left(\boldsymbol{x}_{t}-\beta_{t} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\boldsymbol{x}_{t}, t\right)\right)+\sigma_{t} z, \quad z \sim \mathcal{N}(\mathbf{0}, \boldsymbol{I})
 $$
-:::danger 为什么这里需要添加噪声项，并且该噪声项相比于降噪项大的多？
+:::danger[ 为什么这里需要添加噪声项，并且该噪声项相比于降噪项大的多？]
 
 :::
 ## 相关资料

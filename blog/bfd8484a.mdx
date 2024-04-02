@@ -15,7 +15,7 @@ tags:
 
 ### Electrostatics
 
-:::example
+:::example[]
 对于有电荷密度函数 $\rho(\boldsymbol{r}')$ 其在场位置 $\boldsymbol{r}$ 处的电势满足：
 
 $$
@@ -24,7 +24,7 @@ $$
 :::
 ### Driven Oscillator
 
-:::example
+:::example[]
 以及 `Driven Oscillator` 系统满足
 
 
@@ -62,7 +62,7 @@ $$
 
 这意味着 `operators` 和 `combination` 的顺序无关。可以先组合在变换，也可以先变换再组合。
 
-:::example 举个最简单的例子
+:::example[ 举个最简单的例子]
 对于微分算子 $\displaystyle\frac{d }{dx}$，有两个函数 $y_{1}=x^2,y_{2}=2x^3$
 
 $$
@@ -74,7 +74,7 @@ $$
 L(y_{1})+L(y_{2})=\frac{d }{dx}(x^2)+\frac{d }{dx}(2x^3)=2x+6x^2
 $$
 :::
-:::warning 有什么反例呢？
+:::warning[ 有什么反例呢？]
 
 :::
 ## Dirac $\delta$ "function"
@@ -136,7 +136,7 @@ $$
 $$
 \phi(x)=\int_{\mathbb{R}^3}\rho(\xi)G(x;\xi)/ \epsilon_{0}\, d\xi
 $$
-:::danger 可能这里你有很多疑惑？
+:::danger[ 可能这里你有很多疑惑？]
 比如：
 
 - 为什么是 $\rho(\xi)$ 而不是 $\phi(\xi)$
@@ -147,7 +147,7 @@ $$
 :::
 这会带给我们什么便利呢？
 
-::::tip
+::::tip[]
 我们想要找到这样的一个函数 $G(x;\xi)$，满足
 
 $$
@@ -170,7 +170,7 @@ $$
 $$
 .
 
-:::danger 重点来了
+:::danger[ 重点来了]
 
 根据算子 $L$ 满足 `Linear` 性质，所以实际上允许我们将积分符号提入到算子 $L$ 内部，即：
 
@@ -181,7 +181,7 @@ $$
 
 :::
 ::::
-:::success 让我们回答一下上面提出的两个问题：
+:::success[ 让我们回答一下上面提出的两个问题：]
 这两个问题实际上是一个问题：即为什么要如此构造
 
 实际上，上面的推导已经非常清楚，我们的目的是尝试构造一个 $\mathrm{Green}$ 函数，使得下式成立：
@@ -201,7 +201,7 @@ $$
 :::
 虽然好像懂了一点意思了但是还是存在两个问题：
 
-:::danger
+:::danger[]
 **问题一**：$\mathrm{Green}$ 函数 $G(x;\xi)$ 如何构造
 
 **问题二**：对于边界值如何考虑。
@@ -225,7 +225,7 @@ $$
 $$
 F(t)=\int _{-\infty}^{+\infty}F(\tau)\delta(t-\tau) \, d\tau 
 $$
-:::tip 这个怎么那么像一个东西呢？
+:::tip[ 这个怎么那么像一个东西呢？]
 卷积公式
 
 $$
@@ -243,7 +243,7 @@ LG(x;\xi)=\delta(x-\xi)
 $$
 根据狄拉克 $\delta$ 函数的性质，我们有如下步骤
 
-:::tip
+:::tip[]
 
 1. Solve $LG(x;\xi)=0 \quad \mathrm{if}\ \xi \ne x$
 2. Note $\displaystyle\int_{D}LG(x;\xi) \, d\xi =1\quad \mathrm{if}\ \mathrm{contains}\ x$

@@ -9,7 +9,7 @@ tags:
 ---
 # MM Algorithm
 
-:::quote
+:::quote[]
 The **MM algorithm** is an iterative [optimization](https://en.wikipedia.org/wiki/Optimization "Optimization") method which exploits the [convexity](https://en.wikipedia.org/wiki/Convex_function "Convex function") of a function in order to find its maxima or minima. The MM stands for "Majorize-Minimization" or "Minorize-Maximization", depending on whether the desired optimization is a minimization or a maximization. Despite the name, MM itself is not an algorithm, but a description of how to construct an [optimization algorithm](https://en.wikipedia.org/wiki/Optimization_algorithm "Optimization algorithm").
 
 :::
@@ -22,7 +22,7 @@ MM 主要的思想是 [非凸函数](./476bc716) 太难优化了，我们就构�
 以最小化为例：
 ![Untitled.bmp](https://images.puqing.work/2023/12/08/6572e6816216d.bmp)
 
-:::tip 关于 $Q(x,x_{k})$
+:::tip[ 关于 $Q(x,x_{k})$]
 这样的写法可能会很奇怪，其中第一个 $x$ 是函数自变量，第二个 $x_{k}$ 是指示第 $k$ 个代理函数，下面的写法可能会更清晰：
 
 $$
@@ -34,7 +34,7 @@ $$
 $$
 x_{k+1} = \arg \min_{x \in \mathcal{D}} Q(x,x_{k})
 $$
-:::tip
+:::tip[]
 而**在上面**更加形式化的表述为
 
 $$
@@ -53,7 +53,7 @@ $$
 
 而 MM 算法的名字也很有意思
 
-:::quote
+:::quote[]
 最大化：$\text{Minorize-Maximization}$
 
 最小化：$\text{Majorize-Minimization}$
@@ -67,7 +67,7 @@ MM 原理很简单，但是如何构造 $Q$ 是一大问题，这里介绍两种
 
 #### 一阶展开
 
-:::example
+:::example[]
 对于一个 $\text{Minimization}$ 问题
 
 假设有函数 $f:\mathbb{R}^n\to \mathbb{R}$，$n\in \mathbb{N}$，假设这个函数 $f(\mathbf{x})=g(\mathbf{x})-h(\mathbf{x})$，其中 $g(\mathbf{x})$ 和 $h(\mathbf{x})$ 都是凸函数，于是我们称这里的 $f(x)$ 为 $\text{Difference of Convex Function}$。很明显的是我们无法判定 $f(\mathbf{x})$ 的凸性。因为，$g''(\mathbf{x})\geq 0$，$h''(\mathbf{x})\geq 0$，所以 $f''(\mathbf{x})$ 的正负性是不知道的。
@@ -85,7 +85,7 @@ $$
 这样每次迭代解一个凸问题就好
 
 :::
-:::warning
+:::warning[]
 值得注意的是，其实是利用的 [Fenchel Conjugate Function](./016aa31c)
 
 :::

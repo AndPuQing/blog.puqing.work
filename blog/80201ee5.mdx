@@ -11,7 +11,7 @@ tags:
 
 狄拉克 $\delta(x)$ 函数并不是数学中一个严格意义上的函数，而是泛函分析中称为 [广义函数(generalized function)(This page is not published)](./404) 或者**分布 (distribution)**。它在除零以外的点上都等于零，且在整个定义域上的积分等于 $1$.
 
-:::tip Why?
+:::tip[ Why?]
 假设 $f(x)=\delta(x)$ 和 $g(x)=0$ 这两个数学对象除了在 $x=0$ 以外都有相同的值，但其积分却不相同。根据 [勒贝格积分](https://zh.wikipedia.org/wiki/%E5%8B%92%E8%B2%9D%E6%A0%BC%E7%A9%8D%E5%88%86 "勒贝格积分") 理论，若 $f$ 和 $g$ 为函数，使得 $f=g$ [几乎处处](https://zh.wikipedia.org/zh-cn/%E5%B9%BE%E4%B9%8E%E8%99%95%E8%99%95) 成立，则 $f$ 可积当且仅当 $g$ 可积且 $f$ 和 $g$ 的积分相同。
 
 
@@ -33,7 +33,7 @@ $$
 
 ## 使用函数列严格定义
 
-:::quote 定义 `狄拉克` $\delta$ 函数
+:::quote[ 定义 `狄拉克` $\delta$ 函数]
 令 $\delta_{1}(x),\delta_{2}(x),\dots$ 为一个连续实函数的序列。若 $\delta_{n}(x)$ 满足下面条件，那么我们把该函数列称伪狄拉克 $\delta$ 函数列：
 对于所有性质良好（例如在 $x=0$ 连续）的 $f(x)$，都有
 
@@ -41,7 +41,7 @@ $$
 \lim _{n \rightarrow \infty} \int_{-\infty}^{+\infty} \delta_{n}(x) f(x) \mathrm{d} x=f(0)
 $$
 :::
-:::danger 这里不是太明白函数列的道理
+:::danger[ 这里不是太明白函数列的道理]
 
 :::
 ## 常见性质
@@ -58,7 +58,7 @@ $$
 $$
 \delta(\alpha x)=\frac{\delta(x)}{|\alpha|}.
 $$
-:::tip 证明
+:::tip[ 证明]
 几何不严谨证明：与 $\delta(x)$ 相比较，$\delta(ax)$ 的图像在 $x$ 方向变窄了 $\mid a\mid$ 倍，所以函数曲线下的面积变为原来的 $\frac{1}{\mid a\mid }$ 倍，故 $\mid a\mid\delta(ax)$ 下的面积为 $1$.
 
 :::

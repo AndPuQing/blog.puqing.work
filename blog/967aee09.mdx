@@ -17,7 +17,7 @@ Maximum Likelihood Estimation(MLE) 极大似然估计，又被称作最大似然
 
 对于一个常见的随机变量 $P(x;\theta)$，其中的 $x$ 是表示随机变量，$\theta$ 是该概率分布模型的模型参数。在不同的模型下有各自的模型参数，比如 [二项分布(This page is not published)](./404) $p$，[正态分布(This page is not published)](./404) 的 $\mu,\sigma$。
 
-:::example 正态分布
+:::example[ 正态分布]
 连续型随机变量 $X$ 如果满足如下密度函数
 
 
@@ -35,7 +35,7 @@ $$
 $$
 \underset{\theta}{\arg \max } L(\theta)=\underset{\theta}{\arg \max } L\left(x_{1}, x_{2}, \ldots, x_{n} ; \theta\right)=\underset{\theta}{\arg \max } P\left(x_{1}, x_{2}, \ldots, x_{n} ; \theta\right)
 $$
-::::tip hold on 这里神奇的符号是什么意思？
+::::tip[ hold on 这里神奇的符号是什么意思？]
 其中的 $P(x_1,x_2,\cdots,x_n;\theta)$ 根据我们上面的讲解是当确定 $x_1,x_2,\cdots,x_n$ 时模型参数 $\theta$ 的概率，而 $\underset{\theta}{\arg \max}$ 则是使该概率最大的 $\theta$ 值。
 如果还是有些抽象可以看看下面的栗子
 
@@ -43,7 +43,7 @@ $$
 
 不好意思，举错了
 
-:::example
+:::example[]
 
 - $\displaystyle\underset{x}{\arg \min} x^2$：表示使 $x^2$ 最小的 $x$ 值，显然为 $0$
 - $\displaystyle\underset{\theta}{\arg \max}\log{\theta}\sin{\theta}+\theta$：显然我们需要先求导，然后寻找极值点，然后确定最大值。所用同样的，如下文
@@ -55,7 +55,7 @@ $$
 $$
 \underset{\theta}{\arg \max } L\left(x_{1}, x_{2}, \ldots, x_{n} ; \theta\right)=\underset{\theta}{\arg \max } \prod_{i=1}^{n} P\left(x_{i} ; \theta\right)
 $$
-::::note i.i.d
+::::note[ i.i.d]
 独立同分布 independent and identically distributed，i.i.d.[^1]
 
 :::info
@@ -71,7 +71,7 @@ $$
 3. $\ln L(\theta)$ 对 $\theta$ 求导并令其为 $0$，计算极值点
 4. 模型参数 $\theta$ 得解
 
-:::warning 为什么需要取对数呢？
+:::warning[ 为什么需要取对数呢？]
 [Log Derivative Trick(This page is not published)](./404)
 
 :::
@@ -79,7 +79,7 @@ $$
 
 说了这么多，我们通过一个实际例子来展示如何具体的通过 MLE 来进行参数估计。这里我们以离散型概率分布中的二项分布为例
 
-:::example
+:::example[]
 有一个不透明的袋子，里面装了黑、白两种颜色的球。记从袋子中摸到黑球、白球的概率分别为 $p$、$1-p$。假设某人进行了 $10$ 次随机抽样，每次都是有放回的从袋子中摸出一个球，其抽样结果为 $7$ 次黑球、$3$ 次白球。试估计出概率 $p$ 的值
 
 :::
@@ -88,7 +88,7 @@ $$
 $$
 L(p)=L\left(x_{1}, x_{2}, \ldots, x_{10} ; p\right)=\prod_{i=1}^{10} P\left(x_{i} ; p\right)=p^{7} \cdot(1-p)^{3}
 $$
-:::tip Hold on. 这里得 $p^7\cdot (1-p)^3$ 是怎么出现的？
+:::tip[ Hold on. 这里得 $p^7\cdot (1-p)^3$ 是怎么出现的？]
 前面我们已经说了 $P(x;\theta)$ 具有两面性，可以理解为在参数 $\theta$ 下得到 $x$ 的概率，具体来说，对于二项分布，如果已知参数 $p$，则取到黑色的概率为 $p$，取到白色的概率为 $1-p$，我想这是再自然不过的事情了；
 因为所有的随机变量都是独立同分布的，所以都满足模型参数 $p$ 下的二项分布。那我们假设此时的参数为 $p$(十个概率模型都是这个 $p$)，则取十次的联合分布为连乘。就得到上面的式子。
 
@@ -148,7 +148,7 @@ $$
 $$
 所以对于正态分布而言，其均值的极大似然估计量即是样本的均值；而其方差的极大似然估计量却是**样本数据的总体方差值 (即分母为 $n$)** ，而不是 **样本数据的样本方差值 (即分母为 $n-1$)**[(这里为什么是n-1)](./8f979ab4#%5E187511) ，故正态分布方差的极大似然估计量是有偏的。
 
-:::danger
+:::danger[]
 在最后一步，对于多元函数求极值可能需要证明，根据 [多元函数的极值 最大值与最小值](./8145550f) 中的描述，其偏导为零只是必要条件，而并非充要条件。其应满足似然函数的 $\mathrm{Hessan}$ 矩阵为负正定。
 
 :::

@@ -26,7 +26,7 @@ $$
 $$
 \mathcal{L}(\theta) = \sum_{i=1}^N \log p(x_{i}\mid \theta)=\sum_{i}^N \log \left[ \sum_{z_{i}} p(x_{i},z_{i}\mid \theta) \right] 
 $$
-:::tip 其他格式：
+:::tip[ 其他格式：]
 
 $$
 \mathcal{L}(\theta) = \sum_{i}^N \log \left[ \sum_{z_{i}}p(x_{i},z_{i};\theta) \right] 
@@ -39,7 +39,7 @@ $$
 :::
 这个式子变的难以求解
 
-:::example
+:::example[]
 就拿上面 [三硬币模型](./04c6f12c#%E4%B8%89%E7%A1%AC%E5%B8%81%E6%A8%A1%E5%9E%8B) 来说，其似然函数可写为，
 
 $$
@@ -73,7 +73,7 @@ $$
 
 期望最大算法整体上利用了 [MM algorithm](./7f530326) 核心思想
 
-:::warning
+:::warning[]
 在 [MM algorithm](./7f530326) 中我们要求函数的最大值/最小值，我们可以构造一个代理函数 $Q(\theta,\theta_{t})$，并且这个代理函数 $Q(\theta,\theta_{t})$ 在 EM 算法中是对数似然函数 $\mathcal{L}(\theta)$ 的紧下界，应该满足如下两个条件：
 
 $$
