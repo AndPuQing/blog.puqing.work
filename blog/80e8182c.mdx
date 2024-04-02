@@ -1,0 +1,231 @@
+---
+authors:
+- PuQing
+date: 2024-04-02 12:08
+keywords:
+- 扩散模型
+- Paper
+tags:
+- 扩散模型
+- Paper
+---
+# 生成扩散模型 - DDPM
+
+DDPM 模型将一张图片解构为 $T$ 步，从原始的图片 $x_{0}$ 开始，经过 $T$ 步 " 分解 " 得到随机杂乱的噪声 $x_{t}$，即：
+
+$$
+=\boldsymbol{x}_{0}\to \boldsymbol{x}_{1}\to \boldsymbol{x}_{2} \to \cdots \to \boldsymbol{x}_{T-1} \to \boldsymbol{x}_{T}=z 
+$$
+所以如果我们能够学会 $x_{t}\to x_{t-1}$ 步骤，则我们就可以从噪声恢复原始的图片。所以我们想要学习关系 $x_{t-1}=\mu(x_{t})$，那我们从 $x_{t}$ 出发，反复执行 $x_{t-1}=\mu(x_{t})$ 就能从中恢复。
+
+
+<!--truncate-->
+## 拆解
+
+DDPM 将图片分解的过程描述为：
+
+$$
+\boldsymbol{x}_{t}=\alpha_{t} \boldsymbol{x}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}, \quad \boldsymbol{\varepsilon}_{t} \sim \mathcal{N}(\mathbf{0}, \boldsymbol{I})
+$$
+其中有 $\alpha_{t},\beta_{t}>0$，并且有 $\alpha_{t}^{2}+\beta^{2}=1$，而 $\beta_{t}$ 通常接近于 $\mathbf{0}$，可以形象的理解为对于原图的破坏程度，噪声 $\varepsilon_{t}$ 的引入代表着对于原图的破坏。
+
+反复执行这个分解步骤，我们可以得到：
+
+$$
+\begin{aligned}
+\boldsymbol{x}_{t} & =\alpha_{t} \boldsymbol{x}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t} \\
+& =\alpha_{t}\left(\alpha_{t-1} \boldsymbol{x}_{t-2}+\beta_{t-1} \boldsymbol{\varepsilon}_{t-1}\right)+\beta_{t} \boldsymbol{\varepsilon}_{t} \\
+& =\cdots \\
+& =\left(\alpha_{t} \cdots \alpha_{1}\right) \boldsymbol{x}_{0}+\underbrace{\left(\alpha_{t} \cdots \alpha_{2}\right) \beta_{1} \boldsymbol{\varepsilon}_{1}+\left(\alpha_{t} \cdots \alpha_{3}\right) \beta_{2} \boldsymbol{\varepsilon}_{2}+\cdots+\alpha_{t} \beta_{t-1} \boldsymbol{\varepsilon}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}}_{\text {多个相互独立的正态噪声之和 }}
+\end{aligned}
+$$
+:::tip 多个随机变量相加的方差
+如果有 $n$ 个随机变量 $X_{1},X_{2},\dots ,X_{n}$。它们的方差分别为 $\operatorname{Var}(X_{1}),\operatorname{Var}(X_{2}),\dots,\operatorname{Var}(X_{n})$。并且它们两两之间的协方差为 $\operatorname{Cov}(X_{i},X_{j})$，那么它们的线性组合 $Y=\alpha_{1}X_{1}+\alpha_{2}X_{2}+\dots+\alpha_nX_{n}$ 的方差可以用下面公式计算：
+
+$$
+\operatorname{Var}(Y)=\sum^{n}_{i=1} \sum^{n}_{j=1}\alpha_{i}\alpha_{j}\operatorname{Cov}(X_{i},X_{j})
+$$
+当 $X_{1},X_{2},\dots,X_{n}$ 相互独立时，它们的协方差矩阵为对角线矩阵，即 $\operatorname{Cov}(X_{i},X_{j})=0(i \ne j)$，因此上述公式化简为：
+
+$$
+\operatorname{Var}(Y)=\sum^{n}_{i=1}\alpha_{i}^{2}\operatorname{Var}(X_{i})
+$$
+:::
+:::warning 为什么我们限定 $\alpha_{t}^{2}+\beta_{t}^{2}=1$
+注意到公式后面部分为多个均值为 $0$，方差分别为 $(\alpha_{t}\cdots a_{2})^{2}\beta_{1}^{2}$、$(\alpha_{t}\cdots \alpha_{3})^{2}\beta_{2}$、…、$(\alpha_{t})^{2}\beta_{t-1}^{2}$、$\beta_{t}^{2}$ 的正态噪声之和，因为多个独立的正态分布之和还是均值为 $0$，方差为各个分布方差和的正态分布；
+
+$$
+\begin{aligned}&{\color{Green}  \left(\alpha_{t} \ldots \alpha_{1}\right)^{2}} +\left(\alpha_{t} \ldots \alpha_{2}\right)^{2} \beta_{1}^{2}+\left(\alpha_{t} \ldots \alpha_{3}\right)^{2} \beta_{2}^{2}+\cdots+\alpha_{t}^{2} \beta_{t-1}^{2}+\beta_{t}^{2} \quad {\color{Green}\text{(绿色是我们加入的一项)}}\\
+= & \left(\alpha_{t} \ldots \alpha_{2}\right)^{2} \alpha_{1}^{2}+\left(\alpha_{t} \ldots \alpha_{2}\right)^{2} \beta_{1}^{2}+\left(\alpha_{t} \ldots \alpha_{3}\right)^{2} \beta_{2}^{2}+\cdots+\alpha_{t}^{2} \beta_{t-1}^{2}+\beta_{t}^{2} \\
+= & \left(\alpha_{t} \ldots \alpha_{2}\right)^{2}\left(\alpha_{1}^{2}+\beta_{1}^{2}\right)+\left(\alpha_{t} \ldots \alpha_{3}\right)^{2} \beta_{2}^{2}+\cdots+\alpha_{t}^{2} \beta_{t-1}^{2}+\beta_{t}^{2} \\
+= & \left(\alpha_{t} \ldots \alpha_{3}\right)^{2}\left(\alpha_{2}^{2}\left(\alpha_{1}^{2}+\beta_{1}^{2}\right)+\beta_{2}^{2}\right)+\cdots+\alpha_{t}^{2} \beta_{t-1}^{2}+\beta_{t}^{2} \\
+= & \alpha_{t}^{2}\left(\alpha_{t-1}^{2}\left(\ldots\left(\alpha_{2}^{2}\left(\alpha_{1}^{2}+\beta_{1}^{2}\right)+\beta_{2}^{2}\right)+\ldots\right)+\beta_{t-1}^{2}\right)+\beta_{t}^{2}\end{aligned}
+$$
+可以发现，如果我们加一个约束将会极大简化这个式子，即要求 $\alpha_{t}^{2}+\beta_{t}^{2}=1$，这样上面的平方和就可以等于 1 了。
+
+:::
+于是：
+
+$$
+\boldsymbol{x}_{t}=\underbrace{\left(\alpha_{t} \cdots \alpha_{1}\right)}_{\text {记为 } \bar{\alpha}_{t}} \boldsymbol{x}_{0}+\underbrace{\sqrt{1-\left(\alpha_{t} \cdots \alpha_{1}\right)^{2}}}_{\text {记为 } \bar{\beta}_{t}} \overline{\boldsymbol{\varepsilon}}_{t}, \quad \overline{\boldsymbol{\varepsilon}}_{t} \sim \mathcal{N}(\mathbf{0}, \boldsymbol{I})
+$$
+这就给计算 $\boldsymbol{x}_{t}$ 带来了极大的便利。另一方面，DDPM 会选取合适的 $\alpha_{t}$ 形式，使得 $\bar{a} \approx 0$。这意味着经过 $T$ 步分解之后，图像所剩的 `语义` 可以忽略不计了，已经全部转化为随机噪声 $\bar{\varepsilon}_{t}$ 了。
+
+## 重建
+
+分解是 $\boldsymbol{x}_{t-1}\to x_{t}$ 的过程，这个过程中有很多数据对 $(\boldsymbol{x}_{t-1},\boldsymbol{x}_{t})$，这样<Highlight>重建</Highlight>自然就是从这些数据中学习一个 $\boldsymbol{x}_{t}\to \boldsymbol{x}_{t-1}$ 的模型。设该模型为 $\boldsymbol{\mu}(\boldsymbol{x}_{t})$，那么很容易想到学习方案就是最小化二者的欧式距离：
+
+$$
+\left\|\boldsymbol{x}_{t-1}-\boldsymbol{\mu}\left(\boldsymbol{x}_{t}\right)\right\|^{2}
+$$
+注意到分解时 $\boldsymbol{x}_{t}=\alpha_{t} \boldsymbol{x}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}$，于是 $\boldsymbol{x}_{t-1}=\displaystyle\frac{1}{\alpha_{t}}\left(\boldsymbol{x}_{t}-\beta_{t} \boldsymbol{\varepsilon}_{t}\right)$，所以我们不如直接学习<Highlight>预测噪声</Highlight>。则模型可以设计为：
+
+$$
+\boldsymbol{\mu}\left(\boldsymbol{x}_{t}\right)=\frac{1}{\alpha_{t}}\left(\boldsymbol{x}_{t}-\beta_{t} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\boldsymbol{x}_{t}, t\right)\right)
+$$
+的形式，其中的 $\theta$ 为模型的参数，将其带入到损失函数，得到
+
+$$
+\begin{aligned}
+&\left\|\boldsymbol{x}_{t-1}-\boldsymbol{\mu}\left(\boldsymbol{x}_{t}\right)\right\|^{2}\\
+= & \left\| \frac{1}{\alpha_{t}}\left(\boldsymbol{x}_{t}-\beta_{t} \boldsymbol{\varepsilon}_{t}\right)- \frac{1}{\alpha_{t}}\left(\boldsymbol{x}_{t}-\beta_{t} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\boldsymbol{x}_{t}, t\right)\right)\right\|^{2} \\
+= & \frac{\beta_{t}^{2}}{\alpha_{t}^{2}} \left\| \boldsymbol{\varepsilon}_{t}-\boldsymbol{\epsilon_{\theta}}(\boldsymbol{x}_{t},t) \right\|^{2}
+\end{aligned}
+$$
+前面的系数代表 $loss$ 的权重，可以先不考虑。我们可以给出 $\boldsymbol{x}_{t}$ 的表达式：
+
+$$
+\boldsymbol{x}_{t}=\alpha_{t} \boldsymbol{x}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\alpha_{t}\left(\bar{\alpha}_{t-1} \boldsymbol{x}_{0}+\bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}\right)+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\alpha}_{t} \boldsymbol{x}_{0}+\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}
+$$
+得到损失函数的形式为：
+
+$$
+\left\|\boldsymbol{\varepsilon}_{t}-\boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}, t\right)\right\|^{2}
+$$
+:::danger 为什么要回推到 $\boldsymbol{x}_{t-1}$
+你可能会产生疑问：为什么我们需要利用 $\boldsymbol{x}_{t-1}$? 为什么我们不直接用
+
+$$
+\boldsymbol{x}_{t} = \bar{\alpha}_{t}\boldsymbol{x}_{0}+\bar{\beta}_{t}\bar{\boldsymbol{\varepsilon}}_{t}
+$$
+让我们先看看，如果这样写，损失函数会是什么样子吧：
+
+$$
+\begin{aligned}
+&\left\| \boldsymbol{\varepsilon}_{t}-\boldsymbol{\epsilon}_{\theta}(\boldsymbol{x}_{t},t) \right\|^{2} \\
+= & \left\| \boldsymbol{\varepsilon}_{t}-\boldsymbol{\epsilon}_{\theta}(\bar{\alpha}_{t}\boldsymbol{x}_{0}+\bar{\beta}_{t}\bar{\boldsymbol{\varepsilon}}_{t},t)  \right\| 
+\end{aligned}
+$$
+这个时候，问题就发生了，我们知道 $\bar{\boldsymbol{\varepsilon}}_{t}$ 和 $\boldsymbol{\varepsilon}_{t}$ 其实不是相互独立的，所以我们不能在已经采样 $\boldsymbol{\varepsilon}_{t}$ 情况下完全独立地采样 $\bar{\boldsymbol{\varepsilon}}_{t}$
+
+:::
+## 降低方差
+
+上面的损失函数已经可以用于模型的训练了，但是在实践过程中会发现收敛过慢等问题。其原因是
+上面需要我们采样的随机变量太多了。
+
+:::info
+
+1. 随机采样样本
+2. 从正态分布 $\mathcal{N}(\boldsymbol{0},\boldsymbol{I})$ 中采样两个随机变量 $\bar{\boldsymbol{\varepsilon}}_{t},\boldsymbol{\varepsilon}_{t}$
+3. 从 $1\sim T$ 采样一个 $t$
+
+:::
+观察上面损失函数 $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}$ 部分。嘿，这不也是一个正态分布吗，我们可以合成为一个随机变量。
+
+:::tip $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\boldsymbol{\varepsilon}|\boldsymbol{\varepsilon}\sim \mathcal{N}(\boldsymbol{0},\boldsymbol{I})$
+显然新随机变量的均值为 0，方差为各个随机变量方差的和
+
+$$
+\begin{aligned}
+&(\alpha_{t}\bar{\beta}_{t-1})^{2}+\beta_{t}^{2} \\
+= &\alpha_{t}^{2}\left( 1-\left( \alpha_{t-1}\cdots \alpha_{1} \right)^{2}  \right) + \beta_{t}^{2}\\
+= &1-\left( \alpha_{t} \cdots \alpha_{1} \right)^{2} \\
+= & \bar{\beta}_{t}^{2}
+\end{aligned}
+$$
+:::
+同理可以得到 $\beta_{t} \overline{\boldsymbol{\varepsilon}}_{t-1}-\alpha_{t} \bar{\beta}_{t-1} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\omega\mid \omega \sim \mathcal{N}(\boldsymbol{0},\boldsymbol{I})$，并且可以验证 $\mathbb{E}\left[ \boldsymbol{\varepsilon}\boldsymbol{\omega}^{\mathsf{T}} \right]=0$。所以这是两个互相独立的正态随机变量。
+
+于是我们令 $\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\boldsymbol{\varepsilon}$，那我们的想法就是如何将 $\boldsymbol{\varepsilon}_{t}$ 利用 $\boldsymbol{\omega},\boldsymbol{\varepsilon}$ 表达出来：
+
+:::tip 求解 $\boldsymbol{\varepsilon}_{t}$
+联立方程
+
+$$
+\begin{cases}
+\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\boldsymbol{\varepsilon} \\
+\beta_{t} \overline{\boldsymbol{\varepsilon}}_{t-1}-\alpha_{t} \bar{\beta}_{t-1} \boldsymbol{\varepsilon}_{t}=\bar{\beta}_{t}\omega
+\end{cases}
+$$
+解得：
+
+$$
+\boldsymbol{\varepsilon}_{t}=\frac{\left(\beta_{t} \boldsymbol{\varepsilon}-\alpha_{t} \bar{\beta}_{t-1} \boldsymbol{\omega}\right) \bar{\beta}_{t}}{\beta_{t}^{2}+\alpha_{t}^{2} \bar{\beta}_{t-1}^{2}}=\frac{\beta_{t} \boldsymbol{\varepsilon}-\alpha_{t} \bar{\beta}_{t-1} \boldsymbol{\omega}}{\bar{\beta}_{t}}
+$$
+:::
+将结果带入到上面损失函数式子
+
+$$
+\begin{aligned}
+& \mathbb{E}_{\overline{\boldsymbol{\varepsilon}}_{t-1}, \boldsymbol{\varepsilon}_{t} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{I})}\left[\left\|\boldsymbol{\varepsilon}_{t}-\boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\alpha_{t} \bar{\beta}_{t-1} \overline{\boldsymbol{\varepsilon}}_{t-1}+\beta_{t} \boldsymbol{\varepsilon}_{t}, t\right)\right\|^{2}\right] \\
+= & \mathbb{E}_{\boldsymbol{\omega}, \boldsymbol{\varepsilon} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{I})}\left[\left\|\frac{\beta_{t} \boldsymbol{\varepsilon}-\alpha_{t} \bar{\beta}_{t-1} \boldsymbol{\omega}}{\bar{\beta}_{t}}-\boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon}, t\right)\right\|^{2}\right]
+\end{aligned}
+$$
+::::tip 求均值
+为了方便求均值，我们有 $\boldsymbol{\epsilon}_{\theta}:=\boldsymbol{\epsilon}_{\theta}\left( \bar{\alpha}_{t}\boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon},t \right)$，于是整个平方可以有：
+
+$$
+\begin{aligned}
+\left\| \cdot \right\|^{2}
+= &\left( \frac{\beta_{t}\boldsymbol{\varepsilon}}{\bar{\beta}_{t}} \right) ^{2} - \frac{2\beta_{t}\boldsymbol{\varepsilon}\alpha_{t}\bar{\beta}_{t-1}\boldsymbol{\omega}}{\bar{\beta}_{t}^{2}} + \frac{\left( \alpha_{t}\bar{\beta}_{t-1}\boldsymbol{\omega} \right)^{2}}{\bar{\beta}_{t}^{2}} - \frac{2\beta_{t}\boldsymbol{\varepsilon}\boldsymbol{\epsilon}_{\theta}}{\bar{\beta}_{t}} + \frac{2\alpha_{t}\bar{\beta}_{t-1}\boldsymbol{\omega}\boldsymbol{\epsilon}_{\theta}}{\bar{\beta}_{t}} + \boldsymbol{\epsilon}_{\theta}^{2} \quad \text{(整理一下)}\\
+= & \underbrace{\left( \frac{\beta_{t}}{\bar{\beta}_{t}}\boldsymbol{\varepsilon} \right)^{2}}_{=:\mathcal{A}1 } 
+- \underbrace{\frac{2\alpha_{t}\bar{\beta}_{t-1}\beta_{t}}{\bar{\beta}_{t}^{2}}\boldsymbol{\varepsilon}\boldsymbol{\omega}}_{=:\mathcal{A}2}
++\underbrace{\left( \frac{\alpha_{t}\bar{\beta}_{t-1}}{\bar{\beta}_{t}}\boldsymbol{\omega} \right)^{2}}_{=:\mathcal{A}3}
+-\underbrace{\frac{2\beta_{t}}{\bar{\beta_{t}}}\boldsymbol{\varepsilon}\boldsymbol{\epsilon}_{\theta}}_{=:\mathcal{A}4}
++\underbrace{\frac{2\alpha_{t}\bar{\beta}_{t-1}}{\bar{\beta}_{t}}\boldsymbol{\omega}\boldsymbol{\epsilon}_{\theta}}_{=:\mathcal{A}5}
++\underbrace{\boldsymbol{\epsilon}_{\theta}^{2}}_{=:\mathcal{A}6}
+\end{aligned}
+$$
+下面我们分别分析几个部分
+
+:::note 其中的：
+
+- $\mathcal{A}1$: 均值为常数.
+- $\mathcal{A}2$: 独立的两个随机变量乘积的均值等于均值的乘积，即有：$\mathbb{E}\left[ A \cdot B \right]=\mathbb{E}\left[ A \right]\cdot \mathbb{E}\left[ B \right]$，所以该项依然为 $\boldsymbol{0}$.
+- $\mathcal{A}3$: 均值为常数.
+- $\mathcal{A}4$: 由于 $\boldsymbol{\epsilon}_{\theta}$ 是含 $\boldsymbol{\varepsilon}$ 的非线性函数，非独立的，所以拆解不了.
+- $\mathcal{A}5$: 由于 $\boldsymbol{\epsilon}_{\theta}$ 是不含 $\boldsymbol{\omega}$ 的；所以该项乘积两边依然是独立的，所以该项均值为 $\boldsymbol{0}$.
+- $\mathcal{A}6$: 无法判断
+
+:::
+::::
+于是我们可以放心大胆的将 $\boldsymbol{\omega}$ 项从损失函数中移除。于是我们得到：
+
+$$
+\frac{\beta_{t}^{2}}{\bar{\beta}_{t}^{2}} \mathbb{E}_{\boldsymbol{\varepsilon} \sim \mathcal{N}(0, I)}\left[\left\|\boldsymbol{\varepsilon}-\frac{\bar{\beta}_{t}}{\beta_{t}} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon}, t\right)\right\|^{2}\right]+\text { 常数 }
+$$
+忽略掉常数项，以及系数，得到：
+
+$$
+\left\|\boldsymbol{\varepsilon}-\frac{\bar{\beta}_{t}}{\beta_{t}} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon}, t\right)\right\|^{2}
+$$
+## 推理
+
+在训练完毕后，我们从一个随机噪声 $\boldsymbol{x}_{t}\sim \mathcal{N}(\boldsymbol{0},\boldsymbol{I})$，执行 $T$ 步下式生成
+
+$$
+\boldsymbol{x}_{t-1}=\frac{1}{\alpha_{t}}\left(\boldsymbol{x}_{t}-\beta_{t} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\boldsymbol{x}_{t}, t\right)\right)
+$$
+如果要 $\text{Random Sample}$，那么需要加上噪声项：
+
+$$
+\boldsymbol{x}_{t-1}=\frac{1}{\alpha_{t}}\left(\boldsymbol{x}_{t}-\beta_{t} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\boldsymbol{x}_{t}, t\right)\right)+\sigma_{t} z, \quad z \sim \mathcal{N}(\mathbf{0}, \boldsymbol{I})
+$$
+:::bug 为什么这里需要添加噪声项，并且该噪声项相比于降噪项大的多？
+
+:::
+## 相关资料
+
+- [生成扩散模型漫谈（一）：DDPM = 拆楼 + 建楼 - 科学空间|Scientific Spaces](https://kexue.fm/archives/9119)
+- [一文解释 Diffusion Model (一) DDPM 理论推导 - 知乎](https://zhuanlan.zhihu.com/p/565901160)
