@@ -47,7 +47,7 @@ $$
 $$
 ### 求解参数
 
-:::warning
+:::warning[]
 对于 $\mu$ 的估计实际上就是：
 
 $$
@@ -71,7 +71,7 @@ $$
 \end{split}
 $$
 :::
-:::warning
+:::warning[]
 
 $$
 \begin{split}
@@ -234,7 +234,7 @@ $$
 $$
 \Sigma^{-1}=\left(U \Lambda U^{T}\right)^{-1}=\left(U^{T}\right)^{-1} \Lambda^{-1} U^{-1}=U \Lambda^{-1} U^{T}
 $$
-:::warning
+:::warning[]
 这里的 $U$ 是正交矩阵，所以 $U^\top=U^{-1}$
 
 :::
@@ -261,7 +261,7 @@ $$
 $$
 (X-\mu)^{T} \Sigma^{-1}(X-\mu) =\sum_{i=1}^{p} y_{i} \frac{1}{\lambda_{i}} y_{i}^{T}=\sum_{i=1}^p \frac{y_{i}^{2}}{\lambda_{i}}
 $$
-:::danger 怎么理解呢？
+:::danger[ 怎么理解呢？]
 ![image.png](https://images.puqing.work/2023/11/21/655c2b85bec7b.png)
 
 上图我们有红点和蓝点，他们与整个样本的 " 中心 " 的欧式距离都是一样的，但是马氏距离会怎么样呢？
@@ -275,11 +275,11 @@ $$
 这样计算两个点的欧式距离就可以区分开了。
 
 :::
-:::tip 和 PCA 的关系
+:::tip[ 和 PCA 的关系]
 有主成分分析可知，主成分实际上就是特征向量的方向，而每个方向的方差就是对应的特征值，所以马氏距离就是 $PCA+Norm$
 
 :::
-:::note
+:::note[]
 所以表达式 $(X-\mu)^{T} \Sigma^{-1}(X-\mu)$ 实际上是在描述一个样本对于总体样本 " 中心 " 的距离，而概率密度函数
 
 $$
@@ -290,13 +290,13 @@ $$
 :::
 ### 高维问题
 
-:::tip
+:::tip[]
 由于 $\Sigma$ 是一个 $p \times p$ 是对称矩阵，所以有 $\displaystyle \frac{p(p+1)}{2}$ 个参数。一旦输入维度过大，这个矩阵的计算会很复杂。所以有些时候会进行假设
 
 可以假设其是对角矩阵，甚至在各向同性假设中假设其对角线上的元素都相同。前一种就是 $\text{Factor Analysis}$ 后一种有概率 PCA:Principle Component Analysis(p-PCA)
 
 :::
-:::tip
+:::tip[]
 单个高斯分布是单峰的，对于有多峰的数据分布肯定是不合适的，所以会有 [混合高斯模型](./04c6f12c)(GMM)
 
 :::

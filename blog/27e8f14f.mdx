@@ -15,7 +15,7 @@ tags:
 
 ## 多元高斯的线性性质
 
-:::tip
+:::tip[]
 已知：
 
 
@@ -34,10 +34,10 @@ $$
 这里 $X \in \mathbb{R}^{p},A \in \mathbb{R}^{n \times p},Y \in\mathbb{R}^{n}$
 
 :::
-:::warning 证明
+:::warning[ 证明]
 
 :::
-:::quote 这意味着什么？
+:::quote[ 这意味着什么？]
 如果一个随机变量满足多元高斯分布，对这个随机变量做任意<Highlight>线性变换</Highlight>，得到的随机变量仍然满足多元高斯分布。
 
 :::
@@ -45,7 +45,7 @@ $$
 
 本节探究两个问题？
 
-:::quote
+:::quote[]
 
 1. 如果一个分布是联合高斯分布，从中任取一些随机变量得到的分布是否是高斯分布？
 2. 如果每一个随机变量的分布都是高斯分布，把他们组合在一起是否是联合高斯分布？
@@ -55,7 +55,7 @@ $$
 
 从联合高斯分布到边缘高斯分布是成立的
 
-::::bug
+::::danger[]
 这句话的正常说法就是第一个问题
 
 :::info
@@ -91,7 +91,7 @@ X_{1}\sim \mathcal{N},X_{2}\sim \mathcal{N},\cdots,X_{n}\sim \mathcal{N}\\
 \nRightarrow X=\left( X_{1}\cdots,X_{n} \right)^\top \sim \mathcal{N} 
 \end{split}
 $$
-:::example
+:::example[]
 我们可以构造一个概率密度函数 $f(x,y)$，这个函数的边缘分布是高斯，但是联合分布不是高斯分布
 
 函数主体是高斯的，但是边缘有波动
@@ -124,18 +124,18 @@ $$
 :::
 ### 联合高斯分布判据
 
-:::quote
+:::quote[]
 那么，什么样的判据才能推出联合高斯分布呢？
 
 :::
 对于一个随机变量向量 $X=(X_{1},\cdots,X_{n})^\top$ 是多元随机变量满足一下条件之一 [^1]
 
-:::tip
+:::tip[]
 
 1. 对于任意的线性组合 $Y=a_{1}X_{1}+\cdots+a_{n}X_{n}$ 是正态分布，写成向量乘的形式就是对于任意的常向量 $a \in \mathbb{R}^n$，随机变量 $Y=a^TX$ 是<Highlight>单变量高斯分布</Highlight>
 
 :::
-::::tip
+::::tip[]
 2. 有一个 $\mu \in \mathbb{R}^n$ 的向量，以及一个对称、半正定的协方差矩阵 $\Sigma_{n \times n}$，使得 $X=(X_{1},\cdots,X_{n})$ 的 [特征函数(This page is not published)](./404) 等于：
 
 $$
@@ -143,7 +143,7 @@ $$
 $$
 .
 
-:::warning 证明
+:::warning[ 证明]
 
 :::
 ::::
@@ -151,7 +151,7 @@ $$
 
 ### 独立性和相关性
 
-::::note
+::::note[]
 所谓两个随机变量不相关，就是两个随机变量的期望，等于其各自的期望的乘积
 
 $$
@@ -159,7 +159,7 @@ $$
 $$
 .
 
-:::tip
+:::tip[]
 而 `相关` 实际上就是线性相关，也就是协方差或者 `Pearson` 的相关系数为 $0$
 
 $$
@@ -177,7 +177,7 @@ $$
 
 
 :::
-:::warning
+:::warning[]
 这可能过于抽象，下面举个例子
 
 ![Untitled.bmp](https://images.puqing.work/2023/11/24/6560b9cd1e055.bmp)
@@ -212,13 +212,13 @@ $$
 :::
 ### 高斯分布的不相关和独立
 
-:::quote
+:::quote[]
 如果两个高斯分布是不相关的，能够得到二者独立吗?
 
 :::
 也是不行的
 
-:::warning 证明
+:::warning[ 证明]
 
 :::
 ### 联合高斯分布的不相关和独立
@@ -231,7 +231,7 @@ $$
 \text { Uncorrelated }
 \end{cases}\Rightarrow \text { independent }
 $$
-:::warning 证明
+:::warning[ 证明]
 
 :::
 ## 高斯条件分布
@@ -412,7 +412,7 @@ X_{b}-\mu_{b}
 \right\} \\
 \end{split}
 $$
-:::warning
+:::warning[]
 这里最后一步的变换就是在 [Schur complement](./67d6eeea) 中提到的舒尔补求矩阵逆方法
 
 :::
@@ -459,13 +459,13 @@ $$
 \Sigma_{a\mid b} = \Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}
 \end{split}
 $$
-:::tip
+:::tip[]
 可以看到的是其方差就等于 $\Sigma$ 对于 $\Sigma_{aa}$ 的舒尔补
 
 :::
 ## 求解线性模型
 
-:::danger
+:::danger[]
 已知：$p(x)=\mathcal{N}\left(\mu, \Lambda^{-1}\right), p(y \mid x)=\mathcal{N}\left(A x+b, L^{-1}\right)$，求解：$p(y),p(x\mid y)$
 
 :::
@@ -514,7 +514,7 @@ A\mu+b
 $$
 其中的 $\Delta$ 是多少，我们并不知道，需要求解。
 
-:::quote 求解 $\Delta$
+:::quote[ 求解 $\Delta$]
 直接使用协方差的定义进行求解
 
 $$

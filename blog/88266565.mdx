@@ -37,7 +37,7 @@ $$
 &=E_{q}\left[f(x) \nabla_{\theta} \log q_{\theta}(x)\right]
 \end{split}
 $$
-:::tip
+:::tip[]
 上面公式告诉我们，期望的梯度，可以转化为梯度的期望。
 
 [Log Derivative Trick(This page is not published)](./404)
@@ -45,13 +45,13 @@ $$
 :::
 于是我们可以利用 $E_{q}\left[f(x) \nabla_{\theta} \log q_{\theta}(x)\right]$ 去估计梯度。
 
-:::warning
+:::warning[]
 这样的梯度估计式称为 $SF$ 估计，`Score Function Estimator`，在强化学习中 $q$ 代表着策略，那么上式就是一个基本的策略梯度，有时也叫成 `Reinforce`
 
 :::
 并且上述的推导对于任意的随机变量 $x$ 不管是连续还是离散变量，都是通用的。这样我们可以直接从 $p_{\theta}(x)$ 采样若干个点来估算损失函数的梯度了。
 
-::::danger
+::::danger[]
 这样的梯度估计过程是不可微的，神经网络依赖于链式法则求导优化，所以这里的梯度是无法反向传播的。
 
 :::info
@@ -106,7 +106,7 @@ $$
 $$
 所以在 `一般情况下` 使用从参数化后的梯度估计方差更小，更稳定。（显然你可以找出一个反例，只是说一般情况）
 
-:::warning 这里的结论有待确认
+:::warning[ 这里的结论有待确认]
 
 - 结论边界，满足条件
 

@@ -24,7 +24,7 @@ tags:
 
 
 <!--truncate-->
-:::example 实例
+:::example[ 实例]
 有 1000 个词汇量。排在第一个位置的代表英语中的冠词 "a"，那么这个 "a" 是用 $[1,0,0,0,0,\dots]$，只有第一个位置是 1，其余位置都是 0 的 1000 维度的向量表示，如下图中的第一列所示。
 ![image.png](https://images.puqing.work/2023/09/04/64f5e6e1c82fc.png)
 
@@ -51,7 +51,7 @@ One Hot 编码的每个单词就是一个维度，每个单词之间是 independ
 
 我们手动寻求这四个单词之间的关系 $f$，然后可以使用在两个特征上的值去表示四个单词
 
-:::example
+:::example[]
 
 $$
 \begin{cases}
@@ -101,13 +101,13 @@ $$
 - 从各个输入 $\left\{x_{i}{ }_{i=1}^{N}\right\}$ 之间的关系找目标。如聚类
 - 接下游任务。我们的 Embedding 网络就是需要学习 $x\mapsto y$，那我们给定数据 $\left\{\left(x_{i}, z_{i}\right)_{i=1}^{N}\right\}$，我们可以去学习一个 $x\mapsto z$，这个网络由两个部分构成 $x\mapsto y$，以及 $y\mapsto z$，于是等到网络训练完毕，则自然学到了映射 $x\mapsto y$
 
-:::tip
+:::tip[]
 这里类比图像中的各个任务，Embedding 层就类似于 Backbone，而文字的下游任务可以是单词情感等
 ![Untitled.bmp](https://images.puqing.work/2023/09/04/64f5f5a0a1f69.bmp)
 (几种不同的任务)
 
 :::
-:::tip 像啊，很像啊
+:::tip[ 像啊，很像啊]
 上面说到的后两种任务，有很熟悉的味道。何凯明大佬的 $\mathrm{MAE}$[^1]，与这个是什么关系，似乎叫<Highlight>掩码自编码</Highlight>
 
 :::
