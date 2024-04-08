@@ -1,0 +1,120 @@
+---
+authors:
+- PuQing
+date: 2023-11-05 20:44
+keywords:
+- 强化学习
+- 自编码
+- GradientEstimator
+- REINFORCE
+tags:
+- 强化学习
+- 自编码
+- GradientEstimator
+- REINFORCE
+---
+# Reparameterization Trick
+
+## Motivation
+
+假设我们有个在参数 $\theta$ 下的正态分布 $q$。我们想要求解下面这样一个问题
+
+$$
+\min_{\theta} E_{q}[f(x)]
+$$
+其中 $E_{q}[f(x)]$ 的意思是求满足 $q$ 分布下的随机变量函数 $f(x)$ 的均值，而最外层的 $\min_{\theta}$ 则是求**使得该均值最小时**的 $\theta$
+
+
+<!--truncate-->
+有一种做法就是直接对该期望求 $\theta$ 的导数 $\nabla_{\theta} E_{q}\left[f(x)\right]$
+
+$$
+\begin{split}
+\nabla_{\theta} E_{q}\left[f(x)\right]
+&=\displaystyle \nabla_{\theta} \int q_{\theta}(x) f(x) d x \\
+&=\displaystyle \int f(x) \nabla_{\theta} q_{\theta}(x) \frac{q_{\theta}(x)}{q_{\theta}(x)} d x \quad \text{(积分变量是$x$)} \\
+&=\displaystyle \int q_{\theta}(x) \nabla_{\theta} \log q_{\theta}(x) f(x) d x\quad \text{(Log Derivative Trick)} \\
+&=E_{q}\left[f(x) \nabla_{\theta} \log q_{\theta}(x)\right]
+\end{split}
+$$
+:::tip[]
+上面公式告诉我们，期望的梯度，可以转化为梯度的期望。
+
+[Log Derivative Trick(This page is not published)](./404)
+
+:::
+于是我们可以利用 $E_{q}\left[f(x) \nabla_{\theta} \log q_{\theta}(x)\right]$ 去估计梯度。
+
+:::warning[]
+这样的梯度估计式称为 $SF$ 估计，`Score Function Estimator`，在强化学习中 $q$ 代表着策略，那么上式就是一个基本的策略梯度，有时也叫成 `Reinforce`
+
+:::
+并且上述的推导对于任意的随机变量 $x$ 不管是连续还是离散变量，都是通用的。这样我们可以直接从 $p_{\theta}(x)$ 采样若干个点来估算损失函数的梯度了。
+
+::::danger[]
+这样的梯度估计过程是不可微的，神经网络依赖于链式法则求导优化，所以这里的梯度是无法反向传播的。
+
+:::info
+如果无法理解，可以从前向和反向的角度去理解，对于前向过程 $f(x)$，$\theta$ 完全没有参与整个计算过程，自然 $\theta$ 的梯度无法计算。
+
+
+:::
+::::
+## Trick
+
+我们将随机变量 $x$ 视为另一个随机变量经过变换 $g_{\theta}(\epsilon)$ 得到的
+
+$$
+\begin{split}
+\epsilon \sim p(\epsilon) \\
+x = g_{\theta}(\epsilon)
+\end{split}
+$$
+这样我们对于原式可以写为：
+
+$$
+E_{q}\left[f(x)\right]=E_{p}\left[f(g_{\theta}(\epsilon))\right]
+$$
+现在我们对其求梯度：
+
+$$
+\nabla_{\theta} E_{q}\left[f(x)\right]=\nabla_{\theta} E_{p}\left[f(g_{\theta}(\epsilon))\right]=E_{p}[\frac{\partial f}{\partial g} \cdot \frac{\partial g}{\partial \theta}]
+$$
+此时 $\theta$ 分布参数参与了前向过程，所以保留了 $\theta$ 的梯度，使得能够优化参数 $\theta$。但是这对于随机变量 $\epsilon$ 有什么要求呢？
+
+:::info
+1. $\epsilon$ 应该是方便计算机采样得到的
+2. $g$ 是可微分的
+
+
+:::
+## 梯度估计角度
+
+既然上述都在讲梯度估计，我们自然很关心梯度估计的稳定性，我们不如求一下上面两个公式的方差
+
+:::info
+为了便于求解，我们取 $f(x)=x^2$，$q=N(\mu,1)$
+另外 $g(\epsilon) = \mu+ x$，$p =N(0,1)$
+
+
+:::
+$$
+\begin{cases}
+\operatorname{Var}[f(x) \nabla_{\theta} \log q_{\theta}(x)] = \displaystyle \mu^4+14\mu^2+15 \\
+\displaystyle \operatorname{Var}[\frac{\partial f}{\partial g} \cdot \frac{\partial g}{\partial \theta}] = 4
+\end{cases}
+$$
+所以在 `一般情况下` 使用从参数化后的梯度估计方差更小，更稳定。（显然你可以找出一个反例，只是说一般情况）
+
+:::warning[ 这里的结论有待确认]
+
+- 结论边界，满足条件
+
+:::
+## 相关资料
+
+- [VAE中的重参数化技巧-reparameterization trick - 知乎](https://zhuanlan.zhihu.com/p/344938643)
+- [mathematical statistics - How does the reparameterization trick for VAEs work and why is it important? - Cross Validated](https://stats.stackexchange.com/questions/199605/how-does-the-reparameterization-trick-for-vaes-work-and-why-is-it-important)
+- [漫谈重参数：从正态分布到Gumbel Softmax - 科学空间|Scientific Spaces](https://kexue.fm/archives/6705)
+- [ML - Reparameterization Trick - 知乎](https://zhuanlan.zhihu.com/p/364178598)
+- [Wayback Machine](https://web.archive.org/web/20160418040123/http://dpkingma.com/wordpress/wp-content/uploads/2015/12/talk_nips_workshop_2015.pdf)

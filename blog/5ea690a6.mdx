@@ -1,0 +1,41 @@
+---
+authors:
+- PuQing
+date: 2024-01-17 15:22
+keywords:
+- 贝叶斯定理
+- 变分推断
+- 高斯混合模型
+tags:
+- 贝叶斯定理
+- 变分推断
+- 高斯混合模型
+---
+# Classification via a Diffusion Model
+
+## BackGround
+
+在 [朴素贝叶斯分类器](./6bc3d12f) 中我们就从贝叶斯概率学派下对分类任务做了阐述。这里重新回顾一下这个问题。
+
+我们将输入定义为 $\mathbf{x}$，想要知道该输入 $\mathbf{x}$ 是什么类别，则我们通过计算下面的条件概率：
+
+
+<!--truncate-->
+$$
+P(Y=c_{k}\mid X=\mathbf{x})
+$$
+看看这个输入在哪个类别下的概率最高。而这个概率可以通过 [贝叶斯定理](./fc5a835a) 所求得：
+
+$$
+\begin{equation}
+P\left(Y=c_{k} \mid X=x\right)=\frac{P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)}{\sum_{k} P\left(X=x \mid Y=c_{k}\right) P\left(Y=c_{k}\right)}
+\end{equation}
+$$
+而上式分母部分是对于 $P(X=x)$ 全概率形式，对于所有的类别 $c$ 都是一样的，所以关键是如何求得公式分子部分。
+
+:::tip[ $\mathbf{x}$ 是一个高维随机变量]
+
+:::
+而在 [朴素贝叶斯分类器](./6bc3d12f) 中我们对条件概率 $P(X=x\mid Y=c_{k})$ 做出了强假设关系，即对于高维随机变量 $\mathbf{x}$ 中的每个分量该条件分布是独立的。这样可以将该条件概率写成连乘的形式。让我们看看在 `Diffusion` 视角下，该问题的是如何解决的。
+
+## DDPM

@@ -1,0 +1,120 @@
+---
+authors:
+- PuQing
+date: 2023-07-30 22:16
+keywords:
+- 参数估计
+- 概率论
+- 随机优化
+- 随机梯度估计
+tags:
+- 参数估计
+- 概率论
+- 随机优化
+- 随机梯度估计
+---
+# Score Function and Fisher Information Matrix
+
+## Score Functions
+
+在 [极大似然估计](./967aee09) 中我们提到的似然函数 $L(\theta)$ 求一阶导即为 $Score\ Function$ 。记为
+
+$$
+S(\theta) = \frac{d L(\theta)}{d \theta}
+$$
+因为似然函数中存在许多连乘 $p(x;\theta)$，所以我们一般取对数，这时，作用就体现出来了。
+
+
+<!--truncate-->
+$$
+\begin{array}{c}
+\displaystyle L(\theta) = \prod p(x;\theta)\\
+\displaystyle\Rightarrow \log L(\theta) = \sum \log p(x;\theta) \\ 
+\displaystyle \Rightarrow \nabla_\theta \ln L(\theta) =  \sum \nabla_\theta \log p(x;\theta)
+\end{array}
+$$
+这时便可以使用对数技巧。
+
+$$
+\nabla_{\theta}\log{p(x;\theta)}=\frac{\nabla_{\theta}p(x;\theta)}{p(x;\theta)}
+$$
+:::tip[ 如果没看懂]
+类似于：
+
+$$
+\nabla_{x}\ln{\sin(x)} = \frac{1}{\sin{(x)}}\cos{(x)}
+$$
+:::
+`Score function` 有许多的大量有用的性质：
+
+- **SF 的期望等于零**。推导如下
+
+:::note[]
+
+$$
+\begin{array}{c}
+\displaystyle \mathbb{E}_{p(x ; \theta)}\left[\nabla_{\theta} \log p(x ; \theta)\right] \\
+\displaystyle=\int p(x ; \theta) \nabla_{\theta} \log p(x ; \theta) dx\\
+\displaystyle=\int p(x ; \theta) \frac{\nabla_{\theta} p(x ; \theta)}{p(x ; \theta)} dx\\
+\displaystyle=\int \nabla_{\theta} p(x ; \theta) dx\\
+\displaystyle=\nabla_{\theta} \int p(x ; \theta) dx\\
+=\nabla_{\theta} 1 \\
+=0
+\end{array}
+$$
+:::
+:::danger[ 一步一步来]
+
+$$
+\displaystyle \mathbb{E}_{p(x ; \theta)}\left[\nabla_{\theta} \log p(x ; \theta)\right] \\
+\displaystyle=\int p(x ; \theta) \nabla_{\theta} \log p(x ; \theta) \\
+$$
+这一步是在利用连续型随机变量的数学期望公式，设 $f(x)$ 是自变量为随机变量的函数，并且随机变量是在参数 $\theta$ 下的概率密度 $p(x;\theta)$ 下取得，则有期望 $\mathbb{E}[f(x)]$ 为：
+
+$$
+\mathbb{E}_{x\sim p(x;\theta)}[f(x)]=\int p(x;\theta)f(x)  \, dx 
+$$
+其中的 $x\sim p(x;\theta)$ 是说明 $x$ 服从概率密度函数 $p(x;\theta)$。所以这里将 $\nabla_{\theta} \log p(x ; \theta)$ 视作自变量为随机变量 $x$ 的一个函数就好。
+
+而之后的
+
+$$
+\int \nabla_{\theta}p(x;\theta)\,dx = \nabla_{\theta} \int p(x;\theta) \, dx 
+$$
+则是用到了积分和求导交换如下：
+
+$$
+\frac{d}{d t} \int_{a}^{b} f(x, t) d x=\int_{a}^{b} \frac{\partial}{\partial t} f(x, t) d x
+$$
+当然交换也不是随便交换的，还是需要条件的，还是留个小的证明坑吧 [积分和求导交换顺序条件(This page is not published)](./404)
+
+:::
+:::tip[ 期望为零意味着什么？]
+
+- 期望为零意味着，我们为似然函数加入一定的正则项，不会影响导数的期望
+
+$$
+\begin{array}{c}
+E_{p(x ; \theta)} \nabla_{\theta} \log p(x ; \theta)[f(x)-b]=E_{p(x ; \theta)} \nabla_{\theta} \log p(x ; \theta) f(x)-b E_{p(x ; \theta)} \nabla_{\theta} \log p(x ; \theta) \\
+=E_{p(x ; \theta)} \nabla_{\theta} \log p(x ; \theta) f(x)
+\end{array}
+$$
+:::
+- SF 的方差为 $\mathrm{Fisher\ Information}$
+
+$$
+\mathbb{V}[S(\theta)] = E[(S(\theta)-E[S(\theta)])^2]=E[S(\theta)^2]
+$$
+其中我们便用到了 `SF` 的均值为零的性质，另外 $E[S(\theta)^2]$ 还可以写成：
+
+$$
+E[S(\theta)^2]=\mathbb{E}_{p(x ; \theta)}\left[\nabla_{\theta} \log p(x ; \theta) \nabla_{\theta} \log p(x ; \theta)^{T}\right]
+$$
+:::danger[ 道理我都懂，所以为什么说 SF 的方差为 $\mathrm{Fisher\ Information}$]
+
+:::
+- [人工智能 - 知乎](https://www.zhihu.com/column/c_1088448180282011648)
+- [Score Function and Fisher Information Matrix | 棒棒生](https://bobondemon.github.io/2022/01/07/Score-Function-and-Fisher-Information-Matrix/)
+- [Fisher Information Matrix - Agustinus Kristiadi](https://agustinus.kristia.de/techblog/2018/03/11/fisher-information/)
+- [Fisher Information and Sore function - 知乎](https://zhuanlan.zhihu.com/p/361330134)
+- [【转载】 费舍尔信息矩阵及自然梯度法 - Death_Knight - 博客园](https://www.cnblogs.com/devilmaycry812839668/p/14581916.html)

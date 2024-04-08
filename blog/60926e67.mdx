@@ -1,0 +1,139 @@
+---
+authors:
+- PuQing
+date: 2023-10-13 16:20
+keywords:
+- Math
+- 微积分
+tags:
+- Math
+- 微积分
+---
+# 分数阶导数
+
+在高中就已经学过函数的 $n$ 阶导数，其中的 $n$ 是正整数，$1,2,3,\cdots,n$，能否能够将这里的 $n$ 推广至整数，以及推广至有理数，实数。
+
+## 负整数阶导数
+
+很自然的认为，函数的负整数导数应该是求它的不定积分，并且相差参数 $C$。
+
+
+<!--truncate-->
+我们记导数算子为 $\operatorname{D}$，即
+
+$$
+\mathrm{D} f(x) \triangleq \frac{\mathrm{d} f}{\mathrm{~d} x}, \quad \mathrm{D}^{2} f(x) \triangleq \frac{\mathrm{d}^{2} f}{\mathrm{~d} x^{2}}, \quad \cdots, \quad \mathrm{D}^{n} f(x) \triangleq \frac{\mathrm{d}^{n} f}{\mathrm{~d} x^{n}} .
+$$
+记 ${ }_{a} \mathrm{D}_{x}^{-1}$ 表示变上限积分，即
+
+$$
+\begin{aligned}
+{ }_{a} \mathrm{D}_{x}^{-1} f(x) & \triangleq \int_{a}^{x} f(\tau) \mathrm{d} \tau, \\
+{ }_{a} \mathrm{D}_{x}^{-2} f(x) & \triangleq{ }_{a} \mathrm{D}_{x}^{-1}\left({ }_{a} \mathrm{D}_{x}^{-1} f(x)\right), \\
+& \ldots \ldots \\
+{ }_{a} \mathrm{D}_{x}^{-n} f(x) & \triangleq{ }_{a} \mathrm{D}_{x}^{-1}\left({ }_{a} \mathrm{D}_{x}^{-(n-1)} f(x)\right), \quad x>a .
+\end{aligned}
+$$
+易知，对于任意的正整数 $n$，都有
+
+:::warning[]
+
+$$
+\mathrm{D}^{n}\left({ }_{a} \mathrm{D}_{x}^{-n} f(x)\right)=f(x),
+$$
+:::
+即积分算子 ${ }_{a} \mathrm{D}_{x}^{-n}$ 可以看做成整数阶导数算子的逆。但是反之不成立
+
+## 重复积分的 Cauchy 公式
+
+$n$ 重变上限积分 ${ }_{a} \mathrm{D}_{x}^{-n} f(x)$ 的表达式为：
+
+$$
+{ }_{a} \mathrm{D}_{x}^{-n} f(x)=\underbrace{\int_{a}^{x} \mathrm{~d} \tau_{1} \int_{a}^{\tau_{1}} \mathrm{~d} \tau_{2} \cdots \int_{a}^{\tau_{n-1}} f\left(\tau_{n}\right) \mathrm{d} \tau_{n}}_{n \text {-fold }}
+$$
+柯西给出了公式
+
+$$
+{ }_{a} \mathrm{D}_{x}^{-n} f(x)=\frac{1}{(n-1) !} \int_{a}^{x}(x-\tau)^{n-1} f(\tau) \mathrm{d} \tau
+$$
+为了后面书写方便，引入积分算子 $(Jf)(x)=\displaystyle \int_{0}^x f(t)\, dt$，表达积分算子先作用到函数 $f$ 上，然后作用到变量 $x$ 上。则上面式子又可以写为
+
+$$
+\left(J^{n} f\right)(x)=\frac{1}{(n-1) !} \int_{0}^{x}(x-t)^{n-1} f(t) \mathrm{d} t
+$$
+当然这里 $n\in N^*$
+
+:::tip[ 证明]
+当 $n=1$ 时，显然成立；
+
+当 $n=2$ 时，有
+
+$$
+\left(J^{2} f\right)(x)=\int_{0}^{x}(x-t) f(t) \mathrm{d} t=x \int_{0}^{x} f(t) \mathrm{d} t-\int_{0}^{x} t f(t) \mathrm{d} t
+$$
+对上式两边求导，并利用变上限积分求导公式，有
+
+$$
+\mathrm{D}\left(\left(J^{2}\right) f(x)\right)=x f(x)+\int_{0}^{x} f(t) \mathrm{d} t-x f(x)=\int_{0}^{x} f(t) \mathrm{d} t=(J f)(x)
+$$
+当 $n\ge 3$ 时，有
+
+$$
+\begin{aligned}
+\left(J^{n} f\right)(x) & =\frac{1}{(n-1) !} \int_{0}^{x}\left(\sum_{k=0}^{n-1}(-1)^{k} C_{n-1}^{k} x^{n-k-1} t^{k}\right) f(t) \mathrm{d} t \\
+& =\frac{1}{(n-1) !} \sum_{k=0}^{n-1}(-1)^{k} C_{n-1}^{k} x^{n-k-1} \int_{0}^{x} t^{k} f(t) \mathrm{d} t .
+\end{aligned}
+$$
+同样可以证明：
+
+$$
+D\left(\left(J^{n} f\right)(x)\right)=\frac{1}{(n-2) !} \int_{0}^{x}(x-t)^{n-2} f(t) \mathrm{d} t=\left(J^{n-1} f\right)(x) .
+$$
+:::
+然后考虑到阶乘可以使用 $\text{Gamma}$ 函数进行表示，则又可以化为：
+
+$$
+\left(J^{n} f\right)(x)=\frac{1}{(n-1) !} \int_{a}^{x}(x-\tau)^{n-1} f(\tau) \mathrm{d} \tau=\frac{1}{\Gamma(n)} \int_{a}^{x}(x-\tau)^{n-1} f(\tau) \mathrm{d} t
+$$
+:::warning[ 补充：$\text{Gamma}$ 函数：]
+当 $x> 0$ 时：
+
+$$
+\Gamma(x)=\int_{0}^{+\infty} t^{x-1} e^{-t} d t
+$$
+对 $n\in N^*$ 有
+
+$$
+\Gamma(n+1) = n!
+$$
+:::
+## Riemann-Liouville 积分
+
+我们对上面式子中的 $n$ 进行推广便给出了黎曼 - 纽维尔积分
+
+:::quote[ 定义]
+设 $f(x)$ 为 $(0,+\infty)$ 上的连续函数，那么对于任意 $0\le t\le T,\alpha> 0$，称：
+
+$$
+\left(J^{\alpha} f\right)(x)=\frac{1}{\Gamma(\alpha)} \int_{0}^{x}(x-t)^{\alpha-1} f(t) \mathrm{d} t
+$$
+为函数 $f(x)$ 的 $\alpha$ 阶 $\text{Riemann - Liouville}$ 积分（简称 R-L 积分）
+
+:::
+## Riemann-Liouville 分数阶导数
+
+:::quote[ 定义]
+设 $f(x)$ 为 $(0,T)$ 上的可积函数，那么对于任意 $0<\alpha<1$，称：
+
+$$
+\operatorname{D}^\alpha f(t)=\frac{1}{\Gamma(1-\alpha)} \frac{\mathrm{d}}{\mathrm{d} x} \int_{0}^{x} \frac{f(t)}{(x-t)^{\alpha}} \mathrm{d} t
+$$
+为函数 $f(x)$ 的 $\alpha$ 阶 $\text{Riemann - Liouville}$ 分数阶导数
+
+:::
+对于任意的 $\alpha$，由于 $\text{Gamma}$ 函数的自变量在负整数处没有定义，需要在分数阶求导前先进行整数阶求导，例如 $\mathrm{D}^{\frac{3}{2}} f(x)=\mathrm{D}^{\frac{1}{2}} \mathrm{D} f(x)$
+
+## 参考资料
+
+- [分数阶导数_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1fL4y1J7vP/?spm_id_from=333.880.my_history.page.click&amp;vd_source=5890eec9b2a60d9ae9a403fd2aad7881)
+- [math.ecnu.edu.cn/~jypan/Research/papers/lect_FDE.pdf](https://math.ecnu.edu.cn/~jypan/Research/papers/lect_FDE.pdf)
