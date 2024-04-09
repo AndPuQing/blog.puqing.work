@@ -89,8 +89,54 @@ $$
 $$
 p(x_{2},t_{2}\mid \boldsymbol{y},t;x_{1},t_{1})=p(x_{2},t_{2}\mid \boldsymbol{y},t)p(\boldsymbol{y},t\mid x_{1},t_{1}) \tag{8}
 $$
+:::tip[ 该式子表达的意思]
+这个地方如果是从马尔可夫链进行推导，即离散形式的条件概率可能会更直观。
+
+在前面的推导我们知道式 $(3)$，可是我们如何知道下下个时刻的条件概率呢？
+![image.png](https://images.puqing.work/2024/04/08/6613ba9daa83f.png)
+
+在式 $(8)$ 就是假设，$t_{1}$ 通过 $y$ 转移到 $t_{2}$ 上，但是 $y$ 是不固定的，所以下面要取积分
+
+:::
 在 $(8)$ 中对 $y$ 积分，得
 
 $$
 p(x_{2},t_{2}\mid x_{1},t_{1})=\int p(x_{2},t_{2}\mid \boldsymbol{y},t)p(\boldsymbol{y},t\mid x_{1},t_{1})\, d \boldsymbol{y} \tag{9}
+$$
+式 $(9)$ 就是著名的**查普曼 - 柯尔莫哥洛夫 - 斯莫拉伍斯基 (Chapman-Kolmogorov-Smoluwski) 方程**，它是支配转移概率密度的积分方程。为了便于分析，积分方程 $(9)$ 可转化为等价的微分方程，即著名的**福克 - 普朗克 - 柯尔莫哥洛夫 (Fokker-Planck-Kolmogorov, FPK) 方程**
+
+$$
+\frac{\partial}{\partial t}p + \sum^{n}_{j=1} \frac{\partial}{\partial x_{j}}(a_{j}p)-\frac{1}{2} \sum_{j,k=1}^n \frac{ \partial^{2}}{ \partial x_{j} \partial x_{k} } (b_{jk}p) + \frac{1}{3!} \sum_{j,k,l=1}^n \frac{ \partial^{3}}{ \partial x_{j} \partial x_{k} \partial x_{l}}(c_{jkl}p)-\cdots=0 \tag{10}
+$$
+式中 $p=p(x,t\mid x_{0},t_{0})$ 是转移概率密度，
+
+$$
+\begin{equation}
+\begin{split}
+&a_{j}=a_{j}(\boldsymbol{x}, t)=\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t} E\left[X_{j}(t+\Delta t)-X_{j}(t) \mid \boldsymbol{X}(t)=\boldsymbol{x}\right], \\
+&b_{j k}=b_{j k}(\boldsymbol{x}, t)=\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t} E\left\{\left[X_{j}(t+\Delta t)-X_{j}(t)\right]\left[X_{k}(t+\Delta t)-X_{k}(t)\right] \mid \boldsymbol{X}(t)=\boldsymbol{x}\right\}, \\
+& c_{j k l}=c_{j k l}(\boldsymbol{x}, t)=\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t} E\left\{\left[X_{j}(t+\Delta t)-X_{j}(t)\right]\left[X_{k}(t+\Delta t)-X_{k}(t)\right]\right. \\
+& \quad \qquad \qquad \qquad \left.\times\left[X_{l}(t+\Delta t)-X_{l}(t)\right] \mid \boldsymbol{X}(t)=\boldsymbol{x}\right\}, \\
+& \cdots
+\end{split}
+\end{equation}  \tag{11}
+$$
+函数 $a_{j},b_{jk},c_{jkl},\cdots$ 称为导数矩，它给出在 $X(t)=x$ 条件下，在 $t$ 时刻上 $X(t)$ 的各增量矩的速率。
+
+在许多实际问题中，高于二阶的导数矩为零，于是 $(10)$ 化为
+
+$$
+\frac{\partial}{\partial t} p+\sum_{j=1}^{n} \frac{\partial}{\partial x_{j}}\left(a_{j} p\right)-\frac{1}{2} \sum_{j, k=1}^{n} \frac{\partial^{2}}{\partial x_{j} \partial x_{k}}\left(b_{j k} p\right)=0 . \tag{12}
+$$
+通常所说的 FPK 方程是指 $(12)$，此时，马尔可夫过程 $X(t)$ 称为马尔可夫扩散过程，或简称扩散过程。
+
+FPK 方程 $(12)$ 可重写为
+
+$$
+\frac{\partial}{\partial t}p + \sum_{j=1}^{n} \frac{\partial}{\partial x_{j}}G_{j}=0, \tag{13}
+$$
+式中
+
+$$
+G_{j} = a_{j}p - \frac{1}{2} \sum^{n}_{k=1} \frac{\partial}{\partial x_{k}}(b_{jk}p). \tag{14}
 $$
