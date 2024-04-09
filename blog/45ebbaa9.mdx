@@ -98,8 +98,8 @@ $$
 $$
 \begin{aligned}
 \frac{\partial}{\partial t} p\left(x ; t \mid x_{0}, t_{0}\right)&=\\
-&=\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t}\left[\int_{\Omega} d x^{\prime} p\left(x, t+\Delta t \mid x^{\prime}, t\right) p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)-\right. \\
-&\left.-\int_{\Omega} d x^{\prime} p\left(x^{\prime}, t+\Delta t \mid x ; t\right) p\left(x ; t \mid x_{0}, t_{0}\right)\right] .
+&=\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t}\left[\int_{\Omega} d x^{\prime} {\color{Red} p\left(x, t+\Delta t \mid x^{\prime}, t\right)}  p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)-\right. \\
+&\left.-\int_{\Omega} d x^{\prime} {\color{Red} p\left(x^{\prime}, t+\Delta t \mid x ; t\right)}  p\left(x ; t \mid x_{0}, t_{0}\right)\right] .
 \end{aligned} \tag{12}
 $$
 我们引入项
@@ -145,19 +145,19 @@ $$
 $$
 \begin{split}
 &\frac{\partial}{\partial t} \int_{\Omega} d x \varphi(x) p\left(x, t \mid x_{0}, t_{0}\right)= \\
-&=\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t}\left\{\int _ { \Omega } d x \left[\int_{\Omega} d x^{\prime} \varphi\left(x^{\prime}\right) p\left(x, t+\Delta t \mid x^{\prime}, t\right) p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)+\right.\right. \\
-&\left.+\left.\int_{\Omega} d x^{\prime} \sum_{m=1}^{\infty}\left(x-x^{\prime}\right)^{m} \frac{1}{m !} \frac{\partial^{m} \varphi}{\partial x^{m}}\right|_{x=x^{\prime}} p\left(x, t+\Delta t \mid x^{\prime}, t\right) p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)-\right] \\
-&\left.-\int_{\Omega} d x \int_{\Omega} d x^{\prime} \varphi(x) p\left(x^{\prime} ; t+\Delta t \mid x ; t\right) p\left(x ; t \mid x_{0}, t_{0}\right)\right\} .
+&=\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t}\left\{\int _ { \Omega } d x \left[\int_{\Omega} d x^{\prime} {\color{Red}\varphi\left(x^{\prime}\right)} p\left(x, t+\Delta t \mid x^{\prime}, t\right) p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)+\right.\right. \\
+&\left.+\left.\int_{\Omega} d x^{\prime} {\color{Red} \sum_{m=1}^{\infty}\left(x-x^{\prime}\right)^{m} \frac{1}{m !}} {\color{Red} \frac{\partial^{m} \varphi}{\partial x^{m}}}\right|_{\color{Red}{x=x^{\prime}}} p\left(x, t+\Delta t \mid x^{\prime}, t\right) p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)-\right] \\
+&\left.-\int_{\Omega} d x \int_{\Omega} d x^{\prime} \varphi({\color{Blue}x}) p\left({\color{Blue}x^{\prime}} ; t+\Delta t \mid {\color{Blue}x} ; t\right) p\left({\color{Blue}x} ; t \mid x_{0}, t_{0}\right)\right\} .
 \end{split} \tag{18}
 $$
-这里的最后一个积分是在 $\Omega \times \Omega$ 上的二重积分，并且积分顺序无关，所以我们交换次序
+这里的最后一个积分是在 $\Omega \times \Omega$ 上的二重积分，并且积分顺序无关，所以我们交换积分变量
 
 $$
 \begin{aligned}
 & \frac{\partial}{\partial t} \int_{\Omega} d x \varphi(x) p\left(x, t \mid x_{0}, t_{0}\right)= \\
 =\lim _{\Delta t \rightarrow 0} \frac{1}{\Delta t}\left\{\int_{\Omega} d x\right. & {\left[\int_{\Omega} d x^{\prime} \varphi\left(x^{\prime}\right) p\left(x, t+\Delta t \mid x^{\prime}, t\right) p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)+\right.} \\
 & \left.+\left.\int_{\Omega} d x^{\prime} \sum_{m=1}^{\infty}\left(x-x^{\prime}\right)^{m} \frac{1}{m !} \frac{\partial^{m} \varphi}{\partial x^{m}}\right|_{x=x^{\prime}} p\left(x, t+\Delta t \mid x^{\prime}, t\right) p\left(x^{\prime}, t \mid x_{0}, t_{0}\right)-\right] \\
-- & \left.\int_{\Omega} d x \int_{\Omega} d x^{\prime} \varphi\left(x^{\prime}\right) p\left(x ; t+\Delta t \mid x^{\prime} ; t\right) p\left(x^{\prime} ; t \mid x_{0}, t_{0}\right)\right\} .
+- & \left.\int_{\Omega} d x \int_{\Omega} d x^{\prime} \varphi\left({\color{Blue}x^{\prime}}\right) p\left({\color{Blue}x} ; t+\Delta t \mid {\color{Blue}x^{\prime}} ; t\right) p\left({\color{Blue}x^{\prime}} ; t \mid x_{0}, t_{0}\right)\right\} .
 \end{aligned} \tag{19}
 $$
 重新排列积分，我们有
