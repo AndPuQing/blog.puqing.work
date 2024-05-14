@@ -99,9 +99,9 @@ $$
 $$
 \begin{split}
 \arg \max_{p}L(p) &=\arg \max_{p} \prod_{y \in Y} P(I(y,c_{k}))\\
- &\Rightarrow \arg \max_{p} \sum_{y \in Y} \log P(I(y,c_{k})) \quad \quad \text{(Log Derivative Trick)} \\
- &=\arg \max_{p} \sum_{y \in Y} \log(p^I(1-p)^{(1-I)}) \\ 
- &=\arg \max_p \left ( \sum_{y=1} \log p+ \sum_{y\ne 1} \log (1-p)\right )
+&\Rightarrow \arg \max_{p} \sum_{y \in Y} \log P(I(y,c_{k})) \quad \quad \text{(Log Derivative Trick)} \\
+&=\arg \max_{p} \sum_{y \in Y} \log(p^I(1-p)^{(1-I)}) \\ 
+&=\arg \max_p \left ( \sum_{y=1} \log p+ \sum_{y\ne 1} \log (1-p)\right )
 \end{split}
 
 $$
@@ -152,7 +152,7 @@ $$
 $$
 \begin{split}
 L(P) &= \arg \max _{p} \sum_{x \in X} \log \left(p^{I}(1-p)^{1-I}\right), I=\begin{cases}
- 1, x^{(i)}=a_{j l} \text { and } Y=c_{k} \\
+1, x^{(i)}=a_{j l} \text { and } Y=c_{k} \\
 0, x^{(i)} \neq a_{j l} \text {, or } Y \neq c_{k}
 \end{cases} \\
 &= \arg \max _{p}\left(n^{1} \log p+n^{0} \log (1-p)\right), n^{1}=\sum_{i=1}^{N}(I), n^{0}=\sum_{i=1}^{N}(1-I)

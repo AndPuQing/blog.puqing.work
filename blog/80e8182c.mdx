@@ -213,6 +213,17 @@ $$
 $$
 \left\|\boldsymbol{\varepsilon}-\frac{\bar{\beta}_{t}}{\beta_{t}} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon}, t\right)\right\|^{2}
 $$
+$$
+\begin{equation}
+    \underset{\theta}{\operatorname{min}} \mathbb{E}_{\left(\boldsymbol{x}_{0}, \boldsymbol{c}\right)\sim (\boldsymbol{X}_0,\mathcal{C})}
+    \left[
+    \mathbb{E}_{t \sim U(0,T),\boldsymbol{\varepsilon } \sim \mathcal{N}(0,\boldsymbol{I})}
+    \left[
+    \left\|\boldsymbol{\varepsilon}-\frac{\bar{\beta}_{t}}{\beta_{t}} \boldsymbol{\epsilon}_{\boldsymbol{\theta}}\left(\bar{\alpha}_{t} \boldsymbol{x}_{0}+\bar{\beta}_{t} \boldsymbol{\varepsilon}, \boldsymbol{c},t\right)\right\|^{2}
+    \right]
+    \right],
+\end{equation}
+$$
 ## 推理
 
 在训练完毕后，我们从一个随机噪声 $\boldsymbol{x}_{t}\sim \mathcal{N}(\boldsymbol{0},\boldsymbol{I})$，执行 $T$ 步下式生成

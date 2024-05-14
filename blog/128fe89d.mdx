@@ -90,11 +90,11 @@ $$
 有一辆小车受到随速度而线性变化的水平向右的力 $F=k\dot{y}$，以及来自地面的摩擦力 $\mu$。则利用小学二年级学过的牛二可得方程：
 
 $$
- \begin{array}{c}
- Ma  =  F\\
- \Downarrow \\
- \displaystyle M \frac{d^2y}{dt^2}  =  \mu -k \frac{dy}{dt}
- \end{array}
+\begin{array}{c}
+Ma  =  F\\
+\Downarrow \\
+\displaystyle M \frac{d^2y}{dt^2}  =  \mu -k \frac{dy}{dt}
+\end{array}
 $$
 若令 $x_{1}=y,x_{2}=\displaystyle \frac{dy}{dt}$，即取 $x_{1},x_{2}$ 作为系统的一组状态变量，则可得一组一阶微分方程组：
 
@@ -143,33 +143,6 @@ $$
 :::
 这里的 $\dot{\mathbf{x}} = \mathbf{A} \mathbf{x}+\mathbf{b}\mu$ 就是状态方程。
 
-:::quote[ Why?]
-我们令了两个新的变量，并且将满足方程修改为了方程组的形式，但是为什么？？
-左部为什么是 $\dot{\mathbf{x}}$，这有什么用？目的是什么？
-
-下面是仅凭我的直觉猜测，可能并不是真实的原因：
-
-`结论：`$\dot{\mathbf{x}}$ 是为了迭代，数值进行求解。
-
-考虑 $\dot{\mathbf{x}}$，根据导数的定义，进行离散化：
-
-$$
-\dot{\mathbf{x}} = \frac{\mathbf{x}(k+1) - \mathbf{x}(k)}{T} = \mathbf{A} \mathbf{X}(k) + \mathbf{B}u(k)
-$$
-$$
-\begin{array}{l}
-\mathbf{x}(k+1)-\mathbf{x}(k)=T[\mathbf{A} \mathbf{x}(k)+\mathbf{B} u(k)] \\
-\mathbf{x}(k+1)=(\mathbf{I}+T \mathbf{A}) \mathbf{x}(k)+T \mathbf{B} u(k)=\mathbf{\Phi} \mathbf{x}(k)+\mathbf{G} u(k)
-\end{array}
-$$
-其中 $\mathbf{\Phi}=\mathbf{I}+T \mathbf{A} ; \quad \mathbf{G}=T \mathbf{B}$
-
-所以我们便可以迭代求解其中的状态变量。
-![Untitled.bmp](https://images.puqing.work/2023/09/17/6506a666db5ab.bmp)
-
-另外，上述过程是对于导数的一阶近似，可能有其他方法迭代。
-
-:::
 ### 输出方程
 
 描述系统的状态变量与输出变量一组代数方程称为输出方程。上图中，系统的输出为小车的位移 `(请问系统的输入是什么？)`，则有：对于一般单输入——单输出系统，状态方程和输出方程为 $y=x_{1}$ 或写成矢量的形式：
@@ -226,8 +199,10 @@ $$
 
 上述两例子可知，系统的状态方程只用一阶的微分方程组就能很好描述系统，那么遇上更高阶的方程组怎么办呢？事实上考察一个动态系统有很多不同分类标准，我们在这里只探讨其中最主要的——线性、时不变性。
 
+在 [仿射变换与仿射函数](./bbfe1702#%5Ebeaa3f) 中说到线性系统满足**齐次性**以及**可加性**，所以其状态方程 $\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x}, \mathbf{u}, t), \mathbf{x}\left(t_{0}\right)=\mathbf{x}_{0}$ 各自对应的部分可以分别叠加，即：
+
 :::quote[ 定义 **线性系统**]
-动态系统满足线性时不变条件，当且仅当它可以有以下形式表示
+动态系统满足线性时变条件，当且仅当它可以有以下形式表示
 
 $$
 \begin{cases}
@@ -241,10 +216,55 @@ $$
 而当系统的系统输入量不随时间变化时，有时不变特性：
 
 :::quote[ 定义 **时不变系统**]
-动态系统满足线性时不变条件，当它许用的输入轨迹 $\mathbf{u}(t)$ 自初始条件 $\mathbf{x}_{0}$ 开始，从初始时间 $t_{0}$ 后一定时间 $T\ge 0$ 之内，系统输出为 $\mathbf{y}(t)=\boldsymbol{\psi}\left(t, \mathbf{u}, \mathbf{x}_{0}, t_{0}\right)$，总可以用以下形式表示：
+动态系统满足线性时不变条件，当它的输入轨迹 $\mathbf{u}(t)$ 自初始条件 $\mathbf{x}_{0}$ 开始，从初始时间 $t_{0}$ 后一定时间 $T\ge 0$ 之内，系统输出为 $\mathbf{y}(t)=\boldsymbol{\psi}\left(t, \mathbf{u}, \mathbf{x}_{0}, t_{0}\right)$，总可以用以下形式表示：
 
 $$
 \boldsymbol{\psi}\left(t, \mathbf{u}(t), \mathbf{x}_{0}, t_{0}\right)=\boldsymbol{\psi}\left(t+T, \mathbf{u}(t-T), \mathbf{x}_{0}, t_{0}+T\right)
 $$
 :::
-这里这个公式还是挺不太明白的。下面画一张图就知道了
+也就是说输入信号 $\mathbf{u}(t)$ 产生输出 $y(t)$，那么对于任意时间延迟的输入 $\mathbf{u}(t+\delta)$ 也将得到同样时间延迟的输出 $y(t+\delta)$。
+
+下面给出两个例子，来表明是时不变系统：
+
+:::example[]
+1.系统 A：$y(t)=tx(t)$
+
+2.系统 B：$y(t) =10\cdot x(t)$
+
+:::
+显然，系统 A 除了 $x(t)$ 还依赖了 $t$，所以是时变系统，而系统 B 没有显示依赖时间 $t$ 所以是时不变的。
+
+:::quote[ 定义 **线性时不变系统**]
+动态系统满足时不变条件，当且仅当它可以有以下形式表示
+
+$$
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{A} \mathbf{x}+\mathbf{B} \mathbf{u} \\
+\mathbf{y}=\mathbf{C} \mathbf{x}+\mathbf{D} \mathbf{u}
+\end{cases}
+$$
+:::
+而整个系统非线性时不变，自变量里面就没有 $t$，就是以下形式：
+
+$$
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x}, \mathbf{u}), \mathbf{x}\left(t_{0}\right)=\mathbf{x}_{0} \\
+\mathbf{y}=\mathbf{h}(\mathbf{x}, \mathbf{u})
+\end{cases}
+$$
+当系统非线性且与输入量无关，则称为**自由**非线性系统
+
+$$
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x}, t), \mathbf{x}\left(t_{0}\right)=\mathbf{x}_{0} \\
+\mathbf{y}=\mathbf{h}(\mathbf{x}, t)
+\end{cases}
+$$
+而当系统既自由而且时不变，被称为**自洽**的非线性系统
+
+$$
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x}), \mathbf{x}\left(t_{0}\right)=\mathbf{x}_{0} \\
+\mathbf{y}=\mathbf{h}(\mathbf{x})
+\end{cases}
+$$

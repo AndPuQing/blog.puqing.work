@@ -1,0 +1,32 @@
+---
+authors:
+- PuQing
+date: 2024-05-14 22:30
+keywords:
+- Transformer
+- 长序列建模
+tags:
+- Transformer
+- 长序列建模
+---
+# 从 SSM 到 Mamba
+
+## 什么是 SSM
+
+状态空间模型（State Space Models，SSM），与 [线性系统入门-动态系统](./128fe89d) 中我们介绍过线性时变系统就是一个东西。
+
+$$
+\begin{cases}
+\displaystyle \frac{d \boldsymbol{x}(t)}{d t}=\boldsymbol{A} \boldsymbol{x}(t)+\boldsymbol{B} u(t) \in \mathbb{R}^{N} \\
+y(t)=\boldsymbol{C} \boldsymbol{x}(t)+D u(t) \in \mathbb{R}
+\end{cases}
+$$
+其中每个矩阵是具有含义的，其中的 $\boldsymbol{A}$ 矩阵是状态矩阵（系统矩阵），它描述了系统状态是如何变化的，$\boldsymbol{B}$ 矩阵是输入矩阵描述了输入是如何影响到系统状态的。而 $\boldsymbol{C}$ 矩阵是输出矩阵，描述了当前状态是如何作用到输出量上的，$\boldsymbol{D}$ 矩阵是直接传递矩阵描述了输入是如何直接作用到输出量上的。
+
+
+<!--truncate-->
+## HiPPO（High-order Polynomial Projection Operators）
+
+HiPPO[^1] 是 2020 年 NIPS 上的一篇工作，
+
+[^1]: Gu A, Dao T, Ermon S, et al. Hippo: Recurrent memory with optimal polynomial projections[J]. Advances in neural information processing systems, 2020, 33: 1474-1487.
