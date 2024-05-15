@@ -83,8 +83,51 @@ $$
 $$
 c_{t+1}=\bar{A}_{t} c_{t}+\bar{B}_{t} f_{t}
 $$
-离散化的办法有很多，例如双线性变换，零阶保持等等。
+离散化的办法有很多，例如欧拉法，零阶保持等等。
 
+:::tip[ 欧拉法]
+采用如下公式来近似微分：
+
+$$
+\dot{x}=\frac{x(k+1)-x(k)}{T}
+$$
+欧拉法是一阶数值方法，取其曲线在 $k$ 处的切线进行近似
+
+已知一定常连续系统的状态空间方程为：
+
+$$
+\begin{cases}
+\dot{\mathbf{x}}=\mathbf{A} \mathbf{x}+\mathbf{B} u \\
+y=\mathbf{C x}+\mathbf{D} u
+\end{cases}
+$$
+由 $\dot{x}=\frac{x(k+1)-x(k)}{T}$ 可得：
+
+$$
+\begin{array}{l}
+\dot{\mathbf{x}}=\frac{\mathbf{x}(k+1)-\mathbf{x}(k)}{T}=\mathbf{A} \mathbf{x}(k)+\mathbf{B} u(k) \\
+\mathbf{x}(k+1)-\mathbf{x}(k)=T[\mathbf{A} \mathbf{x}(k)+\mathbf{B} u(k)] \\
+\mathbf{x}(k+1)=(\mathbf{I}+T \mathbf{A}) \mathbf{x}(k)+T \mathbf{B} u(k)=\mathbf{\Phi} \mathbf{x}(k)+\mathbf{G} u(k)
+\end{array}
+$$
+其中：$\mathbf{\Phi}=\mathbf{I}+T \mathbf{A} ; \mathbf{G}=T \mathbf{B}$
+
+输出方程同样可以得到：
+
+$$
+y=\mathbf{C x}+\mathbf{D} u \Rightarrow y(k)=\mathbf{H} \mathbf{x}(k)+\mathbf{J} u(k)
+$$
+其中：$\mathbf{H}=\mathbf{C} ; \mathbf{J}=\mathbf{D}$
+
+综上述，离散化后的状态空间为：
+
+$$
+\begin{cases}
+\mathbf{x}(k+1)=\boldsymbol{\Phi} \mathbf{x}(k)+\mathbf{G} u(k) \\
+y(k)=\mathbf{H} \mathbf{x}(k)+\mathbf{J} u(k)
+\end{cases}
+$$
+:::
 ## 相关资料
 
 [^1]: Gu A, Dao T, Ermon S, et al. Hippo: Recurrent memory with optimal polynomial projections[J]. Advances in neural information processing systems, 2020, 33: 1474-1487.
