@@ -36,7 +36,7 @@ HiPPO[^1] 是 2020 年 NIPS 上的一篇工作，长序列依赖建模的核心�
 :::tip[]
 
 - fixed-size context windows：Transformer 的 window size 通常是有限的，一般来说 Quadratic 的 Attention 最多建模到大约 10K 的 Token 就到计算极限了
-- vanishing gradient：RNN 通过 hidden state 来存储历史信息，理论上能记住之前所有内容，但是实际上 effective memory 大概是<1K 个 Token，可能的原因是 gradient vanishing
+- vanishing gradient：RNN 通过 hidden state 来存储历史信息，理论上能记住之前所有内容，但是实际上 effective memory 大概是 $<1K$ 个 Token，可能的原因是 gradient vanishing
 
 :::
 ### 在线函数逼近（Online Function Approximation）
