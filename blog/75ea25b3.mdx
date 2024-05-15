@@ -5,9 +5,13 @@ date: 2024-05-14 22:30
 keywords:
 - Transformer
 - 长序列建模
+- 动态系统
+- 线性系统
 tags:
 - Transformer
 - 长序列建模
+- 动态系统
+- 线性系统
 ---
 # 从 SSM 到 Mamba
 
@@ -27,6 +31,60 @@ $$
 <!--truncate-->
 ## HiPPO（High-order Polynomial Projection Operators）
 
-HiPPO[^1] 是 2020 年 NIPS 上的一篇工作，
+HiPPO[^1] 是 2020 年 NIPS 上的一篇工作，长序列依赖建模的核心问题是如何通过有限的 memory 来尽可能的记住之前所有的历史信息，这个 memory 就体现在上述状态矩阵上。当前的主流序列建模模型（即 Transformer 和 RNN）存在着普遍的**遗忘问题**
+
+:::tip[]
+
+- fixed-size context windows：Transformer 的 window size 通常是有限的，一般来说 Quadratic 的 Attention 最多建模到大约 10K 的 Token 就到计算极限了
+- vanishing gradient：RNN 通过 hidden state 来存储历史信息，理论上能记住之前所有内容，但是实际上 effective memory 大概是<1K 个 Token，可能的原因是 gradient vanishing
+
+:::
+### 在线函数逼近（Online Function Approximation）
+
+问题的设定是：
+
+:::question[]
+考虑一个一维函数，我们能否用一个固定大小的 representation $c(t) \in \mathbb{R}^N$ 来拟合 $f$ 在 $[0,t]$(记为 $f_{\leq t}$) 的曲线？并且随着 $t$ 的增加，例如从 $t_{1}$ 到 $t_{2}$，我们可以在线的根据 $c(t_{1})$ 求 $c(t_{2})$ 来拟合 $f_{\leq t_{2}}$
+
+:::
+为了判断拟合的效果，我们需要一个测度 (measure) 来判定拟合出来的连续函数和原来的连续函数的相似度，并且假设对于不同的 time step $x$ 有一个权重 $\mu(x)$。每个 measure 都需要在函数空间里定义一个距离，即定义函数的内积：
+
+$$
+\langle f, g\rangle_{\mu}=\int_{0}^{\infty} f(x) g(x) \mathrm{d} \mu(x)
+$$
+:::question[ 如何用 $N$ 维向量来 encoder $f_{\leq t}$]
+假设一组多项式正交基 $\mathcal{G}=\{g_{n}\}_{n<N}$ 满足 $\langle g_{i}, g_{j}\rangle_{\mu}=0$（正交基是由 measure $\mu$ 决定的，不同的 $\mu$ 对应不同 $\mathcal{G}$）。把 $f_{\leq t}$ 投影到多项式正交基 $\mathcal{G}$ 上，让每个投影分量为 $c(t)$ 的分量：
+
+$$
+c_{n}^{(t)}:=\left\langle f_{\leq t}, g_{n}\right\rangle_{\mu^{(t)}}
+$$
+也就是说 $c(t)$ 是多项式正交基的系数向量，有点像傅立叶变换后的频率上的值，每一个 $c_{n}$ 都对应一个频率
+
+:::
+:::question[ 如何计算 $c(t)$]
+从离散的角度来理解的话，从 $t=0$ 开始，每次输入一个 $f(t)$，然后来更新 $c(t)$ 用来 encode$f_{\leq t}$，接着再输入 $f(t+1)$ 并更新 $c(t+1)$ 来 encode$f_{\leq t+1}$。可以看出，$c(t+1)$ 的值受到 $c(t)$ 和 $f(t+1)$ 的影响，HiPPO 证明，在连续情况下，这个过程可以用一个一阶 ODE 来建模：
+
+$$
+\dot{c}(t) = A(t)c(t)+B(t)f(t)
+$$
+只要给定 measure $\mu$ 我们就能确定 $A \in \mathbb{R}^{N\times N},B\in \mathbb{R}^{N\times 1}$。如果按照 ODE 来求解，$c(t)$ 就是我们要找的 optimally encode$f_{\leq t}$ 的系数。
+
+:::
+:::example[ 两个实例]
+![image.png](https://images.puqing.work/2024/05/15/664430eaf0b13.png)
+
+这两个 measure 都是在给定的窗口内的 uniform measures
+
+第一个例子是 Translated Legendre Measure(LegT)，它的 window size 是固定的，也就是说，它只在乎 recent history（within the window），而不在乎更早的 history。第二个例子是 scaled Legendre Measure(LegS)，它的 window size 随着时间变换的，并且 window size 等于整个 history，所有的历史都同等重要。相应的，为了归一化，对每个时刻的 measure 的 scale 大小会对应缩放。
+
+:::
+上述连续的情形 $\dot{c}(t)=A(t)c(t)+B(t)f(t)$ 其实就对应着一个 state space model。可以用离散化的操作来写成一个线性 RNN 的形式
+
+$$
+c_{t+1}=\bar{A}_{t} c_{t}+\bar{B}_{t} f_{t}
+$$
+离散化的办法有很多，例如双线性变换，零阶保持等等。
+
+## 相关资料
 
 [^1]: Gu A, Dao T, Ermon S, et al. Hippo: Recurrent memory with optimal polynomial projections[J]. Advances in neural information processing systems, 2020, 33: 1474-1487.
