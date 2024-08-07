@@ -33,6 +33,37 @@ $$
 $$
 p(y|\mathbf{x},\mathcal{D}) \leftarrow \text{Fit Model}(M,\mathcal{D})
 $$
-即一个条件概率模型，
+即一个条件概率模型，关于这个模型可以见 [高斯过程](./a48ddcb8)。
+
+:::tip[]
+但是这里的问题是，高斯随机过程有两个特征，一个是均值函数 $m(x)$，一个是方差函数 $s(x)$。他们两个分别代表的是：探索**exploitation**以及开发**exploration**。均值小的地方意味着其损失函数会更低，它附近存在全局最优点。而方差高的地方更具有探索价值 (即该区间 Uncertainty 更大)。探索该区域有利于减少我们猜测的方差。
+
+:::
+为了实现以上**探索和开发的平衡 (exploration-exploitation trade-off)**，贝叶斯优化使用了**采集函数 (acquisition function)**，它能平衡好全局最小值的探索和开发。采集函数有很多选择，其中最常见的是 Expected of improvement(EI)，我们先看一个 utility function：
+
+$$
+u(x)=\max \left(0, f^{\prime}-f(x)\right)
+$$
+$f^{'}$ 是目前观察到的最小值，$x$ 是超参数，我们希望上述 utility function 输出越大越好 (即找到的 $x$ 能获得比当前最小值还小)，基于 $u(x)$，EI 采集函数如下所示:
+
+$$
+\begin{align}
+\mathrm{EI}_{y^{*}}(x):=\mathbb{E}[u(x) \mid x, D]&=\int_{-\infty}^{\infty} \max \left(f'-f(x), 0\right) p_{M}(y \mid x) d y .\\
+&=\left(f^{\prime}-\mu(x)\right) \phi\left(f^{\prime}-f\right) N\left(f^{\prime} ; \mu(x), K(x, x)\right)+K(x, x) N\left(f^{\prime} ; \mu(x), K(x, x)\right)
+\end{align}
+$$
+EI 有两部分：
+
+1. 减少均值函数 $\mu(x)$ ，提高 EI。
+
+2. 增加方差 $K(x,x)$，提高 EI。
+
+所以 EI 的提高是建立在均值和方差的 trade-off，也是 exploration 和 exploitation 的 trade-off[^2]。
+
+## 相关链接
+
+- [【转载】AutoML--超参数调优之Bayesian Optimization - marsggbo - 博客园](https://www.cnblogs.com/marsggbo/p/10242962.html)
+- [​通俗科普文：贝叶斯优化与SMBO、高斯过程回归、TPE-腾讯云开发者社区-腾讯云](https://cloud.tencent.com/developer/article/1965403)
 
 [^1]:Algorithms for Hyper-Parameter Optimization
+[^2]:[zhuanlan.zhihu.com/p/372173429](https://zhuanlan.zhihu.com/p/372173429)
