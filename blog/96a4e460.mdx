@@ -1,0 +1,38 @@
+---
+authors:
+- PuQing
+date: 2024-08-06 15:56
+keywords:
+- 贝叶斯定理
+- 深度学习
+tags:
+- 贝叶斯定理
+- 深度学习
+---
+# 贝叶斯优化
+
+本文主要依据与论文 [^1] 来写，虽然这篇论文主要是提出了 SMBO 方法，但是一般认为该方法是 BO 的标准实现。
+
+## Sequential Model-based Global Optimization
+
+作为一个优化方法，我们的目标是最优化其目标函数，并假设有函数：
+
+$$
+f: \mathcal{X}\to \mathbb{R}
+$$
+例如在深度学习中，其 $\mathcal{X}$ 就是模型的参数，$\mathbb{R}$ 就是任务的损失函数；
+
+
+<!--truncate-->
+但是这样一个函数一般高度非凸，无法求解解析解，所以一般我们是使用梯度下降等方法迭代求解。并且该函数 $f$ 评估十分耗时，所以基于模型的算法会使用评估成品更低的代替项来近似 $f$。即有算法如下图：
+
+![image.png](https://images.puqing.work/2024/08/06/66b1e500d215e.png)
+
+这里的 Fit a new model $M_{t}$ 比较特殊，如果我们展开写这个 $M_{t}$，则是：
+
+$$
+p(y|\mathbf{x},\mathcal{D}) \leftarrow \text{Fit Model}(M,\mathcal{D})
+$$
+即一个条件概率模型，
+
+[^1]:Algorithms for Hyper-Parameter Optimization
