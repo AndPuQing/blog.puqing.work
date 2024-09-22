@@ -1,0 +1,26 @@
+name: Update Blog Workflow
+on:
+  schedule:
+    - cron: "* * * * *"
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Python setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Update blog
+        run: |
+          git config --global user.name 'puqing'
+          git config --global user.email 'me@puqing.work'
+          git config --global credential.helper store
+          git clone https://${{ secrets.PAT_TOKEN }}@github.com/AndPuQing/obsidian.git tmp
+          rm -rf blog/*.mdx
+          sh tool/publish.sh
