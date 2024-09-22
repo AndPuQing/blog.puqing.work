@@ -1,7 +1,8 @@
 name: Update Blog Workflow
 on:
   schedule:
-    - cron: "* * * * *"
+    # every day at 00:00 UTC
+    - cron: "0 0 * * *"
   workflow_dispatch:
 jobs:
   update:
