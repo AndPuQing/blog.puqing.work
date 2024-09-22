@@ -1,0 +1,48 @@
+---
+authors:
+- PuQing
+date: 2023-07-18 20:09
+keywords:
+- 随机条件场
+tags:
+- 随机条件场
+---
+# Gaussian Random Fields
+
+## Spatiotemporal Model
+
+假设我们能够测量在定义空间 $M \in \mathbb{R}^3$ 位置 $x$ 以及时间 $t$ 处的温度 $Y$.但是每次测量都会引入一些误差，表达为：
+
+$$
+Y(x,t) = \mu(x,t)+\epsilon(x,t)
+$$
+这里的 $u$ 就是未知的温度函数，$\epsilon$ 是测量误差。这个测量误差可以被建模成随机变量。所以对于每个点 $(x,t)\in M \otimes \mathbb{R}^{+}$ 的测量误差是一个随机变量。随机变量可以写成集合：
+
+
+<!--truncate-->
+$$
+\{\epsilon(x,t):(x,y)\in M \otimes \mathbb{R}^{+}\}
+$$
+这个集合被叫做 *stochastic process*(<Highlight>随机过程</Highlight>)。所有的随机过程包含一个特殊的变量，这个变量被叫做<Highlight>随机场</Highlight>。更加形式化的表述在 Geometry of Random Fields。
+
+## 高斯随机场
+
+A random vector $x=(X_1,\cdots,X_m)$ is multivariate normal[^2] if $\sum_{i}c_{i}X_i$ is Gaussian for very possible choice of $c_i$.[^3]
+
+当随机场 $\epsilon(x_1),\cdots,\epsilon(x_m)$ 对任意的 $x_i\in M \subset \mathbb{R}^N$ 是多元正态分布，则我们叫这个随机场为高斯随机场。当 $\mathbb{E}\epsilon(x)=0$ 时，$\epsilon$ 是一个 mean zero Gaussian filed. 通常情况下高斯随机场的协方差被假设为具有各向同性，也就是只依赖 $x$ 和 $y$ 的距离。常见的各向同性协方差函数有指数型和平方指数型。
+
+**指数型**
+
+$$
+C(x, y)=\sigma^{2} \exp \left(-\frac{\|x-y\|}{l}\right)
+$$
+**平方指数型**
+
+$$
+C(x, y)=\sigma^{2} \exp \left(-\frac{\|x-y\|^{2}}{2 l^{2}}\right)
+$$
+其中的 $\sigma^2$ 表示随机场的方差，$|x-y|$ 是点 $x$ 和 $y$ 的欧式距离，$l$ 是长度尺度参数，用来调随距离增大时得协方差的衰减速度。
+
+## 引用
+
+- [GaussianRandomFields](https://pages.stat.wisc.edu/~mchung/teaching/stat992/ima01.pdf)

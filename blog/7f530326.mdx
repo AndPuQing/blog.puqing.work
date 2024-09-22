@@ -1,0 +1,98 @@
+---
+authors:
+- PuQing
+date: 2023-12-08 16:40
+keywords:
+- 凸优化
+tags:
+- 凸优化
+---
+# MM Algorithm
+
+:::quote[]
+The **MM algorithm** is an iterative [optimization](https://en.wikipedia.org/wiki/Optimization "Optimization") method which exploits the [convexity](https://en.wikipedia.org/wiki/Convex_function "Convex function") of a function in order to find its maxima or minima. The MM stands for "Majorize-Minimization" or "Minorize-Maximization", depending on whether the desired optimization is a minimization or a maximization. Despite the name, MM itself is not an algorithm, but a description of how to construct an [optimization algorithm](https://en.wikipedia.org/wiki/Optimization_algorithm "Optimization algorithm").
+
+:::
+## MM 算法原理
+
+MM 主要的思想是 [非凸函数](./476bc716) 太难优化了，我们就构造一个 " 代理模型 " ，通过迭代优化该函数达到优化的目的。
+
+
+<!--truncate-->
+以最小化为例：
+![Untitled.bmp](https://images.puqing.work/2023/12/08/6572e6816216d.bmp)
+
+:::tip[ 关于 $Q(x,x_{k})$]
+这样的写法可能会很奇怪，其中第一个 $x$ 是函数自变量，第二个 $x_{k}$ 是指示第 $k$ 个代理函数，下面的写法可能会更清晰：
+
+$$
+Q(x,x_{k}):= Q_{x_{k}}(x)
+$$
+:::
+假设 $x_{0}$ 在 $A$ 点，函数 $f$ 很难最小化，我们就构造一个在此时好优化并且**在它上面**的函数 $Q$，我们找到 $Q$ 的最小值点 $B$，然后下一步 $x_{1}$ 移动到和 $B$ 横坐标一样的点 $C$，用表达式表达为：
+
+$$
+x_{k+1} = \arg \min_{x \in \mathcal{D}} Q(x,x_{k})
+$$
+:::tip[]
+而**在上面**更加形式化的表述为
+
+$$
+\begin{aligned}
+&Q(x,x_{k}) \geq f(x)\quad \text{for all x} \\
+&Q(x_{k},x_{k}) = f(x_{k})
+\end{aligned}
+$$
+:::
+这样，通过构造
+
+$$
+f(x_{k+1}) \leq Q(x_{k+1},x_{k})\leq Q(x_{k},x_{k}) = f(x_{k})
+$$
+这样的过程将会保证 $f(x_{k}),x\to\infty$ 会收敛到局部最优或者鞍点
+
+而 MM 算法的名字也很有意思
+
+:::quote[]
+最大化：$\text{Minorize-Maximization}$
+
+最小化：$\text{Majorize-Minimization}$
+
+:::
+## 导出算法
+
+MM 原理很简单，但是如何构造 $Q$ 是一大问题，这里介绍两种构造 $Q$ 函数的方法——泰勒展开和凸不等式
+
+### 泰勒展开法
+
+#### 一阶展开
+
+:::example[]
+对于一个 $\text{Minimization}$ 问题
+
+假设有函数 $f:\mathbb{R}^n\to \mathbb{R}$，$n\in \mathbb{N}$，假设这个函数 $f(\mathbf{x})=g(\mathbf{x})-h(\mathbf{x})$，其中 $g(\mathbf{x})$ 和 $h(\mathbf{x})$ 都是凸函数，于是我们称这里的 $f(x)$ 为 $\text{Difference of Convex Function}$。很明显的是我们无法判定 $f(\mathbf{x})$ 的凸性。因为，$g''(\mathbf{x})\geq 0$，$h''(\mathbf{x})\geq 0$，所以 $f''(\mathbf{x})$ 的正负性是不知道的。
+
+所以这是一个非凸优化
+
+$$
+\min _{x \in \mathcal{D}} \underbrace{g(x)}_{\text {convex }}+\underbrace{-h(x)}_{\text {concave }}
+$$
+然后使用一阶展开将 $h(\mathbf{x})$ $\text{Minorize}$
+
+$$
+x_{k+1} = \arg \min_{x \in \mathcal{D}} g(x) - \left[ h(x_{k}) + \left \langle \nabla h(x_{k}),x-x_{k} \right \rangle \right] 
+$$
+这样每次迭代解一个凸问题就好
+
+:::
+:::warning[]
+值得注意的是，其实是利用的 [Fenchel Conjugate Function](./016aa31c)
+
+:::
+## 相关资料
+
+- [MM_algorithm](https://en.wikipedia.org/wiki/MM_algorithm)
+- [工程中非凸优化利器: Majorization-Minimization - 知乎](https://zhuanlan.zhihu.com/p/107204751)
+- [Majorization-Minimization和EM算法 - 知乎](https://zhuanlan.zhihu.com/p/140339192)
+- [stanford.edu/~boyd/papers/pdf/cvx_ccv.pdf](https://stanford.edu/~boyd/papers/pdf/cvx_ccv.pdf)
+- [大扯闲话之--优化算法Difference of Convex Algorithm （DCA） - 知乎](https://zhuanlan.zhihu.com/p/484002047)

@@ -1,0 +1,249 @@
+---
+authors:
+- PuQing
+date: 2023-08-20 11:23
+keywords:
+- 凸优化
+- 凸函数
+- 机器学习
+tags:
+- 凸优化
+- 凸函数
+- 机器学习
+---
+# 机器学习 - 凸优化
+
+:::quote[ 定义]
+凸优化问题 (`OPT,convex optimization problem`) 指定义在凸集中的凸函数最优化的问题。
+
+:::
+## 数学概念
+
+### 凸集
+
+::::quote[ 定义]
+假设 $C$ 是向量空间的集。若对于任意 $x,y\in C$ 和任意的 $\theta\in \mathbb{R}$，满足 $0\le \theta \le 1$ 时，$\theta x+(1-\theta)y \in C$ 恒成立。则称 $C$ 为 `凸集`[^1]
+
+
+<!--truncate-->
+:::tip[ 从几何上来看，就是 $C$ 中的任意两点之间的直线段都属于 $C$。]
+
+:::
+::::
+下面举几个例子：
+
+:::example[]
+![image.png](https://images.puqing.work/2023/08/22/64e4d721aec91.png)
+
+1. 是凸集 (集合中的任意两个点连线段中的所有点，都在集合中)
+2. 不是凸集，有空隙
+3. 不是凸集，有些边不在集合中
+
+:::
+### 凸函数
+
+:::quote[ 定义]
+定义在 $\mathbb{R}^n \to \mathbb{R}$ 上的函数 $f$ 是凸函数，如果它的定义域 $\mathbb{D}(f)$ 是一个凸集且对任意的 $x,y \in \mathbb{D}$ 和 $0\le \theta \le 1, f(\theta x+(1-\theta y))\le \theta f(x)+(1-\theta)f(y)$ 恒成立 [^2]
+
+:::
+直观来看：
+
+![image.png](https://images.puqing.work/2023/08/23/64e581b312fe9.png)
+
+:::info
+在函数图形上，任意两点连成的线段，皆位于图形的上方
+
+
+:::
+#### 凸函数的一阶充要条件
+
+:::tip[]
+假设定义在 $\mathbb{R}^n \to \mathbb{R}$ 上的函数 $f$ 可微 (对于定义域，梯度 $\nabla f(x)$ 均存在)。则函数 $f$ 是凸函数当且仅当函数定义域 $\mathbb{D}(f)$ 是一个 `凸集`，且对于所有 $x,y\in \mathbb{D}(f)$ 均满足
+
+$$
+f(y)\ge f(x) + \nabla f(x)^\top(y-x)
+$$
+:::
+:::info
+从几何上来看，即定义域内图形都大于等于该点的切线 (切平面)
+
+
+:::
+![image.png](https://images.puqing.work/2023/08/23/64e5b78414e3d.png)
+
+:::tip[ 公式的理解]
+对于二元函数 $f(x,y)$
+
+我们知道，函数在某一点 $(x_{0},y_{0})$ 处的切平面为
+
+$$
+z=f_{x}(x_{0},y_{0})(x-x_{0})+f_{y}(x_{0},y_{0})(y-y_{0}) + f(x_{0},y_{0})
+$$
+其中的 $f_{x}(x_{0},y_{0}),f_{y}(x_{0},y_{0})$ 为 $f$ 在 $(x_{0},y_{0})$ 处的偏导数的值，我们可以使用 $\nabla$ [算子](./7edbed51) 进行表示，并且将自变量视为向量，则：
+
+$$
+z = \nabla f(x_{0})^\top(x-x_{0})+f(x_{0})
+$$
+所以有上面几何理解
+
+:::
+#### 凸函数的二阶充要条件
+
+记函数的一阶导数和二阶导数分别为 $g$ 和 $H$：
+
+$$
+g=\nabla f=\left[\begin{array}{c}
+\frac{\partial f}{\partial x_{1}} \\
+\frac{\partial f}{\partial x_{2}} \\
+\vdots \\
+\frac{\partial f}{\partial x_{n}}
+\end{array}\right] \quad H=\nabla^{2} f=\left[\begin{array}{cccc}
+\frac{\partial^{2} f}{\partial x_{1}^{2}} & \frac{\partial^{2} f}{\partial x_{1} \partial x_{2}} & \cdots & \frac{\partial^{2} f}{\partial x_{1} \partial x_{n}} \\
+\frac{\partial^{2} f}{\partial x_{2} \partial x_{1}} & \frac{\partial^{2} f}{\partial x_{2}^{2}} & \cdots & \frac{\partial^{2} f}{\partial x_{2} \partial x_{n}} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial^{2} f}{\partial x_{n} \partial x_{1}} & \frac{\partial^{2} f}{\partial x_{n} \partial x_{2}} & \cdots & \frac{\partial^{2} f}{\partial x_{n}^{2}}
+\end{array}\right]
+$$
+假设定义在 $\mathbb{R}^n \to \mathbb{R}$ 上的函数 $f$ 二阶可微（即海赛矩阵 $\nabla^2f(x)$ 存在）。则函数 $f$ 是凸函数当且仅当函数定义域 $\mathbb{D}(f)$ 是一个凸集，且对于所有 $x \in \mathbb{D}(f)$ 均满足：
+
+$$
+\nabla^2f(x)\succeq 0
+$$
+:::info
+这里的 $\succeq 0$ 表示是半正定的
+
+
+:::
+见 [正定矩阵(This page is not published)](./404)
+
+## 凸优化问题
+
+:::quote[ 定义]
+
+$$
+\begin{array}{cl}
+\min & f(x) \\
+s . t . & g_{i}(x) \leq 0, i=1,2, \ldots, m \\
+& h_{j}(x)=0, j=1,2, \ldots, n
+\end{array}
+$$
+当 $f(x)$ 和 $g_{i}(x)$ 均为凸函数，而 $h_{j}(x)$ 均为 [仿射变换与仿射函数](./bbfe1702) 时，上述的优化问题即凸优化问题
+
+:::
+## 常见的凸优化问题
+
+:::example[ 线性规划（LP，Linear Program）]
+
+$$
+\begin{array}{cl}
+\min & c^{T} x+d \\
+\text { s.t. } & G(x) \preceq h \\
+& A(x)=b
+\end{array}
+$$
+其中的目标函数和不等式约束都是仿射函数，且 $\preceq$ 表示按元素小于等于
+
+:::
+:::example[ 二次规划（QP，Quadratic Program）]
+
+$$
+\begin{array}{ll}
+\min & \frac{1}{2} x^{T} P x+c^{T} x+d \\
+\text { s.t. } & G(x) \preceq h \\
+& A(x)=b
+\end{array}
+$$
+其中目标函数为凸二次型，不等式约束为仿射函数
+
+:::
+## 利用 Python 进行凸优化
+
+下面是几段例程
+
+给定一个普通的线性规划问题
+
+$$
+\begin{array}{c}
+\min z=2 x_{1}+3 x_{2}+x_{3} \\
+\left\{\begin{array}{l}
+x_{1}+4 x_{2}+2 x_{3} \geq 8 \\
+3 x_{1}+2 x_{2} \geq 6 \\
+x_{1}, x_{2}, x_{3} \geq 0
+\end{array}\right.
+\end{array}
+$$
+<Tabs>  
+<TabItem value="scipy" label="Scipy">  
+
+
+```python
+import numpy as np
+
+z = np.array([2, 3, 1])
+
+a = np.array([[1, 4, 2], [3, 2, 0]])
+
+b = np.array([8, 6])
+
+x1_bound = x2_bound = x3_bound =(0, None)
+
+from scipy import optimize
+
+res = optimize.linprog(z, A_ub=-a, b_ub=-b,bounds=(x1_bound, x2_bound, x3_bound))
+
+print(res)
+
+#output:
+#     fun: 7.0
+# message: 'Optimization terminated successfully.'
+#     nit: 2
+#   slack: array([0., 0.])
+#  status: 0
+# success: True
+#       x: array([0.8, 1.8, 0. ])
+```
+
+</TabItem>  
+<TabItem value="pulp" label="pulp">  
+
+
+```python
+import pulp
+#目标函数的系数
+z = [2, 3, 1]
+#约束
+a = [[1, 4, 2], [3, 2, 0]]
+b = [8, 6]
+#确定最大化最小化问题，最大化只要把Min改成Max即可
+m = pulp.LpProblem(sense=pulp.LpMinimize)
+#定义三个变量放到列表中
+x = [pulp.LpVariable(f'x{i}', lowBound=0) for i in [1,2,3]]
+#定义目标函数，lpDot可以将两个列表的对应位相乘再加和
+#相当于z[0]*x[0]+z[1]*x[0]+z[2]*x[2]
+m += pulp.lpDot(z, x)
+
+#设置约束条件
+for i in range(len(a)):
+    m += (pulp.lpDot(a[i], x) >= b[i])
+#求解
+m.solve()
+#输出结果
+print(f'优化结果：{pulp.value(m.objective)}')
+print(f'参数取值：{[pulp.value(var) for var in x]}')
+
+#output:
+#优化结果：7.0
+#参数取值：[2.0, 0.0, 3.0]
+```
+
+</TabItem>   
+</Tabs>
+
+
+## 参考资料
+
+- [机器学习必知必会：凸优化 - 知乎](https://zhuanlan.zhihu.com/p/85408804)
+- [【数学建模】线性规划各种问题的Python调包方法 - 简书](https://www.jianshu.com/p/9be417cbfebb)
+
+[^1]:[凸集 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%87%B8%E9%9B%86)
+[^2]:[凸函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%87%B8%E5%87%BD%E6%95%B0)
