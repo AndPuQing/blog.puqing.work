@@ -1,0 +1,43 @@
+---
+authors:
+- PuQing
+date: 2024-09-23 16:29
+keywords:
+- 随机过程
+- 文本生成
+tags:
+- 随机过程
+- 文本生成
+---
+# 基于 MCMC 采样的文本生成
+
+在受限文本生成 (Constrained Text Generation) 任务中，我们需要根据一些特定的信息 $c$ 来生成目标文本 $\boldsymbol{x}$，用数学的话说就是 $p(\boldsymbol{x}\mid \boldsymbol{c})$。但是我们无法得到足够多的语料对 $(\boldsymbol{x},\boldsymbol{c})$ 去直接监督一个条件语言模型，而只能训练一个无条件的语言模型 $p(\boldsymbol{x})$，但是我们可以设计一个指标来定量的描述 $\boldsymbol{x}$ 和 $\boldsymbol{c}$ 之间的联系。
+
+举例来说，用关键词造句，那么 $\boldsymbol{x}$ 就是关键词的集合，我们可以定义示性函数：
+
+
+<!--truncate-->
+$$
+\mathcal{X}(x,c) = \begin{cases}
+1,\ \text{如果} x \text{包含关键词集} c \\
+0,\ \text{如果} x \text{不包含关键词集} c
+\end{cases}.
+$$
+继而定义
+
+$$
+\rho(x,c) = p(x) \mathcal{X}(x,c)
+$$
+其中的 $p(x)$ 保证了生成句子的流畅性，$\mathcal{X}(x,c)$ 保证了生成句子包含要求的关键词，那么问题就变成最大化操作 $\operatorname{argmax}_{x} \rho(x,c)$ 或采样操作 $x\sim \rho(x,c)$。当然，这个地方还不是真正的概率，需要归一化后才是真正的概率分布 (概率分布需要确保积分为 $1$)
+
+$$
+\begin{equation}
+\frac{\rho(\boldsymbol{x}, \boldsymbol{c})}{\sum_{\boldsymbol{x}} \rho(\boldsymbol{x}, \boldsymbol{c})}=\frac{p(\boldsymbol{x}) \chi(\boldsymbol{x}, \boldsymbol{c})}{\sum_{\boldsymbol{x}} p(\boldsymbol{x}) \chi(\boldsymbol{x}, \boldsymbol{c})}
+\end{equation}
+$$
+对于类似的文本摘要任务，我们可以定义：
+
+$$
+\rho(\boldsymbol{x},\boldsymbol{c}) = p(\boldsymbol{x}) \cdot \operatorname{sim}(\boldsymbol{x},\boldsymbol{c}) \cdot \mathcal{X}(\boldsymbol{x},\boldsymbol{c})
+$$
+这里的 $\operatorname{sim}(\boldsymbol{x},\boldsymbol{c})$ 是某个文本相似度函数，而 $\mathcal{X}(\boldsymbol{x},\boldsymbol{c})$ 是一个长度的示性函数，即 $\boldsymbol{x}$ 在一定长度范围内为 $1$，否则为 $0$。我们在做文本生成时就可以对上述分布进行采样，或者求最大值。
