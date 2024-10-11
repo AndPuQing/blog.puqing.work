@@ -1,0 +1,229 @@
+---
+authors:
+- PuQing
+date: 2024-10-11 12:36
+keywords:
+- 矩阵分解
+tags:
+- 矩阵分解
+---
+# 对抗扰动矩阵分析
+
+我们想要分析对抗扰动的矩阵，我们借用 FGSM 中的对抗样本生成方式，对抗扰动通过如下公式生成：
+
+$$
+\delta =\epsilon \operatorname{sign}(\nabla_{x}J(\theta,x,y))
+$$
+其中 $\epsilon$ 是扰动的无穷范数约束条件 $\left\| \delta \right\|_{\infty}\leq \epsilon$。
+
+所以重点是分析符号矩阵 $\operatorname{sign}(\nabla_{x}J(\theta,x,y))$。对于黑盒模型，我们无法知道该符号矩阵。
+
+
+<!--truncate-->
+所以我们只能对其进行假设：
+
+:::quote[ 假设]
+我们假设该符号矩阵为实矩阵 $A_{m\times n}$。
+
+:::
+## 矩阵分解
+
+对于一个 $m\times n$ 矩阵来说，我们可以使用 SVD 进行分解，即
+
+$$
+A = U \Lambda V^* = U \begin{bmatrix}
+\lambda_{1}&0&\dots&0 \\
+0&\lambda_{2}&\dots&0 \\
+0&0&\lambda_{r}&\dots
+\end{bmatrix}V^*
+$$
+其中 $U_{m\times m},V^*_{n\times n}$ 都是正交矩阵，$\Lambda$ 是 $m\times n$ 阶对角矩阵。$\Lambda$ 对角线上的元素即为 $A$ 的奇异值。
+
+进一步的，我们有如下推导：
+
+$$
+\begin{align}
+A =&  U \begin{bmatrix}
+\lambda_{1}&0&\dots&0 \\
+0&\lambda_{2}&\dots&0 \\
+0&0&\lambda_{r}&\dots
+\end{bmatrix}V^*\\ 
+=& U \left[ \lambda_{1}\mathrm{E}_{11}+\lambda_{2}\mathrm{E}_{22}+\dots+\lambda_{r}\mathrm{E}_{rr} \right] V^* \\
+=& \lambda_{1}UE_{11}V^*+\lambda_{2}UE_{22}V^*+\dots+\lambda_{r}UE_{rr}V^* \\
+=& \lambda_{1}S_{1}+\lambda_{2}S_{2}+\dots+\lambda_{r}S_{r}
+\end{align}
+$$
+其中的 $E_{rr}$ 是一个 $m\times n$ 在 $\left[ i=r,j=r \right]=1$ 的矩阵。
+
+就此，我们将对抗扰动矩阵分解为了 $r$ 个 $m\times n$ 矩阵 “ 权重 ” 和形式，而权重就是奇异值。
+
+## “基”矩阵分析
+
+接下来，我们来分析一下 $S_{r}$ 矩阵的性质。
+
+我们可以证明 $S_{r}$ 矩阵的秩为 $1$
+
+:::tip[ 证明]
+矩阵  $E_{rr}$  是一个对角矩阵，它的第 $r$ 行和第 $r$ 列元素为 $1$，其他元素为 $0$。也就是说：
+
+$$
+E_{rr} =
+\begin{bmatrix}
+0 & 0 & \dots & 0 \\
+0 & 0 & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & 1 \\
+\end{bmatrix}
+$$
+因此，矩阵 $S_{r}$ 可以表示为：
+
+$$
+\begin{align}
+S_r = U E_{rr} V^* &= U[:,r] V[r,:]^* \\
+&= U[:,r] \cdot V[r,:]^* \\
+&= \vec{u} \cdot \vec{v}
+\end{align}
+$$
+从这个式子可以看出，矩阵 $S_{r}$ 是两个向量的外积 (准确来说是张量积) 的形式，所以得到的矩阵的秩必定为 $1$。
+
+:::
+:::danger[ 但是其中的 $Sr$ 之间必定是线性无关的。]
+
+:::
+:::tip[ 证明：]
+我们先假设 $S_1,S_2,\dots,S_r$ 线性相关，即存在全非零常数 $c_1,c_2,\dots,c_r$，使得：
+
+$$
+c_1 S_1 + c_2 S_2 + \dots + c_r S_r = 0
+$$
+我们代入 $S_{i}$ 的定义
+
+$$
+c_1 U[:] V[1,:]^* + c_2 U[:] V[2,:]^* + \dots + c_r U[:,r] V[r,:]^* = 0
+$$
+首先由于 $U,V^*$ 的正交性，对于任意的 $i \ne j$ 有：
+
+$$
+\begin{cases}
+U[:,i]^* U[:,j] =0\\
+V[:,i]^* V[:,j] =0
+\end{cases}, \quad i \ne j
+$$
+我们对于上述方程左右两边分别乘以 $U[:,k]^*$ 和 $V[k,:]$，其中 $k$ 是任意的 $1\leq k \leq r$:
+
+$$
+U[:,k]^* \left( c_1 U[:] V[1,:]^* + c_2 U[:] V[2,:]^* + \dots + c_r U[:,r] V[r,:]^* \right) V[k,:] = 0
+$$
+通过分配律得到：
+
+$$
+\begin{align}
+c_1 \cdot U[:,k]^* U[:] \cdot V[1,:]^* V[k,:] + c_2 \cdot U[:,k]^* U[:] \cdot V[2,:]^* V[k,:] + \dots \\+ c_r \cdot U[:,k]^* U[:,r] \cdot V[r,:]^* V[k,:] = 0
+\end{align}
+$$
+根据正交性，只有当  $i=k$  时， $U[:,k]^* U[:,i] = 1$  且  $V[i,:]^* V[k,:] = 1$。因此，所有  $i \neq k$  的项都为 0，剩下的只剩下第  $k$ 项：
+
+$$
+c_k \cdot U[:,k]^* U[:,k] \cdot V[k,:]^* V[k,:] = 0
+$$
+这进一步简化为：
+
+$$
+c_k \cdot 1 \cdot 1 = 0
+$$
+因此  $c_{k}=0$。
+
+:::
+由于上述推导适用于任意 $k$ ，因此 $c_1 = c_2 = \dots = c_r = 0$。
+
+所以我们证明了上式只有零解，而无非零解，所以 $S_1,S_2,\dots,S_r$ 是线性无关的。
+
+我们可以进一步提出猜想对于矩阵 $A$ 有下面性质。
+
+:::tip[ 性质]
+对于任意实矩阵 $A_{m\times n}$，我们定义有如下低秩近似误差函数。
+
+$$
+f_{\epsilon,r} = \left\| A-\hat{A} \right\| \leq \epsilon
+$$
+即存在 $r$ 个奇异值与其对应的 $S_{i}$ 矩阵使得重构误差小于等于 $\epsilon$。
+
+:::
+:::warning[ 显然当 $r$ 等于实数矩阵 $A$ 的奇异数时，误差等于 $0$]
+
+:::
+:::question[]
+那么一个新的问题是对于任意的非线性相关的矩阵 $\{S_{i}\}$ 是否存在系数 $\{\lambda_{i}\}$ 使得上式成立。
+
+:::
+:::note[ 结论是不一定的。]
+
+:::
+:::question[]
+因为对于一个 $m\times n$ 的矩阵，至少需要 $mn$ 个基矩阵才能线性表示每一个矩阵，而对于任意的 $r$ 个矩阵显然是不能张成整个矩阵空间的。
+
+:::
+但是对于 $S_{i}$ 的生成过程来说，$S_{i}$ 是通过两个向量 $\vec{u}\in \mathbb{R}^m,\vec{v}_{n}\in \mathbb{R}^n$ 取张量积得到。而 $\vec{u}$ 和 $\vec{v}$ 能够被 $m+n$ 个数线性表示。
+
+写成数学公式就是：
+
+$$
+\begin{align}
+A =& \sum_{i=1}^{r} \sigma_i \cdot S_{i}\\
+=& \sum_{i=1}^{r} \sigma_i \cdot (\vec{u}_m^{(i)} \otimes \vec{v}_n^{(i)}) \\
+=& \sum_{i=1}^{r} \sigma_i \cdot  
+\begin{pmatrix}
+(\vec{u}_m)_1^{(i)} \cdot (\vec{v}_n)_1^{(i)} & \cdots & (\vec{u}_m)_1^{(i)} \cdot (\vec{v}_n)_n^{(i)} \\
+\vdots & \ddots & \vdots \\
+(\vec{u}_m)_m^{(i)} \cdot (\vec{v}_n)_1^{(i)} & \cdots & (\vec{u}_m)_m^{(i)} \cdot (\vec{v}_n)_n^{(i)}
+\end{pmatrix}
+\end{align}
+$$
+其中  $\sigma_i$  是矩阵  $M$  的奇异值，而  $\vec{u}_m^{(i)}$  和  $\vec{v}_n^{(i)}$  是其对应的奇异向量。
+
+而其实 $\sigma_{i}$ 是可以融入奇异向量中的，所以至此，我们将该问题优化为了一个 $\mathcal{O}(r(m+n))$ 的问题。其中的 $r$ 是一个关于 $m,n$ 的量，并且有关系 $r\leq\min(m,n)$。而原始问题是一个 $\mathcal{O}(mn)$ 的问题。
+
+:::question[ 我们还能更近一步吗？]
+很遗憾，基于现有假设，已经无法优化为 $\mathcal{O}(r)$
+
+这里的问题是：下面式子无法化简，将矩阵归并进权重中。
+
+:::
+对于随机的基向量 $\{\tilde{u}_{m}\}$，可以通过基变换矩阵 $T$ 表示 $\vec{u}_{m}$。即：
+
+$$
+\begin{cases}
+\vec{u}_{m}^{(i)} = T^{(i)} \tilde{u}_{m}^{(i)} \\
+\vec{v}_{n}^{(i)} = \tilde{v}_{n}^{(i)} H^{(i)}
+\end{cases}
+$$
+所以 $A$ 被写做为：
+
+$$
+A = \sum^{r}_{i=1} \sigma_{i} (T^{(i)}\tilde{u}_{m}^{(i)} \otimes \tilde{v}_{n}^{(i)} H^{(i)})
+$$
+而其中的 $T^{(i)}\tilde{u}_{m}^{(i)} \otimes \tilde{v}_{n}^{(i)} H^{(i)}$ 就是罪魁祸首。这样的式子无法化成 $\alpha \tilde{u}_{m}^{(i)} \otimes \tilde{v}_{n}^{(i)}$。进而无法优化为 $\mathcal{O}(r)$。
+
+## 稀疏&稠密
+
+上面假设是 $A$ 矩阵是一个稠密矩阵。而事实上，$A$ 矩阵是一个稀疏矩阵，每个元素只可能是 $a_{ij}\in \{-1,0,1\}$。
+
+所以我们可以得到这个优化问题的上确界：
+
+$$
+\mathcal{O}\left( \frac{\log(3^{mn})}{8} \right) = \mathcal{O}\left( mn\frac{\log(3)}{8} \right)
+$$
+即将整个对抗扰动图视为一个 $\text{bit map}$，然后使用 $\text{int8}$ 进行编码，这样编码后就是一个 $mn \frac{\log(3)}{8}$ 维的问题，且每维范围为 $(-128,128)$ 的整数优化。
+
+## 总结
+
+稍微总结一下这个问题，因为在黑盒优化中无梯度先验信息，这意味着我们只能基于有限的信息进行估计。而这个问题核心是下面两个量的 trade off 关系。
+
+- 编码效率
+- 搜索空间
+
+首先如果整体全部使用整数类型假设，其搜索空间最大，但是效率是 $\mathcal{O}(mn)$ 量级；进一步我们基于 SVD 分解假设，将 $m\times n$ 矩阵分解为 $r$ 个矩阵的和形式，其权重为奇异值，矩阵为左右奇异向量的张量积，而 $r$ 是应当是一个 $r\ll \min(m,n)$ 量，该算法的效率是 $\mathcal{O}(r(m+n))$ 量级；最后我们给出了该优化问题的一个上确界，即通过 $\text{bit}$ 对整个对抗图进行编码，该算法的效率是 $\mathcal{O}\left( mn \frac{\log(3)}{8} \right)$。
+
+另外我们也分析了利用 SVD 分解无法将问题优化至 $\mathcal{O}(r)$ 的原因，其问题在于 $T^{(i)}\tilde{u}_{m}^{(i)} \otimes \tilde{v}_{n}^{(i)} H^{(i)}$ 无法进一步优化。
+
+最后，针对于对抗扰动是一个稀疏矩阵问题，可能应该尝试使用稀疏矩阵假设？
