@@ -53,7 +53,7 @@ const config = {
         },
         sitemap: {
           ignorePatterns: ['/tags/**', '/blog/tags/**', '/docs/**',],
-          filename: 'sitemap.XML',
+          filename: 'sitemap.xml',
         },
         gtag: {
           trackingID: "G-KPEKSDZKLJ",
@@ -77,7 +77,7 @@ const config = {
       require.resolve("@easyops-cn/docusaurus-search-local"),
       {
         hashed: true,
-        language: ["en", "zh"],
+        indexDocs: false
       },
     ],
   ],

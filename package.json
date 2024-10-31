@@ -15,9 +15,10 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "3.2.0",
-    "@docusaurus/preset-classic": "3.2.0",
-    "@easyops-cn/docusaurus-search-local": "^0.21.4",
+    "@docusaurus/core": "^3.5.2",
+    "@docusaurus/plugin-content-blog": "^3.5.2",
+    "@docusaurus/preset-classic": "^3.5.2",
+    "@easyops-cn/docusaurus-search-local": "^0.44.5",
     "@mdx-js/react": "^3.0.0",
     "@vercel/analytics": "^1.0.0",
     "@vercel/speed-insights": "^1.0.10",
@@ -38,8 +39,8 @@
     "url-loader": "^4.1.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.2.0",
-    "@docusaurus/types": "3.2.0",
+    "@docusaurus/module-type-aliases": "^3.5.2",
+    "@docusaurus/types": "^3.5.2",
     "typescript": "^5.0.0"
   },
   "browserslist": {
