@@ -1,0 +1,86 @@
+---
+authors:
+- PuQing
+date: 2024-09-07 16:53
+keywords:
+- 函数
+tags:
+- 函数
+---
+# 不可导函数的可导逼近
+
+在深度学习中，我们会使用很多不可导函数，比如 $\max$，$\arg\min$，所以有一个很有意思的问题就是如何构造一个可导函数是的该函数逼近上述的不可导函数。当然该问题已经被大牛讨论很多次了 [^1][^2]
+
+## Max
+
+我们想要寻找到一个平滑的二元函数 $f(x,y)$ ，它的效果近似于 $\max(x,y)$ ，足以用来代替最大值函数？在设计这样的函数时，下面这些条件需要尽可能满足：
+
+
+<!--truncate-->
+:::tip[]
+
+- 函数简洁而美观
+- 可以调整函数的 “ 平滑度 ”
+- 可以很方便地扩展到多个变量
+
+:::
+比如
+
+$$
+\ln (\exp(x)+\exp(y))
+$$
+函数通过 $\exp$ 对数值进行放大，然后通过 $\ln$ 恢复原本的数值量级。同时还可以添加系数控制平滑程度。
+
+$$
+\frac{\ln(\exp(k·x) + \exp(k·y))}{k}
+$$
+$k$ 越大整个函数将越逼近最大值函数， $k$ 越小函数也就变得越平滑。
+
+有了这个函数后，很多本身不可导的函数立即有了可导的近似函数。例如，绝对值函数 $\mathrm{abs}(x)$ 其实可以写作 $\max(x,-x)$ ，因此可以用可导函数 $\ln(\exp(x) + \exp(-x))$ 近似代替
+
+**推广到 $n$ 维**
+
+$$
+\max \left(x_{1}, x_{2}, \ldots, x_{n}\right)=\lim _{K \rightarrow+\infty} \frac{1}{K} \log \left(\sum_{i=1}^{n} e^{K x_{i}}\right)
+$$
+所以选定固定的 $K$ 我们有近似
+
+$$
+\max \left(x_{1}, x_{2}, \ldots, x_{n}\right) \approx \frac{1}{K} \log \left(\sum_{i=1}^{n} e^{K x_{i}}\right)
+$$
+当然我们可以直接把 $K$ 融合进神经网络里
+
+$$
+\begin{aligned}
+\max \left(x_{1}, x_{2}, \ldots, x_{n}\right) & \approx \log \left(\sum_{i=1}^{n} e^{x_{i}}\right) \\
+& \triangleq \operatorname{logsumexp}\left(x_{1}, x_{2}, \ldots, x_{n}\right)
+\end{aligned}
+$$
+## Softmax
+
+softmax 是 $\mathrm{onehot}(\arg \max(x))$ 的光滑近似，即先求出最大值的 <Highlight>index</Highlight>，然后对 $\mathrm{index}$ 进行 $\mathrm{onehot}$ 编码
+
+$$
+\begin{equation}
+\arg \max (\left[ 0.1,0.2,0.4,0.3 \right] ) \to [0,0,1,0]
+\end{equation}
+$$
+$$
+\begin{aligned}
+\operatorname{onehot}(\operatorname{argmax}(\boldsymbol{x})) 
+& \approx\left(\frac{e^{x_{1}}}{\sum_{i=1}^{n} e^{x_{i}}}, \frac{e^{x_{2}}}{\sum_{i=1}^{n} e^{x_{i}}}, \ldots, \frac{e^{x_{n}}}{\sum_{i=1}^{n} e^{x_{i}}}\right) \\
+& \triangleq \operatorname{softmax}\left(x_{1}, x_{2}, \ldots, x_{n}\right)
+\end{aligned}
+$$
+## Argmax
+
+$\arg \max$ 可以作为一个<Highlight>index</Highlight>序列乘以 onehot 编码所以：
+
+$$
+\operatorname{sum}(\underbrace{[1,2,3,4,5]}_{\text {序向量 }[1,2, \ldots, \mathrm{n}]} \otimes \underbrace{[0,0,0,1,0]}_{\text {onehot }(\operatorname{argmax}(\boldsymbol{x}))})
+$$
+$$
+\operatorname{argmax}(\boldsymbol{x}) \approx \sum_{i=1}^{n} i \times \operatorname{softmax}(\boldsymbol{x})_{i}
+$$
+[^1]:[寻求一个光滑的最大值函数 - 科学空间|Scientific Spaces](https://spaces.ac.cn/archives/3290)
+[^2]:http://www.matrix67.com/blog/archives/2830
