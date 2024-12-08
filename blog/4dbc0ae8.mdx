@@ -147,7 +147,7 @@ $ make -j$(nproc); make install
 
 `LayerHelper` 是一个用于创建 OP 输出变量、向静态图 `program` 中添加 OP 的辅助工具类。在这里我们实例了一个 gather_nd 算子，并将输入 Tensor，输出 Tensor, 以两个字典的形式，作为参数添加 OP
 
-所以通过这部分代码我们可以知道在 Paddle 这边 gather_nd 通过输入 inputs 字典，字典中有 "X" ，"Index" 字段。
+所以通过这部分代码我们可以知道在 Paddle 这边 gather_nd 通过输入 inputs 字典，字典中有 “X” ，“Index” 字段。
 
 :::info
 而其他的算子的参数并非也是 Tensor 输入的，而是作为 attributes 字典输入的，例如 [shard_index](https://github.com/PaddlePaddle/Paddle/blob/develop/python/paddle/tensor/manipulation.py#L603) 则是以 attr 字典输入的

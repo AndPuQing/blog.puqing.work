@@ -20,7 +20,7 @@ tags:
 ## Abstract（摘要）
 
 :::info
-In recent years, artiﬁcial intelligence technologies have been widely used in computer vision, natural language processing, automatic driving, and other ﬁelds. However, artiﬁcial intelligence systems are vulnerable to adversarial attacks, which limit the applications of artiﬁcial intelligence (AI) technologies in key security ﬁelds. Therefore, improving the robustness of AI systems against adversarial attacks has played an increasingly important role in the further development of AI. This paper aims to comprehensively summarize the latest research progress on adversarial attack and defense technologies in deep learning. According to the target model's different stages where the adversarial attack occurred, this paper expounds the adversarial attack methods in the training stage and testing stage respectively. Then, we sort out the applications of adversarial attack technologies in computer vision, natural language processing, cyberspace security, and the physical world. Finally, we describe the existing adversarial defense methods respectively in three main categories, i.e., modifying data, modifying models and using auxiliary tools.
+In recent years, artiﬁcial intelligence technologies have been widely used in computer vision, natural language processing, automatic driving, and other ﬁelds. However, artiﬁcial intelligence systems are vulnerable to adversarial attacks, which limit the applications of artiﬁcial intelligence (AI) technologies in key security ﬁelds. Therefore, improving the robustness of AI systems against adversarial attacks has played an increasingly important role in the further development of AI. This paper aims to comprehensively summarize the latest research progress on adversarial attack and defense technologies in deep learning. According to the target model’s different stages where the adversarial attack occurred, this paper expounds the adversarial attack methods in the training stage and testing stage respectively. Then, we sort out the applications of adversarial attack technologies in computer vision, natural language processing, cyberspace security, and the physical world. Finally, we describe the existing adversarial defense methods respectively in three main categories, i.e., modifying data, modifying models and using auxiliary tools.
 [Review of Artiﬁcial Intelligence Adversarial Attack and Defense Technologies](https://www.mdpi.com/2076-3417/9/5/909)
 
 
@@ -43,7 +43,7 @@ In recent years, artiﬁcial intelligence technologies have been widely used in 
 
 ![image.png](https://images.puqing.work/2023/10/07/65215abb08fc9.png)
 
-对于单个的像素的变动不会怎么变化，但是对于输入的所有维度进行小的扰动将会有显著的变化。所以 " 攻击能力 " 是因为多维度作用叠加的效果。
+对于单个的像素的变动不会怎么变化，但是对于输入的所有维度进行小的扰动将会有显著的变化。所以 “ 攻击能力 ” 是因为多维度作用叠加的效果。
 
 ### 对抗样本的特征
 
@@ -63,7 +63,7 @@ In recent years, artiﬁcial intelligence technologies have been widely used in 
 :::
 ### Adversarial Capabilitise
 
-攻击能力，因为攻击是攻击一个 "System"，根据我们能得到这个 "System" 的信息，我们有如下划分：
+攻击能力，因为攻击是攻击一个 “System”，根据我们能得到这个 “System” 的信息，我们有如下划分：
 ![image.png](https://images.puqing.work/2023/10/07/65215d538e2ca.png)
 
 #### Training Stage Capabilities
@@ -103,7 +103,7 @@ $$
 
 ##### Black-box Attacks
 
-在黑盒模型的攻击中，攻击者对于目标模型 $f$ 没有任何了解。这种攻击模式会通过 " 过去 " 的输入/输出 pair 来分析模型的漏洞。那黑盒模型的攻击又分为下面几种：
+在黑盒模型的攻击中，攻击者对于目标模型 $f$ 没有任何了解。这种攻击模式会通过 “ 过去 ” 的输入/输出 pair 来分析模型的漏洞。那黑盒模型的攻击又分为下面几种：
 
 :::tip[ Non-Adaptive Black-Box Attacks]
 对于这种攻击模式。攻击者只能访问目标模型 $f$ 的训练数据分布 $\mu$。因此，攻击者可以利用一个代理模型 $f'$，在来自数据分布 $\mu$ 的样本下利用 $train'$ 训练过程得到一个 $local\ model$ 模型来近似目标模型 $f$。然后攻击者就可以利用白盒攻击策略来攻击了
