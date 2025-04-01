@@ -1,0 +1,196 @@
+---
+authors:
+- PuQing
+date: 2025-04-01 10:46
+keywords:
+- 微积分
+- 高斯混合模型
+- 高斯分布
+tags:
+- 微积分
+- 高斯混合模型
+- 高斯分布
+---
+# 在二元高斯混合模型中求曲线积分
+
+## 预备知识
+
+回顾 [高斯分布](./971deee9) 以及 [混合模型](./04c6f12c) 中的内容，独立的多元高斯分布为：
+
+$$
+f_{\mathbf{x}}\left(x_{1}, \ldots, x_{k}\right)=\frac{1}{\sqrt{(2 \pi)^{k}|\boldsymbol{\Sigma}|}} \mathrm{e}^{-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^{\mathrm{T}} \boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}
+$$
+在二维非奇异的情形下，我们有下面公式：
+
+
+<!--truncate-->
+$$
+f(x, y)=\frac{1}{2 \pi \sigma_{X} \sigma_{Y} \sqrt{1-\rho^{2}}} \mathrm{e}^{-\frac{1}{2\left(1-\rho^{2}\right)}\left[\left(\frac{x-\mu_{X}}{\sigma_{X}}\right)^{2}-2 \rho\left(\frac{x-\mu_{X}}{\sigma_{X}}\right)\left(\frac{y-\mu_{Y}}{\sigma_{Y}}\right)+\left(\frac{y-\mu_{Y}}{\sigma_{Y}}\right)^{2}\right]}
+$$
+其中 $\rho$ 是 $X$ 和 $Y$ 之间的相关系数，$\sigma_{X}>0$ 并且 $\sigma_{Y}>0$，我们假设 $X,Y$ 之间是独立的 $\rho=0$，所以我们可以化简上述公式为：
+
+$$
+\begin{align}
+f(x, y) &= \frac{1}{2 \pi \sigma_{X} \sigma_{Y}} \mathrm{e}^{-\frac{1}{2}\left[\left(\frac{x-\mu_{X}}{\sigma_{X}}\right)^{2}-2 \rho\left(\frac{x-\mu_{X}}{\sigma_{X}}\right)\left(\frac{y-\mu_{Y}}{\sigma_{Y}}\right)+\left(\frac{y-\mu_{Y}}{\sigma_{Y}}\right)^{2}\right]} \\ 
+ 
+&= \frac{1}{2 \pi\sqrt{|\boldsymbol{\Sigma}|}} \mathrm{e}^{-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^{\mathrm{T}} \boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}
+\end{align}
+$$
+其中
+
+$$
+\boldsymbol{\mu}=\binom{\mu_{X}}{\mu_{Y}}, \quad \boldsymbol{\Sigma}=\begin{pmatrix}
+\sigma_{X}^{2} & 0 \\
+0 & \sigma_{Y}^{2}
+\end{pmatrix}
+$$
+## 单高斯模型求曲线积分
+
+我们有曲线 $L$，则求其第一类曲线积分：
+
+$$
+\int_{L} f(x,y)\, ds
+$$
+假设曲线有参数方程的形式，我们有：
+
+$$
+\begin{align}
+L:\begin{cases}
+x=\varphi(t) \\
+y=\psi(t)
+\end{cases} &,\quad \alpha \leq t \leq \beta \\
+\int_{L} f(x, y) \mathrm{d} s&=\int_{\alpha}^{\beta} f(\varphi(t), \psi(t)) \underbrace{\sqrt{\left(\varphi^{\prime}(t)\right)^{2}+\left(\psi^{\prime}(t)\right)^{2}} \mathrm{~d} t}_{\text {参数方程的弧微分 } \mathrm{d} s}
+\end{align}
+$$
+如果有函数形式，我们有：
+
+$$
+\begin{align}
+L:\begin{cases}
+x=x \\
+y=\psi(x)
+\end{cases}&,\quad a \leq x \leq b \\
+\int_{L} f(x, y) \mathrm{d} s&=\int_{a}^{b} f(x, \psi(x)) \underbrace{\sqrt{1+\left(\psi^{\prime}(x)\right)^{2}} \mathrm{~d} x}_{\text {函数的弧微分 } \mathrm{d} s}
+\end{align}
+$$
+:::example[ 来点例子]
+假设曲线是一个过两点 $(x_{1},y_{1}),(x_{2},y_{2})$ 的直线，则对于曲线 $L$ 我们有下面参数方程：
+
+$$
+L:\begin{cases}
+x = x_{1}+t(x_{2}-x_{1}) \\
+y = y_{1}+t(y_{2}-y_{1})
+\end{cases},\quad 0\leq t \leq 1
+$$
+求其曲线积分
+
+:::
+$$
+\begin{align}
+\int_{L} f(x,y) \, ds &=\int_{0}^{1} f(\varphi(t),\psi(t)) \sqrt{\left(\varphi^{\prime}(t)\right)^{2}+\left(\psi^{\prime}(t)\right)^{2}} \, dt \\
+&= \int_{0}^{1} f(\varphi(t),\psi(t)) \sqrt{\left(x_{1} - x_{2}\right)^{2} + \left(y_{1} - y_{2}\right)^{2}} \, dt \\
+\end{align}
+$$
+记 $\Delta x=x_{2}-x_{1},\Delta y=y_{2}-y_{1}$。
+
+二元高斯分布为：
+
+$$
+f(\mathrm{x}) = \frac{1}{2 \pi\sqrt{|\boldsymbol{\Sigma}|}} \mathrm{e}^{-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^{\mathrm{T}} \boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}
+$$
+其中设：
+
+$$
+\mathrm{x}(t) = \binom{\varphi(t)}{\psi(t)} = \binom{x_{1}+t\Delta x}{y_{1}+t\Delta y}
+$$
+则：
+
+$$
+\mathrm{x}(t)-\boldsymbol{\mu} = \binom{x_{1}+t\Delta x - x_{0}}{y_{1}+t\Delta y -y_{0}}
+$$
+二次型为：
+
+$$
+Q(t) = (\mathrm{x}(t)-\boldsymbol{\mu})^{\mathsf{T}} \boldsymbol{\Sigma}^{-1}(\mathrm{x}(t)-\boldsymbol{\mu})
+$$
+我们令 $\sigma_{X}=\sigma_{Y}=k$，展开得到：
+
+$$
+Q(t) = \frac{(x_{1}-x_{0}+t\Delta x)^{2}+(y_{1}-y_{0}+t\Delta y)^{2}}{k^{2}}
+$$
+曲线积分为：
+
+$$
+\int_{L} f(x, y) d s=\frac{\sqrt{\Delta x^{2}+\Delta y^{2}}}{2 \pi k^{2}} \int_{0}^{1} \exp \left(-\frac{Q(t)}{2}\right) d t
+$$
+由于 $Q(t)$ 是关于 $t$ 的二次函数，可以表示为：
+
+$$
+Q(t) = At^{2} +Bt +C
+$$
+其中：
+
+$$
+\begin{align}
+A &= \frac{\Delta x^{2}+\Delta y^{2}}{k^{2}}\\
+B &= 2\frac{\Delta x(x_{1}-x_{0})+\Delta y(y_{1}-y_{0})}{k^{2}} \\
+C &= \frac{(x_{1}-x_{0})^{2}+(y_{1}-y_{0})^{2}}{k^{2}} 
+\end{align}
+$$
+因此，积分变为：
+
+$$
+\int^1_{0} \exp(-\frac{At^{2}+Bt+C}{2}) \, dt
+$$
+完全平方公式：
+
+$$
+At^{2}+Bt+C = A\left( t+\frac{B}{2A} \right)^{2}+\left( C-\frac{B^{2}}{4A} \right) 
+$$
+令：
+
+$$
+D=C-\frac{B^{2}}{4A}
+$$
+则积分变为：
+
+$$
+e^{-D/2}\int^1_{0} \exp\left( -\frac{A}{2} \left( t+\frac{B}{2A} \right) ^{2}\right) \, dx 
+$$
+令 $\mu=t+\frac{B}{2A}$，则
+
+$$
+\int^{1+\frac{B}{2A}}_{\frac{B}{2A}} \exp \left( -\frac{A}{2} u^{2} \right) \, du 
+$$
+可以表示成误差函数 $\mathrm{erf}$ 的形式：
+
+$$
+\sqrt{\frac{2}{A}}\left[\Phi\left(\sqrt{A}\left(1+\frac{B}{2 A}\right)\right)-\Phi\left(\sqrt{A} \cdot \frac{B}{2 A}\right)\right]
+$$
+其中
+
+$$
+ \Phi(z)=\frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{z} e^{-t^{2} / 2} d t \text { 。 }
+$$
+所以最后曲线积分为：
+
+$$
+\boxed{\frac{\sqrt{\Delta x^{2}+\Delta y^{2}}}{2 \pi k^{2}} \cdot \sqrt{\frac{2}{A}} e^{-D/2}\left[\Phi\left(\sqrt{A}\left(1+\frac{B}{2 A}\right)\right)-\Phi\left(\sqrt{A} \cdot \frac{B}{2 A}\right)\right]}
+$$
+其中参数为：
+
+$$
+\begin{cases}
+\Delta x = x_{2}-x_{1} \\
+\Delta y = y_{2}-y_{1} \\ 
+A = \frac{\Delta x^{2}+\Delta y^{2}}{k^{2}}\\
+B = 2\frac{\Delta x(x_{1}-x_{0})+\Delta y(y_{1}-y_{0})}{k^{2}} \\
+C = \frac{(x_{1}-x_{0})^{2}+(y_{1}-y_{0})^{2}}{k^{2}} \\
+D = C-\frac{B^{2}}{4A}
+\end{cases}
+$$
+其中 $\Phi$ 是标准正态分布的累积分布函数 (CDF).
+
+## 拓展到混合模型中
+
+实际上每个二元高斯分布是独立的，所以依次相加即可。
