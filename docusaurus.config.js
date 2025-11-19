@@ -62,17 +62,6 @@ const config = {
     ],
   ],
 
-    themes: [
-        [
-            require.resolve("@easyops-cn/docusaurus-search-local"),
-            /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-            ({
-                hashed: true,
-                indexDocs: false,
-            }),
-        ],
-    ],
-
   stylesheets: [
     {
       href: 'https://fastly.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
