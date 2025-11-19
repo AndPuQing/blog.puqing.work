@@ -12,12 +12,16 @@ const config = {
   tagline: "Empoered with knowledge",
   url: "https://blog.puqing.work",
   baseUrl: "/",
-  onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
+    onBrokenLinks: "warn",
   favicon: "img/logo.svg",
   organizationName: "AndPuQing", // Usually your GitHub org/user name.
   projectName: "blog.puqing.work", // Usually your repo name.
 
+    markdown: {
+        "hooks": {
+            onBrokenMarkdownLinks: "warn"
+        }
+    },
 
   presets: [
     [
