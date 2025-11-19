@@ -1,0 +1,155 @@
+---
+authors:
+- PuQing
+date: 2025-11-18 23:00
+keywords:
+- 布尔函数
+- 傅立叶变换
+tags:
+- 布尔函数
+- 傅立叶变换
+---
+# 布尔函数
+
+在数学中，有限布尔函数是形如如下形式的函数 $f: \mathbb{B}^{k}\to \mathbb{B}$，这里的 $\mathbb{B}=\{0,1\}$ 是布尔域，而 $k$ 是非负整数。
+
+## 实数表示
+
+任意的布尔函数 $f(x):\{0,1\}^{n}\to\{0,1\}$ 可以被唯一的表示为一个多线性多项式 (Multilinear Polynomials)：
+
+
+<!--truncate-->
+$$
+f^{*}(x) = \sum_{a \in \{0,1\}^{n}}f(a) \prod_{i:a_{i}=1} x_{i} \prod_{i:a_{i}=0}(1-x_{i})
+$$
+也可以表示为：
+
+$$
+f(\boldsymbol{x})=\sum_{S \subseteq[n]} \hat{f}(S) \chi_{S}(\boldsymbol{x}),
+$$
+其中 $\boldsymbol{x}=(x_{1},\dots,x_{n})$，$\chi_{S}(\boldsymbol{x})=\prod_{i \in S} x_{i}$ 是多项式中的各个单项式，我们称之为奇偶校验函数 (parity function)，$\hat{f}(S)$ 是各个单项式的系数。
+
+:::note[ 多线性的含义]
+由于输入变量 $x_{i}$ 只能取两个值，任意高次幂函数 $x_{i}^{2},x_{i}^{3}$ 等价于 $x_{i}$（在布尔域）或在常数 (在 $\pm$ 域)。因此，这个多项式中不会出现 $x_{i}^{2}$，每一项都是不同变量的一次乘积。这就是**多线性**的含义
+
+:::
+举个例子来说：
+
+对于 $f(x_{1},x_{2})=\max(x_{1},x_{2})$ 可以被等价表示为 $f(x_{1},x_{2}) = \frac{1}{2}+\frac{1}{2}x_{1}+\frac{1}{2}x_{2}-\frac{1}{2}x_{1}x_{2}$。
+
+### Fourier Transform
+
+这个时候就能联系上傅立叶变换了，上面的式子前面的系数可以视为**频谱系数**，而后面的多项式可以视为正交基函数。
+
+coefficients measure how close $f$ is to basis functions
+
+这个变换可以通过 Walsh-Hadamard Transform 得到：
+
+$$
+\hat{\boldsymbol{\mathrm{F}}} = \frac{1}{2^{n}} H_{n} \boldsymbol{\mathrm{F}}
+$$
+其中 $\boldsymbol{\mathrm{F}}$ 是把函数的所有输出值写成一个列向量 (长度为 $2^{n}$)，这里的向量 $\hat{\boldsymbol{\mathrm{F}}}$ 中的每个元素，就是多项式中对应项的系数。
+
+其中 $H_{N}$ 为 Hadamard Matrix，可以通过下面递推式得到：
+
+$$
+\begin{aligned}
+H_{0} & =1 \\
+H_{m} & =\frac{1}{\sqrt{2}}
+\end{aligned}\left(\begin{array}{cc}
+H_{m-1} & H_{m-1} \\
+H_{m-1} & -H_{m-1}
+\end{array}\right)
+$$
+也可以简写成下面式子：
+
+$$
+H_{n}=\frac{n}{2^{n}} H_{n}^{-1}
+$$
+还可以使用 Kronecker 积得到:
+
+$$
+H_{n} = H_{1} \otimes H_{n-1}
+$$
+关于 Hadamard Matrix 具有很好的性质：
+
+- 正交性：$H_{N}H_{N}^{\mathsf{T}} = NI$
+- 对称性：$H_{N}=H_{N}^{\mathsf{T}}$
+- 自逆性：$H_{N}^{-1} = \frac{1}{N}H_{N}$
+
+### 另一种多项式 (ANF)
+
+如果这里的多线性多项式指代的是代数范式 (Algebraic Normal Form,ANF)，即在 $GF(2)$ 上形如 $x_{1} \oplus x_{1}x_{2}$ 的多项式。
+
+它的求法不直接使用标准的 WHT，而是使用结构相同，但是运算在 $GF(2)$ 下进行的变换，通常称为**快速莫比乌斯变换 (Fast Moebius Transform)**
+
+## 实例
+
+对于与门 $x_{1} \text{AND}\ x_{2}$
+我们有真值表：
+
+$$
+\begin{matrix}
+x_{1} & x_{2} & x_{1} \wedge x_{2} \\
+0 & 0 &0 \\
+0 & 1 &0 \\
+1 & 0 &0 \\
+1 & 1 &1
+\end{matrix}
+$$
+因为变换在 $\{1,-1\}$ 生效，所以我们做一下映射。
+
+$$
+\begin{matrix}
+z_{1} & z_{2} & F(z) \\
+1 & 0 & 1 \\
+1 & -1 &1 \\
+-1 & 1 &1 \\
+-1 & -1 &-1
+\end{matrix}
+$$
+我们有：
+
+$$
+\begin{bmatrix}
+1 & 1 & 1 & 1 \\
+1 & -1 & 1 & -1 \\
+1 & 1 & -1 & -1 \\
+1 & -1 & -1 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 \\
+1 \\
+1 \\
+-1
+\end{bmatrix}=\begin{bmatrix}
+1+1+1-1 \\
+1-1+1-(-1) \\
+1+1-1-(-1) \\
+1-1-1-1
+\end{bmatrix}=\begin{bmatrix}
+2 \\
+2 \\
+2 \\
+-2
+\end{bmatrix}
+$$
+再乘以归一化因子 $\frac{1}{2^{n}}=\frac{1}{4}$:
+
+$$
+\hat{\mathbf{F}}=[0.5,0.5,0.5,-0.5]^{T}
+$$
+:::warning[ 二进制字典序]
+你可能意识到了这样计算实际上是有顺序的：
+一般来说，我们通常按照整数 $0$ 到 $2^{n}-1$ 的二进制表示来排列
+
+$$
+\begin{bmatrix}
+0 \to 000 \\
+1 \to 001\\
+2 \to 010
+\end{bmatrix}
+$$
+这样的顺序
+
+:::
