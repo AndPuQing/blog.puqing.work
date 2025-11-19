@@ -1,10 +1,9 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer").themes.github;
-const darkCodeTheme = require("prism-react-renderer").themes.dracula;
-const math = require('remark-math');
-const katex = require('rehype-katex').default;
+import math from "remark-math";;
+import katex from "rehype-katex";
+import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -57,14 +56,21 @@ const config = {
         },
         sitemap: {
           ignorePatterns: ['/tags/**', '/blog/tags/**', '/docs/**',],
-          filename: 'sitemap.xml',
-        },
-        gtag: {
-          trackingID: "G-KPEKSDZKLJ",
+            filename: 'sitemap.xml',
         }
       }),
     ],
   ],
+
+    themes: [
+        [
+            require.resolve("@easyops-cn/docusaurus-search-local"),
+            /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+            ({
+                hashed: true,
+            }),
+        ],
+    ],
 
   stylesheets: [
     {
@@ -74,16 +80,6 @@ const config = {
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
-  ],
-
-  plugins: [
-    [
-      require.resolve("@easyops-cn/docusaurus-search-local"),
-      {
-        hashed: true,
-        indexDocs: false
-      },
-    ],
   ],
 
   themeConfig:
@@ -133,8 +129,8 @@ const config = {
         copyright: `<a href="https://github.com/AndPuQing" target="_blank">@PuQing</a> ${new Date().getFullYear()} All rights reserved | <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2020018876号</a>`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+          theme: prismThemes.github,
+          darkTheme: prismThemes.dracula,
         defaultMode: 'light'
       },
     }),
